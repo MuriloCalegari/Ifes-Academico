@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">Scholar Tools</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -14,4 +14,5 @@
     <string name="drawer_secondary_title">Adjustments</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
+    <string name="Home">Home</string>
 </resources>
