@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Agenda Escolar</string>
+    <string name="navigation_drawer_open">Abrir barra de navegação</string>
+    <string name="navigation_drawer_close">Fechar barra de navegação</string>
+    <string name="action_settings">Configurações</string>
+    <string name="subjects">Matérias</string>
+    <string name="schedules">Horários</string>
+    <string name="grades">Notas</string>
+    <string name="events">Eventos</string>
+    <string name="classes">Aulas</string>
+    <string name="drawer_secondary_title">Ajustes</string>
+    <string name="settings">Configurações</string>
+    <string name="about">Sobre</string>
+</resources>

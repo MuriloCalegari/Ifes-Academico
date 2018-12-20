@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Scholar Tools</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="subjects">Subjects</string>
+    <string name="schedules">Schedules</string>
+    <string name="grades">Grades</string>
+    <string name="events">Events</string>
+    <string name="classes">Classes</string>
+    <string name="drawer_secondary_title">Adjustments</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+</resources>
