@@ -5,7 +5,10 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/textColorDark</item>
+        <item name="android:textColorSecondary">@color/textColorLight</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorDark</item>
+        <item name="colorAccent">@color/primaryLightColor</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
