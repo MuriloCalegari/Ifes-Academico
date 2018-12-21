@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY appname "Agenda Escolar">
+    <!ENTITY author "Murilo Calegari de Souza">
+    ]>
+
 <resources>
     <string name="app_name">Agenda Escolar</string>
     <string name="navigation_drawer_open">Abrir barra de navegação</string>
@@ -13,4 +18,10 @@
     <string name="settings">Configurações</string>
     <string name="about">Sobre</string>
     <string name="Home">Início</string>
+    <string name="aboutActivityName">&appname;</string>"
+    <string name="app_about_1">Esse app nasceu como um remake do aplicativo Agenda Escolar original desenvolvido por Mayke Santos.</string>
+    <string name="app_about_2">A ideia principal foi criar um simples aplicativo que pudesse ajudá-lo a acompanhar as suas notas em uma maneira simples e prática, exibindo-as em forma de porcentagem e, portanto, dando-lhe a oportunidade de antecipar as suas notas finais.</string>
+    <string name="developer_info">Esse aplicativo foi desenvolvido por &author; e está disponível no GitHub em https://github.com/MuriloCalegari/Agenda-Escolar. Por favor, fique à vontade para contribuir para esse projeto, você pode sempre me contactar no email murilo.calegari.souza@gmail.com.</string>
+    <string name="review">Por favor, não se esqueça de avaliar esse app clicando no botão abaixo:</string>
+    <string name="review_button">Avalie-nos!</string>
 </resources>

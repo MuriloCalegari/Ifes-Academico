@@ -1,5 +1,10 @@
+<!DOCTYPE resources [
+    <!ENTITY appname "School tools">
+    <!ENTITY author "Murilo Calegari de Souza">
+    ]>
+
 <resources>
-    <string name="app_name">Scholar Tools</string>
+    <string name="app_name">&appname;</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title" translatable="false">Android Studio</string>
@@ -15,4 +20,17 @@
     <string name="settings">Settings</string>
     <string name="about">About</string>
     <string name="Home">Home</string>
+    <string name="app_about_1">
+        This app was born as a remake of the original Scholar tools application developed by Mayke Santos.
+    </string>
+    <string name="app_about_2">
+        "The idea was to create a simple app that can help you keep track of your grades in a nice and clean way; displaying them as percentages hence giving you the opportunity of anticipating you final grades."
+    </string>
+    <string name="developer_info">
+        "This app was developed by &author; and it's hosted on GitHub at https://github.com/MuriloCalegari/Agenda-Escolar. \n"
+        "Please, fell free to contribute to this project; you can always contact me at murilo.calegari.souza@gmail.com
+    </string>
+    <string name="aboutActivityName">&appname;</string>
+    <string name="review">Please, don\'t forget to review by pressing the following button:</string>
+    <string name="review_button">Rate us!</string>
 </resources>
