@@ -18,7 +18,7 @@
             android:title="@string/schedules" />
         <item
             android:id="@+id/nav_grades"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_spellcheck_black_24dp"
             android:title="@string/grades" />
         <item
             android:id="@+id/nav_events"

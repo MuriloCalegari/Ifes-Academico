@@ -15,42 +15,17 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/schedules">
+    <PreferenceCategory android:title="@string/subjects">
+
+        <com.yokkomi.commons.preference.seekbar.SeekBarPreference
+            android:defaultValue="60"
+            android:key="minimumPercentage"
+            android:summary="@string/minimum_percentage_summary"
+            android:title="@string/minimum_percentage"
+            app:maxValue="100"
+            app:padding="3"
+            app:unit="%" />
 
     </PreferenceCategory>
-
-    <CheckBoxPreference
-        android:key="checkbox"
-        android:summary="Tap to check if on or off"
-        android:title="Checkbox Preference" />
-    <RingtonePreference
-        android:key="ringtone"
-        android:showDefault="true"
-        android:showSilent="true"
-        android:summary="Pick a ringtone you like"
-        android:title="Ringtone Preference" />
-    <EditTextPreference
-        android:dialogTitle="Enter a text"
-        android:key="text"
-        android:summary="Click to show a text entry dialog"
-        android:title="EditText Preference" />
-    <SwitchPreference
-        android:key="switch"
-        android:title="Switch Preference"
-        android:summary="Click to switch on or off"
-        android:defaultValue="true"/>
-    <ListPreference
-        android:defaultValue="1"
-        android:entries="@android:array/emailAddressTypes"
-        android:entryValues="@android:array/emailAddressTypes"
-        android:key="list_preference_1"
-        android:title="List preference" />
-    <MultiSelectListPreference
-        android:defaultValue="@android:array/emailAddressTypes"
-        android:entries="@android:array/emailAddressTypes"
-        android:entryValues="@android:array/emailAddressTypes"
-        android:key="multi_select_list_preference_1"
-        android:title="Multi select list preference" />
-
 
 </PreferenceScreen>

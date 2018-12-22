@@ -30,6 +30,8 @@
     <string name="title_activity_settings">Configurações</string>
     <string name="total_classes">Quantidade total de aulas</string>
     <string name="total_classes_summary">Quantas aulas você tem por dia?</string>
+    <string name="minimum_percentage">Nota mínima requerida</string>
+    <string name="minimum_percentage_summary">Porcentagem mínima para ser aprovado</string>
 
 
 </resources>
