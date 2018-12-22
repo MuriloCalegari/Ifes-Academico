@@ -37,5 +37,7 @@
     <!-- Strings related to Settings -->
 
     <string name="title_activity_settings">Settings</string>
+    <string name="total_classes">Total classes</string>
+    <string name="total_classes_summary">How many classes do you have per day?</string>
 
 </resources>

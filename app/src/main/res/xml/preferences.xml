@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/classes">
+
+    <com.yokkomi.commons.preference.seekbar.SeekBarPreference
+        android:defaultValue="6"
+        android:key="totalClasses"
+        android:summary="@string/total_classes_summary"
+        android:title="@string/total_classes"
+        app:maxValue="12"
+        app:padding="3"
+        app:unit=" Aulas" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/schedules">
+
+    </PreferenceCategory>
+
     <CheckBoxPreference
         android:key="checkbox"
         android:summary="Tap to check if on or off"
@@ -20,4 +39,18 @@
         android:title="Switch Preference"
         android:summary="Click to switch on or off"
         android:defaultValue="true"/>
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@android:array/emailAddressTypes"
+        android:entryValues="@android:array/emailAddressTypes"
+        android:key="list_preference_1"
+        android:title="List preference" />
+    <MultiSelectListPreference
+        android:defaultValue="@android:array/emailAddressTypes"
+        android:entries="@android:array/emailAddressTypes"
+        android:entryValues="@android:array/emailAddressTypes"
+        android:key="multi_select_list_preference_1"
+        android:title="Multi select list preference" />
+
+
 </PreferenceScreen>

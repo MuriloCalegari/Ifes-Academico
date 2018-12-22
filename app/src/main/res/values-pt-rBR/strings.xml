@@ -28,5 +28,8 @@
     <!-- Strings related to Settings -->
 
     <string name="title_activity_settings">Configurações</string>
+    <string name="total_classes">Quantidade total de aulas</string>
+    <string name="total_classes_summary">Quantas aulas você tem por dia?</string>
+
 
 </resources>
