@@ -2,10 +2,7 @@ package calegari.murilo.agendaescolar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -80,8 +78,13 @@ public class MainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.nav_about:
-                Intent intent = new Intent(this,ScrollingActivity.class);
-                startActivity(intent);
+                Intent aboutIntent = new Intent(this,AboutActivity.class);
+                startActivity(aboutIntent);
+                break;
+            case R.id.nav_settings:
+                Intent settingsIntent = new Intent(this,SettingsActivity.class);
+                startActivity(settingsIntent);
+                break;
         }
 
         return true;

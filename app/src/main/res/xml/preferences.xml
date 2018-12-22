@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="checkbox"
+        android:summary="Tap to check if on or off"
+        android:title="Checkbox Preference" />
+    <RingtonePreference
+        android:key="ringtone"
+        android:showDefault="true"
+        android:showSilent="true"
+        android:summary="Pick a ringtone you like"
+        android:title="Ringtone Preference" />
+    <EditTextPreference
+        android:dialogTitle="Enter a text"
+        android:key="text"
+        android:summary="Click to show a text entry dialog"
+        android:title="EditText Preference" />
+    <SwitchPreference
+        android:key="switch"
+        android:title="Switch Preference"
+        android:summary="Click to switch on or off"
+        android:defaultValue="true"/>
+</PreferenceScreen>

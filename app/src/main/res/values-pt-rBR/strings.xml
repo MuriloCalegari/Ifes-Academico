@@ -24,4 +24,9 @@
     <string name="developer_info">Esse aplicativo foi desenvolvido por &author; e está disponível no GitHub em https://github.com/MuriloCalegari/Agenda-Escolar. Por favor, fique à vontade para contribuir para esse projeto, você pode sempre me contactar no email murilo.calegari.souza@gmail.com.</string>
     <string name="review">Por favor, não se esqueça de avaliar esse app clicando no botão abaixo:</string>
     <string name="review_button">Avalie-nos!</string>
+
+    <!-- Strings related to Settings -->
+
+    <string name="title_activity_settings">Configurações</string>
+
 </resources>

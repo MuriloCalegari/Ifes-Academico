@@ -1,7 +1,4 @@
-<!DOCTYPE resources [
-    <!ENTITY appname "School tools">
-    <!ENTITY author "Murilo Calegari de Souza">
-    ]>
+<!DOCTYPE resources [<!ENTITY appname "School tools"><!ENTITY author "Murilo Calegari de Souza">]>
 
 <resources>
     <string name="app_name">&appname;</string>
@@ -20,6 +17,9 @@
     <string name="settings">Settings</string>
     <string name="about">About</string>
     <string name="Home">Home</string>
+
+    <!-- Strings related to About -->
+
     <string name="app_about_1">
         This app was born as a remake of the original Scholar tools application developed by Mayke Santos.
     </string>
@@ -33,4 +33,9 @@
     <string name="aboutActivityName">&appname;</string>
     <string name="review">Please, don\'t forget to review by pressing the following button:</string>
     <string name="review_button">Rate us!</string>
+
+    <!-- Strings related to Settings -->
+
+    <string name="title_activity_settings">Settings</string>
+
 </resources>
