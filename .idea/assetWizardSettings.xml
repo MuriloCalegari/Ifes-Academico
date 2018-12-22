@@ -80,11 +80,11 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="ffffff" />
-                            <entry key="height" value="108" />
-                            <entry key="outputName" value="ic_school_black_108dp" />
+                            <entry key="height" value="128" />
+                            <entry key="outputName" value="ic_school_black_24dp" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\muril" />
-                            <entry key="width" value="108" />
+                            <entry key="width" value="128" />
                           </map>
                         </option>
                       </PersistentState>
