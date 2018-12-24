@@ -42,4 +42,12 @@
     <string name="minimum_percentage">Minimum required grade</string>
     <string name="minimum_percentage_summary">Minimum percentage to be approved</string>
 
+    <!-- Strings related to New Subject -->
+
+    <string name="title_activity_new_subject">New Subject</string>
+    <string name="name">Name:</string>
+    <string name="professor">Professor:</string>
+    <string name="abbreviation">Abbreviation:</string>
+
+
 </resources>

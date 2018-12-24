@@ -33,5 +33,11 @@
     <string name="minimum_percentage">Nota mínima requerida</string>
     <string name="minimum_percentage_summary">Porcentagem mínima para ser aprovado</string>
 
+    <!-- Strings related to New Subject -->
+
+    <string name="title_activity_new_subject">Nova matéria</string>
+    <string name="name">Nome:</string>
+    <string name="professor">Professor(a):</string>
+    <string name="abbreviation">Abreviação:</string>
 
 </resources>
