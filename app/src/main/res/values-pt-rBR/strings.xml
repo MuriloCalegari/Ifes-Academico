@@ -39,5 +39,12 @@
     <string name="name">Nome:</string>
     <string name="professor">Professor(a):</string>
     <string name="abbreviation">Abreviação:</string>
+    <string name="min_max_character_abbreviation_error">A abreviação deve ter de 2 a 6 caracteres</string>
+    <string name="min_max_character_subject_name_error">O nome deve ter de 2 a 40 caracteres</string>
+    <string name="empty">(Vazio0</string>
+    <string name="confirmation">Confirmação</string>
+    <string name="confirm_data">Confirmar dados</string>
+    <string name="everything_correct">Está tudo certo?</string>
+    <string name="vertical_stepper_form_confirm_button">Confirmar dados</string>
 
 </resources>

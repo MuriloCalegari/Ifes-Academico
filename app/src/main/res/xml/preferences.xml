@@ -4,27 +4,35 @@
 
     <PreferenceCategory android:title="@string/classes">
 
-    <com.yokkomi.commons.preference.seekbar.SeekBarPreference
-        android:defaultValue="6"
-        android:key="totalClasses"
-        android:summary="@string/total_classes_summary"
-        android:title="@string/total_classes"
-        app:maxValue="12"
-        app:padding="3"
-        app:unit=" Aulas" />
+        <com.pavelsikun.seekbarpreference.SeekBarPreference
+            android:key="totalClasses"
+            android:title="@string/total_classes"
+            android:summary="@string/total_classes_summary"
+            android:enabled="true"
+            android:defaultValue="6"
+
+            app:msbp_minValue="0"
+            app:msbp_maxValue="12"
+            app:msbp_interval="1"
+            app:msbp_measurementUnit=" Aulas"
+            app:msbp_dialogEnabled="false"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/subjects">
 
-        <com.yokkomi.commons.preference.seekbar.SeekBarPreference
-            android:defaultValue="60"
+        <com.pavelsikun.seekbarpreference.SeekBarPreference
             android:key="minimumPercentage"
-            android:summary="@string/minimum_percentage_summary"
             android:title="@string/minimum_percentage"
-            app:maxValue="100"
-            app:padding="3"
-            app:unit="%" />
+            android:summary="@string/minimum_percentage_summary"
+            android:enabled="true"
+            android:defaultValue="60"
+
+            app:msbp_minValue="0"
+            app:msbp_maxValue="100"
+            app:msbp_interval="1"
+            app:msbp_measurementUnit="%"
+            app:msbp_dialogEnabled="false"/>
 
     </PreferenceCategory>
 

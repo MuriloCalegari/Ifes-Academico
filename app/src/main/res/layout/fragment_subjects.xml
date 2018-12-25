@@ -6,12 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".SubjectsFragment">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,8 +23,7 @@
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:fabSize="normal"
-            android:focusable="true" />
-    </android.support.constraint.ConstraintLayout>
+            app:srcCompat="@drawable/ic_add_white_24dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
