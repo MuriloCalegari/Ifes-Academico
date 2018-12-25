@@ -1,29 +1,33 @@
-package calegari.murilo.agendaescolar;
+package calegari.murilo.agendaescolar.SubjectSteps;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
+import calegari.murilo.agendaescolar.R;
 import ernestoyaquello.com.verticalstepperform.Step;
 
-public class NewSubjectNameStep extends Step<String> {
-    private EditText subjectNameView;
+public class SubjectProfessorStep extends Step<String> {
+    private EditText subjectProfessorView;
+    private Integer MINIMUM_CHARACTERS_PARAMETER = 2;
+    private Integer MAXIMUM_CHARACTERS_PARAMETER = 40;
 
-    public NewSubjectNameStep(String stepTitle) {
+
+    public SubjectProfessorStep(String stepTitle) {
         super(stepTitle);
     }
 
     @Override
     protected View createStepContentLayout() {
-        // Here we generate the view that will be used by the library as the content of the step.
-        subjectNameView = new EditText(getContext());
-        subjectNameView.setSingleLine(true);
-        subjectNameView.setHint(getContext().getResources().getString(R.string.name));
+        subjectProfessorView = new EditText(getContext());
+        subjectProfessorView.setSingleLine(true);
+        subjectProfessorView.setHint(getContext().getResources().getString(R.string.professor));
 
-        subjectNameView.addTextChangedListener(new TextWatcher() {
+        subjectProfessorView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -36,16 +40,16 @@ public class NewSubjectNameStep extends Step<String> {
             @Override
             public void afterTextChanged(Editable s) {}
         });
-        return subjectNameView;
+        return subjectProfessorView;
     }
 
     @Override
     protected IsDataValid isStepDataValid(String stepData) {
-        // The step's data (i.e., the user name) will be considered valid only if it is longer than
-        // three characters. In case it is not, we will display an error message for feedback.
-        // In an optional step, you should implement this method to always return a valid value.
-        boolean isNameValid = (stepData.length() >= 2) && (stepData.length() <= 40);
-        String errorMessage = !isNameValid ? getContext().getResources().getString(R.string.min_max_character_subject_name_error) : "";
+        /* The step's data (i.e., the user name) will be considered valid only if it is between
+        two and forty characters. In case it is not, we will display an error message for feedback.
+        n an optional step, you should implement this method to always return a valid value. */
+        boolean isNameValid = (stepData.length() >= MINIMUM_CHARACTERS_PARAMETER) && (stepData.length() <= MAXIMUM_CHARACTERS_PARAMETER);
+        String errorMessage = !isNameValid ? getContext().getResources().getString(R.string.min_max_character_professor_error) : "";
 
         return new IsDataValid(isNameValid, errorMessage);
     }
@@ -53,8 +57,8 @@ public class NewSubjectNameStep extends Step<String> {
     @Override
     public String getStepData() {
         // We get the step's data from the value that the user has typed in the EditText view.
-        Editable subjectName = subjectNameView.getText();
-        return subjectName != null ? subjectName.toString() : "";
+        Editable subjectProfessor = subjectProfessorView.getText();
+        return subjectProfessor != null ? subjectProfessor.toString() : "";
     }
 
     @Override
@@ -62,8 +66,8 @@ public class NewSubjectNameStep extends Step<String> {
         // Because the step's data is already a human-readable string, we don't need to convert it.
         // However, we return "(Empty)" if the text is empty to avoid not having any text to display.
         // This string will be displayed in the subtitle of the step whenever the step gets closed.
-        String userName = getStepData();
-        return !userName.isEmpty() ? userName : getContext().getResources().getString(R.string.empty);
+        String subjectProfessor = getStepData();
+        return !subjectProfessor.isEmpty() ? subjectProfessor : getContext().getResources().getString(R.string.empty);
     }
 
     @Override
@@ -89,7 +93,7 @@ public class NewSubjectNameStep extends Step<String> {
     @Override
     public void restoreStepData(String stepData) {
         // To restore the step after a configuration change, we restore the text of its EditText view.
-        subjectNameView.setText(stepData);
+        subjectProfessorView.setText(stepData);
     }
 
 }

@@ -1,17 +1,23 @@
 package calegari.murilo.agendaescolar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import calegari.murilo.agendaescolar.SubjectSteps.SubjectAbbreviationStep;
+import calegari.murilo.agendaescolar.SubjectSteps.SubjectNameStep;
+import calegari.murilo.agendaescolar.SubjectSteps.SubjectProfessorStep;
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormView;
 import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
 
 public class NewSubjectActivity extends AppCompatActivity implements StepperFormListener {
 
-    private NewSubjectNameStep newSubjectName;
+    private SubjectNameStep newSubjectName;
+    private SubjectAbbreviationStep newSubjectAbbreviation;
+    private SubjectProfessorStep newSubjectProfessor;
     private VerticalStepperFormView verticalStepperForm;
 
     @Override
@@ -31,11 +37,19 @@ public class NewSubjectActivity extends AppCompatActivity implements StepperForm
             }
         });
 
+        /*
+        Used library: VerticalStepperForm, available at:
+        https://github.com/ernestoyaquello/VerticalStepperForm
+        */
+
         // Create the steps
-        newSubjectName = new NewSubjectNameStep(getResources().getString(R.string.name));
+        newSubjectName = new SubjectNameStep(getResources().getString(R.string.name));
+        newSubjectAbbreviation = new SubjectAbbreviationStep(getResources().getString(R.string.abbreviation));
+        newSubjectProfessor = new SubjectProfessorStep(getResources().getString(R.string.professor));
+
         // Find the form view, set it up and initialize it.
         verticalStepperForm = findViewById(R.id.stepper_form);
-        verticalStepperForm.setup(this, newSubjectName).init();
+        verticalStepperForm.setup(this, newSubjectName, newSubjectAbbreviation, newSubjectProfessor).init();
 
     }
 
@@ -43,6 +57,18 @@ public class NewSubjectActivity extends AppCompatActivity implements StepperForm
     public void onCompletedForm() {
         // This method will be called when the user clicks on the last confirmation button of the
         // form in an attempt to save or send the data.
+
+        Intent resultIntent = new Intent();
+
+        // Sends obtained data to SubjectsFragment
+        resultIntent.putExtra("newSubjectName",newSubjectName.getStepDataAsHumanReadableString());
+        resultIntent.putExtra("newSubjectAbbreviation",newSubjectAbbreviation.getStepDataAsHumanReadableString());
+        resultIntent.putExtra("newSubjectProfessor",newSubjectProfessor.getStepDataAsHumanReadableString());
+
+        setResult(NewSubjectActivity.RESULT_OK, resultIntent);
+
+        finish();
+
     }
 
     @Override
