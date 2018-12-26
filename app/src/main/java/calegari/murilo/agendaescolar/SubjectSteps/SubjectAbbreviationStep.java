@@ -51,6 +51,8 @@ public class SubjectAbbreviationStep extends Step<String> {
         boolean isNameValid = (stepData.length() >= MINIMUM_CHARACTERS_PARAMETER) && (stepData.length() <= MAXIMUM_CHARACTERS_PARAMETER);
         String errorMessage = !isNameValid ? getContext().getResources().getString(R.string.min_max_character_abbreviation_error) : "";
 
+        // TODO: Check if abbreviation is unique in database
+
         return new IsDataValid(isNameValid, errorMessage);
     }
 

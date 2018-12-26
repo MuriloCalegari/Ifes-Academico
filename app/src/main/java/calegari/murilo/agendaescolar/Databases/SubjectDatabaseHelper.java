@@ -2,6 +2,7 @@ package calegari.murilo.agendaescolar.Databases;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
@@ -51,12 +52,18 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, Professor);
         long result = db.insert(SubjectEntry.TABLE_NAME, null, contentValues);
 
-        if(result == -1) {
+        if (result == -1) {
             Log.d("SubjectDatabaseHelper", "Some error happened when inserting data in database");
             return false;
         } else {
             Log.d("SubjectDatabaseHelper", "Created entry in database successfully");
             return true;
         }
+    }
+
+    public Cursor getAllData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME, null);
+        return cursor;
     }
 }
