@@ -1,7 +1,7 @@
 <!DOCTYPE resources [<!ENTITY appname "School tools"><!ENTITY author "Murilo Calegari de Souza">]>
 
 <resources>
-    <string name="app_name">&appname;</string>
+    <string name="app_name">School tools</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title" translatable="false">Android Studio</string>
@@ -30,7 +30,7 @@
         "This app was developed by &author; and it's hosted on GitHub at https://github.com/MuriloCalegari/Agenda-Escolar. \n"
         "Please, fell free to contribute to this project; you can always contact me at murilo.calegari.souza@gmail.com
     </string>
-    <string name="aboutActivityName">&appname;</string>
+    <string name="aboutActivityName">About</string>
     <string name="review">Please, don\'t forget to review by pressing the following button:</string>
     <string name="review_button">Rate us!</string>
 
@@ -56,5 +56,6 @@
     <string name="everything_correct">Is everything correct?</string>
     <string name="vertical_stepper_form_confirm_button">Confirm data</string>
     <string name="min_max_character_professor_error">Professor name must have 2 to 40 characters</string>
+    <string name="code_version">Code version:</string>
 
 </resources>

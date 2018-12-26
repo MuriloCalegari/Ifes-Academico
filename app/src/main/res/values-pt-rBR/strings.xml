@@ -18,7 +18,7 @@
     <string name="settings">Configurações</string>
     <string name="about">Sobre</string>
     <string name="Home">Início</string>
-    <string name="aboutActivityName">&appname;</string>"
+    <string name="aboutActivityName">Sobre</string>"
     <string name="app_about_1">Esse app nasceu como um remake do aplicativo Agenda Escolar original desenvolvido por Mayke Santos.</string>
     <string name="app_about_2">A ideia principal foi criar um simples aplicativo que pudesse ajudá-lo a acompanhar as suas notas em uma maneira simples e prática, exibindo-as em forma de porcentagem e, portanto, dando-lhe a oportunidade de antecipar as suas notas finais.</string>
     <string name="developer_info">Esse aplicativo foi desenvolvido por &author; e está disponível no GitHub em https://github.com/MuriloCalegari/Agenda-Escolar. Por favor, fique à vontade para contribuir para esse projeto, você pode sempre me contactar no email murilo.calegari.souza@gmail.com.</string>
@@ -47,5 +47,6 @@
     <string name="everything_correct">Está tudo certo?</string>
     <string name="vertical_stepper_form_confirm_button">Confirmar dados</string>
     <string name="min_max_character_professor_error">O nome do professor deve ter entre 2 e 40 caracteres</string>
+    <string name="code_version">Versão do código:</string>
 
 </resources>
