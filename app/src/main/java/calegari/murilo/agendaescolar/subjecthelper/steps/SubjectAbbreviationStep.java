@@ -1,10 +1,12 @@
-package calegari.murilo.agendaescolar.SubjectSteps;
+package calegari.murilo.agendaescolar.subjecthelper.steps;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.R;
 import ernestoyaquello.com.verticalstepperform.Step;
 
@@ -13,9 +15,23 @@ public class SubjectAbbreviationStep extends Step<String> {
 
     private Integer MINIMUM_CHARACTERS_PARAMETER = 2;
     private Integer MAXIMUM_CHARACTERS_PARAMETER = 6;
+    private boolean checkOnDatabase = true;
+    private String ignoreStringOnDatabase;
+
 
     public SubjectAbbreviationStep(String stepTitle) {
         super(stepTitle);
+    }
+
+    public SubjectAbbreviationStep(String stepTitle, boolean checkDatabase) {
+        super(stepTitle);
+        checkOnDatabase = checkDatabase;
+    }
+
+    public SubjectAbbreviationStep(String stepTitle, boolean checkDatabase, String ignoreString) {
+        super(stepTitle);
+        checkOnDatabase = checkDatabase;
+        ignoreStringOnDatabase = ignoreString;
     }
 
     @Override
@@ -45,15 +61,31 @@ public class SubjectAbbreviationStep extends Step<String> {
 
     @Override
     protected IsDataValid isStepDataValid(String stepData) {
-        /* The step's data (i.e., the user name) will be considered valid only if it is between
-        two and forty characters. In case it is not, we will display an error message for feedback.
-        n an optional step, you should implement this method to always return a valid value. */
-        boolean isNameValid = (stepData.length() >= MINIMUM_CHARACTERS_PARAMETER) && (stepData.length() <= MAXIMUM_CHARACTERS_PARAMETER);
-        String errorMessage = !isNameValid ? getContext().getResources().getString(R.string.min_max_character_abbreviation_error) : "";
+        /* The step's data (i.e., the subject abbreviation) will be considered valid only if this method
+         * returns a new IsDataValid(true, "") object */
+        boolean isNameSizeValid = (stepData.length() >= MINIMUM_CHARACTERS_PARAMETER) && (stepData.length() <= MAXIMUM_CHARACTERS_PARAMETER);
+        String errorMessage;
 
-        // TODO: Check if abbreviation is unique in database
+        if(!isNameSizeValid) {
+            errorMessage = getContext().getResources().getString(R.string.min_max_character_abbreviation_error);
+            return new IsDataValid(false, errorMessage);
+        }
 
-        return new IsDataValid(isNameValid, errorMessage);
+        /* Only checks if entry is unique after consulting if name size is valid
+         * and if stepData is different of ignore param, this is important on
+         * EditSubjectActivity */
+
+        if(checkOnDatabase && !stepData.equals(ignoreStringOnDatabase)) {
+            SubjectDatabaseHelper subjectDatabase = new SubjectDatabaseHelper(getContext());
+            Log.d("SubjectAbbreviationStep", "Checking if " + stepData + " is already in database");
+            boolean isAbbreviationOnDataBase = subjectDatabase.hasObject(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, stepData);
+            if (isAbbreviationOnDataBase) {
+                errorMessage = getContext().getResources().getString(R.string.abbreviation_already_on_database);
+                return new IsDataValid(false, errorMessage);
+            }
+        }
+
+        return new IsDataValid(true, "");
     }
 
     @Override

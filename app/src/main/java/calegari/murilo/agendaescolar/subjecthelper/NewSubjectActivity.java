@@ -1,16 +1,16 @@
-package calegari.murilo.agendaescolar;
+package calegari.murilo.agendaescolar.subjecthelper;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import calegari.murilo.agendaescolar.Databases.SubjectDatabaseHelper;
-import calegari.murilo.agendaescolar.SubjectSteps.SubjectAbbreviationStep;
-import calegari.murilo.agendaescolar.SubjectSteps.SubjectNameStep;
-import calegari.murilo.agendaescolar.SubjectSteps.SubjectProfessorStep;
+import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
+import calegari.murilo.agendaescolar.R;
+import calegari.murilo.agendaescolar.subjecthelper.steps.SubjectAbbreviationStep;
+import calegari.murilo.agendaescolar.subjecthelper.steps.SubjectNameStep;
+import calegari.murilo.agendaescolar.subjecthelper.steps.SubjectProfessorStep;
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormView;
 import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
 
@@ -50,8 +50,13 @@ public class NewSubjectActivity extends AppCompatActivity implements StepperForm
 
         // Find the form view, set it up and initialize it.
         verticalStepperForm = findViewById(R.id.stepper_form);
-        verticalStepperForm.setup(this, newSubjectName, newSubjectAbbreviation, newSubjectProfessor).init();
-
+        verticalStepperForm
+                .setup(this, newSubjectName, newSubjectAbbreviation, newSubjectProfessor)
+                .lastStepNextButtonText(getString(R.string.subject_confirm_edit_button))
+                .displayCancelButtonInLastStep(true)
+                .lastStepCancelButtonText(getString(R.string.cancel))
+                .stepNextButtonText(getString(R.string.next))
+                .init();
     }
 
     @Override

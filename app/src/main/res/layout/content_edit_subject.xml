@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".subjecthelper.NewSubjectActivity"
-    tools:showIn="@layout/activity_new_subject">
+    tools:context=".subjecthelper.EditSubjectActivity"
+    tools:showIn="@layout/activity_edit_subject">
 
     <ernestoyaquello.com.verticalstepperform.VerticalStepperFormView
         xmlns:android="http://schemas.android.com/apk/res/android"

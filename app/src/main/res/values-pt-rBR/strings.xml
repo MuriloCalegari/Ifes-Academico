@@ -45,8 +45,16 @@
     <string name="confirmation">Confirmação</string>
     <string name="confirm_data">Confirmar dados</string>
     <string name="everything_correct">Está tudo certo?</string>
-    <string name="vertical_stepper_form_confirm_button">Confirmar dados</string>
+    <string name="subject_confirm_button">Criar matéria</string>
     <string name="min_max_character_professor_error">O nome do professor deve ter entre 2 e 40 caracteres</string>
     <string name="code_version">Versão do código:</string>
+
+    <!-- Strings related to Edit Subject -->
+
+    <string name="title_activity_edit_subject">Editar matéria</string>
+    <string name="subject_confirm_edit_button">Editar matéria</string>
+    <string name="cancel">Cancelar</string>
+    <string name="next">Próximo</string>
+    <string name="abbreviation_already_on_database">Abreviação já está sendo utilizada</string>
 
 </resources>

@@ -11,6 +11,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import calegari.murilo.agendaescolar.subjecthelper.SubjectsFragment;
+
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity

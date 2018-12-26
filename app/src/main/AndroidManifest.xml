@@ -35,13 +35,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewSubjectActivity"
+            android:name=".subjecthelper.NewSubjectActivity"
             android:label="@string/title_activity_new_subject"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity
+            android:name=".subjecthelper.EditSubjectActivity"
+            android:label="@string/title_activity_edit_subject"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

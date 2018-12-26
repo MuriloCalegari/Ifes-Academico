@@ -1,4 +1,4 @@
-package calegari.murilo.agendaescolar.Databases;
+package calegari.murilo.agendaescolar.databases;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -52,6 +52,8 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, Professor);
         long result = db.insert(SubjectEntry.TABLE_NAME, null, contentValues);
 
+        db.close();
+
         if (result == -1) {
             Log.d("SubjectDatabaseHelper", "Some error happened when inserting data in database");
             return false;
@@ -61,9 +63,37 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public Integer removeData(String Abbreviation) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String deleteQuery = "DELETE FROM " + SubjectEntry.TABLE_NAME + " WHERE " + SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + " = " + '"' + Abbreviation + '"';
+        Log.d("SubjectDatabaseHelper", "Removing data from database with query: " + deleteQuery);
+        int i = db.delete(SubjectEntry.TABLE_NAME, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {Abbreviation});
+        db.close();
+        return i;
+    }
+
     public Cursor getAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME, null);
         return cursor;
     }
+
+    public boolean hasObject(String columnName, String entry) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "SELECT * FROM " + SubjectEntry.TABLE_NAME + " WHERE " + columnName + " = " + '"' + entry + '"';
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if(cursor.moveToFirst()) {
+            cursor.close();
+            db.close();
+            return true;
+        } else {
+            cursor.close();
+            db.close();
+            return false;
+        }
+    }
+
 }

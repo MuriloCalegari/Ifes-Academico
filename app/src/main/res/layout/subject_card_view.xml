@@ -21,7 +21,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/space"
         tools:layout_conversion_absoluteHeight="511dp"
-        tools:layout_conversion_absoluteWidth="384dp">
+        tools:layout_conversion_absoluteWidth="384dp"
+        android:foreground="?android:attr/selectableItemBackground">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,4 +1,4 @@
-package calegari.murilo.agendaescolar;
+package calegari.murilo.agendaescolar.subjecthelper;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -8,12 +8,13 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import calegari.murilo.agendaescolar.R;
 
-public class LineAdapter extends RecyclerView.Adapter<SubjectLineHolder> {
+public class SubjectLineAdapter extends RecyclerView.Adapter<SubjectLineHolder> {
 
     private final List<Subject> mSubjects;
 
-    public LineAdapter(ArrayList subjects) {
+    public SubjectLineAdapter(ArrayList subjects) {
         mSubjects = subjects;
     }
 
@@ -51,5 +52,4 @@ public class LineAdapter extends RecyclerView.Adapter<SubjectLineHolder> {
         mSubjects.add(subject);
         notifyItemInserted(getItemCount());
     }
-
 }
