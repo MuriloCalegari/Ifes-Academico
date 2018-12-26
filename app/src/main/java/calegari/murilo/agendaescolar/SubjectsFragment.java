@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 public class SubjectsFragment extends Fragment {
 
     FloatingActionButton fab;
-    Integer REQUEST_CODE = 1;
 
     @Nullable
     @Override
@@ -41,20 +40,6 @@ public class SubjectsFragment extends Fragment {
 
     private void newSubject() {
         Intent newSubjectIntent = new Intent(getContext(), NewSubjectActivity.class);
-        startActivityForResult(newSubjectIntent, REQUEST_CODE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode == NewSubjectActivity.RESULT_OK) {
-            String newSubjectName = data.getStringExtra("newSubjectName");
-            String newSubjectAbbreviation = data.getStringExtra("newSubjectAbbreviation");
-            String newSubjectProfessor = data.getStringExtra("newSubjectProfessor");
-
-            // TODO: Do something with received Strings
-
-        }
+        startActivity(newSubjectIntent);
     }
 }

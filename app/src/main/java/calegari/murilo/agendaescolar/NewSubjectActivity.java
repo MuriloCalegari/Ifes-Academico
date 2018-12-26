@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import calegari.murilo.agendaescolar.Databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.SubjectSteps.SubjectAbbreviationStep;
 import calegari.murilo.agendaescolar.SubjectSteps.SubjectNameStep;
 import calegari.murilo.agendaescolar.SubjectSteps.SubjectProfessorStep;
@@ -58,17 +59,12 @@ public class NewSubjectActivity extends AppCompatActivity implements StepperForm
         // This method will be called when the user clicks on the last confirmation button of the
         // form in an attempt to save or send the data.
 
-        Intent resultIntent = new Intent();
+        // Sends data to database
 
-        // Sends obtained data to SubjectsFragment
-        resultIntent.putExtra("newSubjectName",newSubjectName.getStepDataAsHumanReadableString());
-        resultIntent.putExtra("newSubjectAbbreviation",newSubjectAbbreviation.getStepDataAsHumanReadableString());
-        resultIntent.putExtra("newSubjectProfessor",newSubjectProfessor.getStepDataAsHumanReadableString());
-
-        setResult(NewSubjectActivity.RESULT_OK, resultIntent);
+        SubjectDatabaseHelper subjectDbHelper = new SubjectDatabaseHelper(this);
+        subjectDbHelper.insertData(newSubjectName.getStepDataAsHumanReadableString(), newSubjectAbbreviation.getStepDataAsHumanReadableString(), newSubjectProfessor.getStepDataAsHumanReadableString());
 
         finish();
-
     }
 
     @Override
