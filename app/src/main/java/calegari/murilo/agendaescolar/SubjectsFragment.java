@@ -94,11 +94,11 @@ public class SubjectsFragment extends Fragment {
         subjectDatabase = new SubjectDatabaseHelper(getContext());
         Cursor cursor = subjectDatabase.getAllData();
 
-        while(cursor.moveToNext()) {
+        Integer subjectNameIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_NAME);
+        Integer subjectProfessorIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_PROFESSOR);
+        Integer subjectAbbreviationIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_ABBREVIATION);
 
-            Integer subjectNameIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_NAME);
-            Integer subjectProfessorIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_PROFESSOR);
-            Integer subjectAbbreviationIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_ABBREVIATION);
+        while(cursor.moveToNext()) {
 
             String subjectName = cursor.getString(subjectNameIndex);
             String subjectProfessor = cursor.getString(subjectProfessorIndex);
