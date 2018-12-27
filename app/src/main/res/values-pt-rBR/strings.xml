@@ -52,7 +52,7 @@
     <!-- Strings related to Edit Subject -->
 
     <string name="title_activity_edit_subject">Editar matéria</string>
-    <string name="subject_confirm_edit_button">Editar matéria</string>
+    <string name="subject_confirm_save_button">Salvar matéria</string>
     <string name="cancel">Cancelar</string>
     <string name="next">Próximo</string>
     <string name="abbreviation_already_on_database">Abreviação já está sendo utilizada</string>

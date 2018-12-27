@@ -60,7 +60,7 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
         verticalStepperForm = findViewById(R.id.stepper_form);
         verticalStepperForm
                 .setup(this, newSubjectName, newSubjectAbbreviation, newSubjectProfessor)
-                .lastStepNextButtonText(getString(R.string.subject_confirm_edit_button))
+                .lastStepNextButtonText(getString(R.string.subject_confirm_save_button))
                 .displayCancelButtonInLastStep(true)
                 .lastStepCancelButtonText(getString(R.string.cancel))
                 .stepNextButtonText(getString(R.string.next))

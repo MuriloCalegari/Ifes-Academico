@@ -61,7 +61,7 @@
     <!-- Strings related to Edit Subject -->
 
     <string name="title_activity_edit_subject">Edit subject</string>
-    <string name="subject_confirm_edit_button">Edit subject</string>
+    <string name="subject_confirm_save_button">Save subject</string>
     <string name="cancel">Cancel</string>
     <string name="next">Next</string>
     <string name="abbreviation_already_on_database">Abbreviation is already in use</string>
