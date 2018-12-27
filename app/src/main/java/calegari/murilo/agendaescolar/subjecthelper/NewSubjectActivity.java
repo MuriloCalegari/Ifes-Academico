@@ -76,6 +76,7 @@ public class NewSubjectActivity extends AppCompatActivity implements StepperForm
     @Override
     public void onCancelledForm() {
         // This method will be called when the user clicks on the cancel button of the form.
+        finish();
     }
 
 }
