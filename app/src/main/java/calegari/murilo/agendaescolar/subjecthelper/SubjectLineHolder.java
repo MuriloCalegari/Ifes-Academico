@@ -31,9 +31,9 @@ public class SubjectLineHolder extends RecyclerView.ViewHolder implements View.O
         Intent editSubjectIntent = new Intent(v.getContext(), EditSubjectActivity.class);
 
         // Sends the data from this line
-        editSubjectIntent.putExtra("subjectName", subjectName.getText());
-        editSubjectIntent.putExtra("subjectProfessor", subjectProfessor.getText());
-        editSubjectIntent.putExtra("subjectAbbreviation", subjectAbbreviation.getText());
+        editSubjectIntent.putExtra("oldSubjectName", subjectName.getText());
+        editSubjectIntent.putExtra("oldSubjectProfessor", subjectProfessor.getText());
+        editSubjectIntent.putExtra("oldSubjectAbbreviation", subjectAbbreviation.getText());
         v.getContext().startActivity(editSubjectIntent);
     }
 

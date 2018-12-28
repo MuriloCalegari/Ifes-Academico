@@ -69,15 +69,23 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateData(Subject subject) {
+	/**
+	 * Replaces rows that matches the old subject abbreviation with the new Subject object parameters
+	 * @param oldSubjectAbbreviation Old subject abbreviation to be compared in database
+	 * @param newSubject New subject object to edit database
+	 */
+
+	public void updateData(String oldSubjectAbbreviation, Subject newSubject) {
     	SQLiteDatabase db = this.getWritableDatabase();
 
     	ContentValues contentValues = new ContentValues();
-	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_NAME, subject.getName());
-	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, subject.getAbbreviation());
-	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, subject.getProfessor());
+	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_NAME, newSubject.getName());
+	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, newSubject.getAbbreviation());
+	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, newSubject.getProfessor());
 
-	    db.update(SubjectEntry.TABLE_NAME, contentValues, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {subject.getAbbreviation()});
+	    Log.d("SubjectDatabaseHelper", newSubject.getAbbreviation());
+
+	    db.update(SubjectEntry.TABLE_NAME, contentValues, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {oldSubjectAbbreviation});
 	    db.close();
     }
 

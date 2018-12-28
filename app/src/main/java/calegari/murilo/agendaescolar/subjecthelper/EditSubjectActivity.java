@@ -17,14 +17,14 @@ import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
 
 public class EditSubjectActivity extends AppCompatActivity implements StepperFormListener {
 
-	private SubjectNameStep newSubjectName;
-	private SubjectAbbreviationStep newSubjectAbbreviation;
-	private SubjectProfessorStep newSubjectProfessor;
+	private SubjectNameStep subjectNameStep;
+	private SubjectAbbreviationStep subjectAbbreviationStep;
+	private SubjectProfessorStep subjectProfessorStep;
 	private VerticalStepperFormView verticalStepperForm;
 
-	String subjectName;
-	String subjectProfessor;
-	String subjectAbbreviation;
+	String oldSubjectName;
+	String oldSubjectProfessor;
+	String oldSubjectAbbreviation;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,33 +49,33 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
         */
 
 		// Gets information from which input the user would like to edit
-		subjectName = getIntent().getStringExtra("subjectName");
-		subjectProfessor = getIntent().getStringExtra("subjectProfessor");
-		subjectAbbreviation = getIntent().getStringExtra("subjectAbbreviation");
+		oldSubjectName = getIntent().getStringExtra("oldSubjectName");
+		oldSubjectProfessor = getIntent().getStringExtra("oldSubjectProfessor");
+		oldSubjectAbbreviation = getIntent().getStringExtra("oldSubjectAbbreviation");
 
 		// Create the steps
-		newSubjectName = new SubjectNameStep(getResources().getString(R.string.name));
-		newSubjectAbbreviation = new SubjectAbbreviationStep(getResources().getString(R.string.abbreviation), true, subjectAbbreviation);
-		newSubjectProfessor = new SubjectProfessorStep(getResources().getString(R.string.professor));
+		subjectNameStep = new SubjectNameStep(getResources().getString(R.string.name));
+		subjectAbbreviationStep = new SubjectAbbreviationStep(getResources().getString(R.string.abbreviation), true, oldSubjectAbbreviation);
+		subjectProfessorStep = new SubjectProfessorStep(getResources().getString(R.string.professor));
 
 		// Find the form view, set it up and initialize it.
 		verticalStepperForm = findViewById(R.id.stepper_form);
 		verticalStepperForm
-				.setup(this, newSubjectName, newSubjectAbbreviation, newSubjectProfessor)
+				.setup(this, subjectNameStep, subjectAbbreviationStep, subjectProfessorStep)
 				.lastStepNextButtonText(getString(R.string.subject_confirm_save_button))
 				.displayCancelButtonInLastStep(true)
 				.lastStepCancelButtonText(getString(R.string.cancel))
 				.stepNextButtonText(getString(R.string.next))
 				.init();
 
-		reloadSteps(subjectName, subjectProfessor, subjectAbbreviation);
+		reloadSteps(oldSubjectName, oldSubjectProfessor, oldSubjectAbbreviation);
 
-		ImageButton imageButton = findViewById(R.id.imageButton);
+		ImageButton deleteButton = findViewById(R.id.imageButton);
 
-		imageButton.setOnClickListener(new View.OnClickListener() {
+		deleteButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				deleteSubject(subjectAbbreviation);
+				deleteSubject(oldSubjectAbbreviation);
 			}
 		});
 
@@ -89,10 +89,11 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
 		// Sends data to database
 		SubjectDatabaseHelper subjectDbHelper = new SubjectDatabaseHelper(this);
 		subjectDbHelper.updateData(
+				oldSubjectAbbreviation,
 				new Subject(
-						newSubjectName.getStepDataAsHumanReadableString(),
-						newSubjectProfessor.getStepDataAsHumanReadableString(),
-						newSubjectAbbreviation.getStepDataAsHumanReadableString()
+						subjectNameStep.getStepDataAsHumanReadableString(),
+						subjectProfessorStep.getStepDataAsHumanReadableString(),
+						subjectAbbreviationStep.getStepDataAsHumanReadableString()
 				)
 		);
 
@@ -106,9 +107,9 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
 	}
 
 	public void reloadSteps(String subjectName, String subjectProfessor, String subjectAbbreviation) {
-		newSubjectName.restoreStepData(subjectName);
-		newSubjectProfessor.restoreStepData(subjectProfessor);
-		newSubjectAbbreviation.restoreStepData(subjectAbbreviation);
+		subjectNameStep.restoreStepData(subjectName);
+		subjectProfessorStep.restoreStepData(subjectProfessor);
+		subjectAbbreviationStep.restoreStepData(subjectAbbreviation);
 	}
 
 	public void deleteSubject(final String subjectAbbreviation) {
