@@ -88,8 +88,7 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
 
 		// Sends data to database
 		SubjectDatabaseHelper subjectDbHelper = new SubjectDatabaseHelper(this);
-		subjectDbHelper.removeData(subjectAbbreviation); // Deletes entry from database so it will be regenerated
-		subjectDbHelper.insertData(
+		subjectDbHelper.updateData(
 				new Subject(
 						newSubjectName.getStepDataAsHumanReadableString(),
 						newSubjectProfessor.getStepDataAsHumanReadableString(),

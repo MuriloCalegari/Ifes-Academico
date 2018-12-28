@@ -49,32 +49,36 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SubjectEntry.SQL_DELETE_ENTRIES);
     }
 
-    public boolean insertData(Subject subject) {
+    public void insertData(Subject subject) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(SubjectEntry.COLUMN_SUBJECT_NAME, subject.getName());
         contentValues.put(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, subject.getAbbreviation());
         contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, subject.getProfessor());
-        long result = db.insert(SubjectEntry.TABLE_NAME, null, contentValues);
 
+        db.insert(SubjectEntry.TABLE_NAME, null, contentValues);
         db.close();
-
-        if (result == -1) {
-            Log.d("SubjectDatabaseHelper", "Some error happened when inserting data in database");
-            return false;
-        } else {
-            Log.d("SubjectDatabaseHelper", "Created entry in database successfully");
-            return true;
-        }
     }
 
-    public Integer removeData(String Abbreviation) {
+    public void removeData(String Abbreviation) {
         SQLiteDatabase db = this.getWritableDatabase();
         String deleteQuery = "DELETE FROM " + SubjectEntry.TABLE_NAME + " WHERE " + SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + " = " + '"' + Abbreviation + '"';
         Log.d("SubjectDatabaseHelper", "Removing data from database with query: " + deleteQuery);
-        int i = db.delete(SubjectEntry.TABLE_NAME, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {Abbreviation});
+
+        db.delete(SubjectEntry.TABLE_NAME, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {Abbreviation});
         db.close();
-        return i;
+    }
+
+    public void updateData(Subject subject) {
+    	SQLiteDatabase db = this.getWritableDatabase();
+
+    	ContentValues contentValues = new ContentValues();
+	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_NAME, subject.getName());
+	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, subject.getAbbreviation());
+	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, subject.getProfessor());
+
+	    db.update(SubjectEntry.TABLE_NAME, contentValues, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {subject.getAbbreviation()});
+	    db.close();
     }
 
     public Cursor getAllDataInAlphabeticalOrder() {
@@ -92,9 +96,8 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
     public boolean hasObject(String columnName, String entry) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String selectQuery = "SELECT * FROM " + SubjectEntry.TABLE_NAME + " WHERE " + columnName + " = " + '"' + entry + '"';
 
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor cursor = db.query(SubjectEntry.TABLE_NAME, new String[] {columnName}, columnName  + "=?", new String[] {entry}, null, null, null);
 
         if(cursor.moveToFirst()) {
             cursor.close();
