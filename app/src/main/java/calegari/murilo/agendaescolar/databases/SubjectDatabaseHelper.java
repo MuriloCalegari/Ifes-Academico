@@ -23,12 +23,17 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         public static final String COLUMN_SUBJECT_NAME = "name";
         public static final String COLUMN_SUBJECT_ABBREVIATION = "abbreviation";
         public static final String COLUMN_SUBJECT_PROFESSOR = "professor";
+        // This naming is very bad, sorry english speakers
+        public static final String COLUMN_SUBJECT_OBTAINED_GRADE = "obtainedgrade";
+        public static final String COLUMN_SUBJECT_MAXIMUM_GRADE = "maximumgrade";
         public static final Integer DATABASE_VERSION = 1;
         private static final String SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
                 SubjectEntry.TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 SubjectEntry.COLUMN_SUBJECT_NAME + " TEXT," +
                 SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + " TEXT," +
-                SubjectEntry.COLUMN_SUBJECT_PROFESSOR + " TEXT)";
+                SubjectEntry.COLUMN_SUBJECT_PROFESSOR + " TEXT," +
+                SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE + " TEXT," +
+                SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE + " TEXT)";
 
         private static final String SQL_DELETE_ENTRIES =
                 "DROP TABLE IF EXISTS " + SubjectEntry.TABLE_NAME;
