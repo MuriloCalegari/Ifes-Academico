@@ -32,8 +32,8 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
                 SubjectEntry.COLUMN_SUBJECT_NAME + " TEXT," +
                 SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + " TEXT," +
                 SubjectEntry.COLUMN_SUBJECT_PROFESSOR + " TEXT," +
-                SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE + " TEXT," +
-                SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE + " TEXT)";
+                SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE + " REAL," +
+                SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE + " REAL)";
 
         private static final String SQL_DELETE_ENTRIES =
                 "DROP TABLE IF EXISTS " + SubjectEntry.TABLE_NAME;
