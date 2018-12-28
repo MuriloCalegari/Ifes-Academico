@@ -105,8 +105,6 @@ public class SubjectsFragment extends Fragment {
             String subjectProfessor = cursor.getString(subjectProfessorIndex);
             String subjectAbbreviation = cursor.getString(subjectAbbreviationIndex);
 
-            Log.d("SubjectsFragment", "Creating new subject object and updating RecyclerView with param: " + subjectName + ", " + subjectProfessor + ", " + subjectAbbreviation);
-
             Subject subject = new Subject(subjectName,subjectProfessor,subjectAbbreviation);
 
             mAdapter.updateList(subject);

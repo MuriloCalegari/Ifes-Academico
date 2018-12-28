@@ -62,9 +62,6 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
 
     public void removeData(String Abbreviation) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String deleteQuery = "DELETE FROM " + SubjectEntry.TABLE_NAME + " WHERE " + SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + " = " + '"' + Abbreviation + '"';
-        Log.d("SubjectDatabaseHelper", "Removing data from database with query: " + deleteQuery);
-
         db.delete(SubjectEntry.TABLE_NAME, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {Abbreviation});
         db.close();
     }
@@ -82,8 +79,6 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
 	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_NAME, newSubject.getName());
 	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, newSubject.getAbbreviation());
 	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, newSubject.getProfessor());
-
-	    Log.d("SubjectDatabaseHelper", newSubject.getAbbreviation());
 
 	    db.update(SubjectEntry.TABLE_NAME, contentValues, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {oldSubjectAbbreviation});
 	    db.close();
