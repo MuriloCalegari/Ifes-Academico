@@ -93,7 +93,7 @@ public class SubjectsFragment extends Fragment {
 
         // Populates the list:
         subjectDatabase = new SubjectDatabaseHelper(getContext());
-        Cursor cursor = subjectDatabase.getAllData();
+        Cursor cursor = subjectDatabase.getAllDataInAlphabeticalOrder();
 
         Integer subjectNameIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_NAME);
         Integer subjectProfessorIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_PROFESSOR);

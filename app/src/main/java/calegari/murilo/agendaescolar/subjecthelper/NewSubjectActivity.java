@@ -68,8 +68,13 @@ public class NewSubjectActivity extends AppCompatActivity implements StepperForm
         // Sends data to database
 
         SubjectDatabaseHelper subjectDbHelper = new SubjectDatabaseHelper(this);
-        subjectDbHelper.insertData(newSubjectName.getStepDataAsHumanReadableString(), newSubjectAbbreviation.getStepDataAsHumanReadableString(), newSubjectProfessor.getStepDataAsHumanReadableString());
-
+        subjectDbHelper.insertData(
+                new Subject(
+                		newSubjectName.getStepDataAsHumanReadableString(),
+						newSubjectProfessor.getStepDataAsHumanReadableString(),
+                        newSubjectAbbreviation.getStepDataAsHumanReadableString()
+                )
+        );
         finish();
     }
 

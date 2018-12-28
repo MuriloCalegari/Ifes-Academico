@@ -9,13 +9,13 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import calegari.murilo.agendaescolar.subjecthelper.Subject;
 
 public class SubjectDatabaseHelper extends SQLiteOpenHelper {
 
     public SubjectDatabaseHelper(@Nullable Context context) {
         super(context, SubjectEntry.DATABASE_NAME, null, SubjectEntry.DATABASE_VERSION);
     }
-
 
     public static class SubjectEntry implements BaseColumns {
         public static final String DATABASE_NAME = "schooltools.db";
@@ -49,12 +49,12 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SubjectEntry.SQL_DELETE_ENTRIES);
     }
 
-    public boolean insertData(String Name, String Abbreviation, String Professor) {
+    public boolean insertData(Subject subject) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_NAME, Name);
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, Abbreviation);
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, Professor);
+        contentValues.put(SubjectEntry.COLUMN_SUBJECT_NAME, subject.getName());
+        contentValues.put(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, subject.getAbbreviation());
+        contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, subject.getProfessor());
         long result = db.insert(SubjectEntry.TABLE_NAME, null, contentValues);
 
         db.close();
@@ -77,10 +77,16 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         return i;
     }
 
-    public Cursor getAllData() {
+    public Cursor getAllDataInAlphabeticalOrder() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME + " ORDER BY " + SubjectEntry.COLUMN_SUBJECT_NAME + " ASC", null);
         return cursor;
+    }
+
+    public Cursor getAllData() {
+	    SQLiteDatabase db = this.getWritableDatabase();
+	    Cursor cursor = db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME + "", null);
+	    return cursor;
     }
 
     public boolean hasObject(String columnName, String entry) {
