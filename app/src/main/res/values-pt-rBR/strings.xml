@@ -56,5 +56,8 @@
     <string name="cancel">Cancelar</string>
     <string name="next">Próximo</string>
     <string name="abbreviation_already_on_database">Abreviação já está sendo utilizada</string>
+    <string name="confirm_subject_delete_title">Deletar matéria?</string>
+    <string name="confirm_subject_delete_message">Isso vai deletar permanentemente a matéria e suas notas.</string>
+    <string name="delete">Deletar</string>
 
 </resources>

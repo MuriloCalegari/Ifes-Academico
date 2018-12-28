@@ -65,5 +65,8 @@
     <string name="cancel">Cancel</string>
     <string name="next">Next</string>
     <string name="abbreviation_already_on_database">Abbreviation is already in use</string>
+    <string name="confirm_subject_delete_title">Delete subject?</string>
+    <string name="confirm_subject_delete_message">This will permanently delete this subject and its grades</string>
+    <string name="delete">Delete</string>
 
 </resources>
