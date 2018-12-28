@@ -1,9 +1,12 @@
 package calegari.murilo.agendaescolar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
+import android.os.Handler;
 import android.util.Log;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
@@ -14,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import calegari.murilo.agendaescolar.subjecthelper.SubjectsFragment;
 
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -24,6 +28,11 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("MainActivity","onCreate");
+
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -63,35 +72,59 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(final MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        final int id = item.getItemId();
+
+        final Context context = this;
+
+        /*
+        Adds a delay to the fragment calling after navigation bar is being closed, I've tested three different methods
+        in order to improve the stutter that happens during the animation: hardware acceleration, which didn't solve the
+        issue by itself; only calling fragment after navigation bar is closed, which introduced a too-long blank screen
+        before fragment is setup. This "solve" was found in
+        https://stackoverflow.com/questions/27234580/stuttering-when-opening-new-fragment-from-navigation-drawer
+        and is said to be within an app example presented by Google in Google IO 2014
+        */
+
+        int NAVBAR_CLOSE_DELAY = 200;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // TODO: Add proper default statement and make Home do not change App Bar title
+                switch (id) {
+                    case R.id.nav_about:
+                        Intent aboutIntent = new Intent(context,AboutActivity.class);
+                        startActivity(aboutIntent);
+                        break;
+                    case R.id.nav_settings:
+                        Intent settingsIntent = new Intent(context,SettingsActivity.class);
+                        startActivity(settingsIntent);
+                        break;
+                    case R.id.nav_subjects:
+                        startFragment(SubjectsFragment.class, item);
+                        break;
+                    default:
+                        startFragment(SubjectsFragment.class, item);
+                        break;
+                }
+            }
+        }, NAVBAR_CLOSE_DELAY);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-
-        // TODO: Add proper default statement and make Home do not change App Bar title
-        switch (id) {
-            case R.id.nav_about:
-                Intent aboutIntent = new Intent(this,AboutActivity.class);
-                startActivity(aboutIntent);
-                break;
-            case R.id.nav_settings:
-                Intent settingsIntent = new Intent(this,SettingsActivity.class);
-                startActivity(settingsIntent);
-                break;
-            case R.id.nav_subjects:
-                startFragment(SubjectsFragment.class, item);
-                break;
-            default:
-                startFragment(SubjectsFragment.class, item);
-                break;
-        }
 
         return true;
     }
 
     public void startFragment(Class fragmentClass, MenuItem item) {
+
+        /* Set action bar title
+        It would be preferable that this was called just after navigation bar is begin closed,
+        But I'd need to set this only when calling a fragment, and not an activity, this would increase
+        code complexity and it's just not worth it
+        */
+        setTitle(item.getTitle());
 
         Fragment fragment = null;
         try {
@@ -103,11 +136,6 @@ public class MainActivity extends AppCompatActivity
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
-        // Highlight the selected item has been done by NavigationView
-        item.setChecked(true);
-        // Set action bar title
-        setTitle(item.getTitle());
 
     }
 }
