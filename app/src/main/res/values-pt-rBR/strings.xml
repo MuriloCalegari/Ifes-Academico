@@ -60,4 +60,8 @@
     <string name="confirm_subject_delete_message">Isso vai deletar permanentemente a matéria e suas notas.</string>
     <string name="delete">Deletar</string>
 
+    <!-- Strings related to Grades -->
+
+    <string name="out_of">de</string>
+
 </resources>

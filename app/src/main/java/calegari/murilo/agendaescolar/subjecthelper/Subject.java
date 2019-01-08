@@ -5,11 +5,20 @@ public class Subject {
     private String name;
     private String professor;
     private String abbreviation;
+    private Float maximumGrade;
+    private Float obtainedGrade;
 
     public Subject(String name, String professor, String abbreviation) {
         this.name = name;
         this.professor = professor;
         this.abbreviation = abbreviation;
+    }
+
+    public Subject(String name, String professor, Float maximumGrade, Float obtainedGrade) {
+        this.name = name;
+        this.professor = professor;
+        this.maximumGrade = maximumGrade;
+        this.obtainedGrade = obtainedGrade;
     }
 
     public String getName() {
@@ -34,5 +43,21 @@ public class Subject {
 
     public void setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;
+    }
+
+    public Float getMaximumGrade() {
+        return maximumGrade;
+    }
+
+    public void setMaximumGrade(Float maximumGrade) {
+        this.maximumGrade = maximumGrade;
+    }
+
+    public Float getObtainedGrade() {
+        return obtainedGrade;
+    }
+
+    public void setObtainedGrade(Float obtainedGrade) {
+        this.obtainedGrade = obtainedGrade;
     }
 }
