@@ -1,8 +1,6 @@
 package calegari.murilo.agendaescolar.gradehelper;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -12,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.R;
@@ -39,21 +36,6 @@ public class SubjectGradeLineAdapter extends RecyclerView.Adapter<SubjectGradeLi
 
         float obtainedGrade = mSubjects.get(position).getObtainedGrade();
         float maximumGrade = mSubjects.get(position).getMaximumGrade();
-        SlimChart gradeChart = holder.gradeChart;
-        int dangerColor = holder.itemView.getResources().getColor(R.color.slimchart_danger_color);
-        int warningColor = holder.itemView.getResources().getColor(R.color.slimchart_warning_color);
-        int okColor = holder.itemView.getResources().getColor(R.color.slimchart_ok_color);
-
-        obtainedGrade = 75;
-        maximumGrade = 100;
-
-        float averageGradePercentage = obtainedGrade / maximumGrade * 100;
-        final float[] stats = new float[4];
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(holder.itemView.getContext());
-        Integer dangerGradePercentage = sharedPreferences.getInt("minimumPercentage",60);
-        Integer DANGER_WARNING_THRESHOLD = 10;
-        Integer warningGradePercentage = dangerGradePercentage + DANGER_WARNING_THRESHOLD;
 
         holder.subjectName.setText(mSubjects.get(position).getName());
 
@@ -64,6 +46,23 @@ public class SubjectGradeLineAdapter extends RecyclerView.Adapter<SubjectGradeLi
         holder.gradeText.setText(gradeText);
 
         holder.subjectName.setText(mSubjects.get(position).getName());
+
+        setupGradeChart(holder, 50, 30);
+    }
+
+    private void setupGradeChart(@NonNull SubjectGradeLineHolder holder, float obtainedGrade, float maximumGrade) {
+        SlimChart gradeChart = holder.gradeChart;
+        int dangerColor = holder.itemView.getResources().getColor(R.color.slimchart_danger_color);
+        int warningColor = holder.itemView.getResources().getColor(R.color.slimchart_warning_color);
+        int okColor = holder.itemView.getResources().getColor(R.color.slimchart_ok_color);
+
+        float averageGradePercentage = obtainedGrade / maximumGrade * 100;
+        final float[] stats = new float[4];
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(holder.itemView.getContext());
+        Integer dangerGradePercentage = sharedPreferences.getInt("minimumPercentage",60);
+        Integer DANGER_WARNING_THRESHOLD = 10;
+        Integer warningGradePercentage = dangerGradePercentage + DANGER_WARNING_THRESHOLD;
 
         String gradeChartText;
         if(maximumGrade != 0) {
@@ -85,7 +84,7 @@ public class SubjectGradeLineAdapter extends RecyclerView.Adapter<SubjectGradeLi
             stats[1] = warningGradePercentage;
             stats[2] = dangerGradePercentage;
 
-            // gradeChart.setTextColor(Color.GREEN);
+            gradeChart.setTextColor(R.color.slimchart_ok_color);
 
         } else if (averageGradePercentage >= dangerGradePercentage && averageGradePercentage < warningGradePercentage) {
             graphColors[0] = warningColor;
@@ -94,12 +93,15 @@ public class SubjectGradeLineAdapter extends RecyclerView.Adapter<SubjectGradeLi
             gradeChart.setColors(graphColors);
             stats[0] = averageGradePercentage;
             stats[1] = dangerGradePercentage;
+
+            gradeChart.setTextColor(R.color.slimchart_warning_color);
+
         } else {
             graphColors[0] = dangerColor;
             stats[0] = averageGradePercentage;
-        }
 
-        // TODO Set text color -- need to fix issue with library
+            gradeChart.setTextColor(R.color.slimchart_danger_color);
+        }
 
         gradeChart.setColors(graphColors);
         gradeChart.setStats(stats);
