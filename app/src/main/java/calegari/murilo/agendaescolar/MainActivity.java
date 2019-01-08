@@ -14,7 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import calegari.murilo.agendaescolar.gradehelper.SubjectGradesFragment;
+import calegari.murilo.agendaescolar.gradehelper.GradesFragment;
 import calegari.murilo.agendaescolar.subjecthelper.SubjectsFragment;
 
 import android.view.MenuItem;
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity
                         startFragment(SubjectsFragment.class, item);
                         break;
                     case R.id.nav_grades:
-                        startFragment(SubjectGradesFragment.class, item);
+                        startFragment(GradesFragment.class, item);
                         break;
                     default:
                         break;

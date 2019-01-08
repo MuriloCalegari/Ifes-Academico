@@ -15,24 +15,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.subjecthelper.Subject;
 
-public class SubjectGradeLineAdapter extends RecyclerView.Adapter<SubjectGradeLineHolder> {
+public class GradesLineAdapter extends RecyclerView.Adapter<GradesLineHolder> {
 
     private final List<Subject> mSubjects;
 
-    public SubjectGradeLineAdapter (ArrayList subjects) {
+    public GradesLineAdapter(ArrayList subjects) {
         mSubjects = subjects;
     }
 
     @NonNull
     @Override
-    public SubjectGradeLineHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public GradesLineHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        return new SubjectGradeLineHolder(LayoutInflater.from(parent.getContext())
+        return new GradesLineHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.subject_grade_card,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SubjectGradeLineHolder holder, int position) {
+    public void onBindViewHolder(@NonNull GradesLineHolder holder, int position) {
 
         float obtainedGrade = mSubjects.get(position).getObtainedGrade();
         float maximumGrade = mSubjects.get(position).getMaximumGrade();
@@ -50,7 +50,7 @@ public class SubjectGradeLineAdapter extends RecyclerView.Adapter<SubjectGradeLi
         setupGradeChart(holder, obtainedGrade, maximumGrade);
     }
 
-    private void setupGradeChart(@NonNull SubjectGradeLineHolder holder, float obtainedGrade, float maximumGrade) {
+    private void setupGradeChart(@NonNull GradesLineHolder holder, float obtainedGrade, float maximumGrade) {
         SlimChart gradeChart = holder.gradeChart;
         int dangerColor = holder.itemView.getResources().getColor(R.color.slimchart_danger_color);
         int warningColor = holder.itemView.getResources().getColor(R.color.slimchart_warning_color);

@@ -8,13 +8,13 @@ import com.mancj.slimchart.SlimChart;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.R;
 
-public class SubjectGradeLineHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class GradesLineHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     public TextView gradeText;
     public TextView subjectName;
     public SlimChart gradeChart;
 
-    public SubjectGradeLineHolder(View itemView) {
+    public GradesLineHolder(View itemView) {
         super(itemView);
 
         gradeText = itemView.findViewById(R.id.grade);

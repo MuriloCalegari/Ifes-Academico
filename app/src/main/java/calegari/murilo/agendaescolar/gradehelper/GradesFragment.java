@@ -2,13 +2,11 @@ package calegari.murilo.agendaescolar.gradehelper;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,10 +17,10 @@ import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.subjecthelper.Subject;
 import me.saket.inboxrecyclerview.InboxRecyclerView;
 
-public class SubjectGradesFragment extends Fragment {
+public class GradesFragment extends Fragment {
 
     InboxRecyclerView inboxRecyclerView;
-    private SubjectGradeLineAdapter mAdapter;
+    private GradesLineAdapter mAdapter;
     SubjectDatabaseHelper subjectDatabase;
 
     @Nullable
@@ -50,7 +48,7 @@ public class SubjectGradesFragment extends Fragment {
     private void setupThreadView() {
         inboxRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mAdapter = new SubjectGradeLineAdapter(new ArrayList<>(0));
+        mAdapter = new GradesLineAdapter(new ArrayList<>(0));
 
         // Needed to avoid "Adapter needs to have stable IDs so that the expanded item can be restored across orientation changes." error
         // TODO Check if this brokes the app in some usage
