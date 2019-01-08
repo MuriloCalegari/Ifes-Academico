@@ -1,12 +1,19 @@
 package calegari.murilo.agendaescolar.gradehelper;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
+import com.mancj.slimchart.SlimChart;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.subjecthelper.Subject;
@@ -30,23 +37,77 @@ public class SubjectGradeLineAdapter extends RecyclerView.Adapter<SubjectGradeLi
     @Override
     public void onBindViewHolder(@NonNull SubjectGradeLineHolder holder, int position) {
 
+        float obtainedGrade = mSubjects.get(position).getObtainedGrade();
+        float maximumGrade = mSubjects.get(position).getMaximumGrade();
+        SlimChart gradeChart = holder.gradeChart;
+        int dangerColor = holder.itemView.getResources().getColor(R.color.slimchart_danger_color);
+        int warningColor = holder.itemView.getResources().getColor(R.color.slimchart_warning_color);
+        int okColor = holder.itemView.getResources().getColor(R.color.slimchart_ok_color);
+
+        obtainedGrade = 75;
+        maximumGrade = 100;
+
+        float averageGradePercentage = obtainedGrade / maximumGrade * 100;
+        final float[] stats = new float[4];
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(holder.itemView.getContext());
+        Integer dangerGradePercentage = sharedPreferences.getInt("minimumPercentage",60);
+        Integer DANGER_WARNING_THRESHOLD = 10;
+        Integer warningGradePercentage = dangerGradePercentage + DANGER_WARNING_THRESHOLD;
+
         holder.subjectName.setText(mSubjects.get(position).getName());
 
-        String gradeText = mSubjects.get(position).getObtainedGrade() + " " +
+        String gradeText = obtainedGrade + " " +
                 holder.itemView.getContext().getResources().getString(R.string.out_of) + " " +
-                mSubjects.get(position).getMaximumGrade();
+                maximumGrade;
 
         holder.gradeText.setText(gradeText);
 
         holder.subjectName.setText(mSubjects.get(position).getName());
 
         String gradeChartText;
-        if(mSubjects.get(position).getMaximumGrade() != 0) {
-            gradeChartText = String.valueOf(mSubjects.get(position).getObtainedGrade() / mSubjects.get(position).getObtainedGrade() * 100) + "%";
+        if(maximumGrade != 0) {
+            gradeChartText = String.valueOf(Math.round(averageGradePercentage)) + "%";
         } else {
             gradeChartText = "0%";
         }
-        holder.gradeChart.setText(gradeChartText);
+        gradeChart.setText(gradeChartText);
+
+        // Create color array for slimChart
+        int[] graphColors = new int[4];
+
+        if(averageGradePercentage >= warningGradePercentage) { // If grade is in "safe zone"
+            graphColors[0] = okColor;
+            graphColors[1] = warningColor;
+            graphColors[2] = dangerColor;
+
+            stats[0] = averageGradePercentage;
+            stats[1] = warningGradePercentage;
+            stats[2] = dangerGradePercentage;
+
+            // gradeChart.setTextColor(Color.GREEN);
+
+        } else if (averageGradePercentage >= dangerGradePercentage && averageGradePercentage < warningGradePercentage) {
+            graphColors[0] = warningColor;
+            graphColors[1] = dangerColor;
+
+            gradeChart.setColors(graphColors);
+            stats[0] = averageGradePercentage;
+            stats[1] = dangerGradePercentage;
+        } else {
+            graphColors[0] = dangerColor;
+            stats[0] = averageGradePercentage;
+        }
+
+        // TODO Set text color -- need to fix issue with library
+
+        gradeChart.setColors(graphColors);
+        gradeChart.setStats(stats);
+
+        //Play animation
+        gradeChart.setStartAnimationDuration(2000);
+        gradeChart.playStartAnimation();
+
     }
 
     @Override
