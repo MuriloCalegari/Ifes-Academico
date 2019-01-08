@@ -65,5 +65,6 @@
     <string name="cancel">Cancel</string>
     <string name="next">Next</string>
     <string name="abbreviation_already_on_database">Abbreviation is already in use</string>
+    <string name="out_of">out of</string>
 
 </resources>

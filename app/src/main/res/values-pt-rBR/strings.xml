@@ -57,4 +57,8 @@
     <string name="next">Próximo</string>
     <string name="abbreviation_already_on_database">Abreviação já está sendo utilizada</string>
 
+    <!-- Strings related to Grades -->
+
+    <string name="out_of">de</string>
+
 </resources>
