@@ -14,6 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import calegari.murilo.agendaescolar.gradehelper.SubjectGradesFragment;
 import calegari.murilo.agendaescolar.subjecthelper.SubjectsFragment;
 
 import android.view.MenuItem;
@@ -103,8 +104,10 @@ public class MainActivity extends AppCompatActivity
                     case R.id.nav_subjects:
                         startFragment(SubjectsFragment.class, item);
                         break;
+                    case R.id.nav_grades:
+                        startFragment(SubjectGradesFragment.class, item);
+                        break;
                     default:
-                        startFragment(SubjectsFragment.class, item);
                         break;
                 }
             }
@@ -117,6 +120,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void startFragment(Class fragmentClass, MenuItem item) {
+
+        Log.d("MainActivityLog", "Starting " + fragmentClass.getName());
 
         /* Set action bar title
         It would be preferable that this was called just after navigation bar is begin closed,

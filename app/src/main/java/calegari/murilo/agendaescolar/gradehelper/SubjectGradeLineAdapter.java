@@ -22,6 +22,7 @@ public class SubjectGradeLineAdapter extends RecyclerView.Adapter<SubjectGradeLi
     @NonNull
     @Override
     public SubjectGradeLineHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         return new SubjectGradeLineHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.subject_grade_card,parent,false));
     }
@@ -31,15 +32,20 @@ public class SubjectGradeLineAdapter extends RecyclerView.Adapter<SubjectGradeLi
 
         holder.subjectName.setText(mSubjects.get(position).getName());
 
-        String gradeText = mSubjects.get(position).getObtainedGrade() +
-                holder.itemView.getContext().getResources().getString(R.string.out_of) +
+        String gradeText = mSubjects.get(position).getObtainedGrade() + " " +
+                holder.itemView.getContext().getResources().getString(R.string.out_of) + " " +
                 mSubjects.get(position).getMaximumGrade();
 
         holder.gradeText.setText(gradeText);
 
         holder.subjectName.setText(mSubjects.get(position).getName());
 
-        String gradeChartText = String.valueOf(mSubjects.get(position).getObtainedGrade() / mSubjects.get(position).getObtainedGrade() * 100);
+        String gradeChartText;
+        if(mSubjects.get(position).getMaximumGrade() != 0) {
+            gradeChartText = String.valueOf(mSubjects.get(position).getObtainedGrade() / mSubjects.get(position).getObtainedGrade() * 100) + "%";
+        } else {
+            gradeChartText = "0%";
+        }
         holder.gradeChart.setText(gradeChartText);
     }
 

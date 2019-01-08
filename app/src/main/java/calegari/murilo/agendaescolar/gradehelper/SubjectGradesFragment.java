@@ -36,7 +36,7 @@ public class SubjectGradesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        inboxRecyclerView = Objects.requireNonNull(getActivity()).findViewById(R.id.inbox_recyclerview);
+        inboxRecyclerView = getView().findViewById(R.id.inbox_recyclerview);
 
         setupThreadView();
 
@@ -51,7 +51,36 @@ public class SubjectGradesFragment extends Fragment {
         inboxRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mAdapter = new SubjectGradeLineAdapter(new ArrayList<>(0));
+
+        // Needed to avoid "Adapter needs to have stable IDs so that the expanded item can be restored across orientation changes." error
+        // TODO Check if this brokes the app in some usage
+
+        mAdapter.setHasStableIds(true);
+
         inboxRecyclerView.setAdapter(mAdapter);
+
+        // Populates the list:
+        subjectDatabase = new SubjectDatabaseHelper(getContext());
+        Cursor cursor = subjectDatabase.getAllDataInAlphabeticalOrder();
+
+        Integer subjectNameIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_NAME);
+        Integer subjectProfessorIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_PROFESSOR);
+        Integer subjectMaximumGradeIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE);
+        Integer subjectObtainedGradeIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE);
+
+        while(cursor.moveToNext()) {
+
+            String subjectName = cursor.getString(subjectNameIndex);
+            String subjectProfessor = cursor.getString(subjectProfessorIndex);
+            Float subjectMaximumGrade = cursor.getFloat(subjectMaximumGradeIndex);
+            Float subjectObtainedGrade = cursor.getFloat(subjectObtainedGradeIndex);
+
+            Subject subject = new Subject(subjectName,subjectProfessor,subjectMaximumGrade,subjectObtainedGrade);
+
+            mAdapter.updateList(subject);
+        }
+        cursor.close();
+        subjectDatabase.close();
     }
 
 }
