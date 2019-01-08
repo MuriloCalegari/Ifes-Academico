@@ -47,7 +47,7 @@ public class SubjectGradeLineAdapter extends RecyclerView.Adapter<SubjectGradeLi
 
         holder.subjectName.setText(mSubjects.get(position).getName());
 
-        setupGradeChart(holder, 50, 30);
+        setupGradeChart(holder, obtainedGrade, maximumGrade);
     }
 
     private void setupGradeChart(@NonNull SubjectGradeLineHolder holder, float obtainedGrade, float maximumGrade) {
