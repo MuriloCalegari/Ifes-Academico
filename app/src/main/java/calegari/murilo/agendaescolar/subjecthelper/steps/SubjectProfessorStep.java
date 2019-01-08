@@ -2,6 +2,7 @@ package calegari.murilo.agendaescolar.subjecthelper.steps;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 
@@ -40,6 +41,20 @@ public class SubjectProfessorStep extends Step<String> {
             @Override
             public void afterTextChanged(Editable s) {}
         });
+
+        subjectProfessorView.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
+                    getFormView().goToNextStep(true);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         return subjectProfessorView;
     }
 
