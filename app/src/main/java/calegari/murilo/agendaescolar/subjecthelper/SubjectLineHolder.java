@@ -8,6 +8,8 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.R;
+import calegari.murilo.agendaescolar.gradehelper.GradesFragment;
+import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks;
 
 public class SubjectLineHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -16,7 +18,7 @@ public class SubjectLineHolder extends RecyclerView.ViewHolder implements View.O
     public TextView subjectProfessor;
     public TextView subjectAbbreviation;
 
-    public SubjectLineHolder(View itemView) {
+    public SubjectLineHolder(final View itemView) {
         super(itemView);
         subjectCard = itemView.findViewById(R.id.cardView);
         subjectName = itemView.findViewById(R.id.subjectName);

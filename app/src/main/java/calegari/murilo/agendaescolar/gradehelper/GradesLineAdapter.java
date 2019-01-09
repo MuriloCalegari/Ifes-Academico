@@ -10,10 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
+import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.subjecthelper.Subject;
+import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks;
 
 public class GradesLineAdapter extends RecyclerView.Adapter<GradesLineHolder> {
 
@@ -32,7 +37,7 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesLineHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GradesLineHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final GradesLineHolder holder, int position) {
 
         float obtainedGrade = mSubjects.get(position).getObtainedGrade();
         float maximumGrade = mSubjects.get(position).getMaximumGrade();

@@ -30,7 +30,7 @@
 
             app:msbp_minValue="0"
             app:msbp_maxValue="100"
-            app:msbp_interval="1"
+            app:msbp_interval="5"
             app:msbp_measurementUnit="%"
             app:msbp_dialogEnabled="false"/>
 

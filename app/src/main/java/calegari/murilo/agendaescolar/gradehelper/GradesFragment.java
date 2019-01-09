@@ -10,16 +10,24 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
+import calegari.murilo.agendaescolar.subjectgrades.SubjectGradesFragment;
 import calegari.murilo.agendaescolar.subjecthelper.Subject;
 import me.saket.inboxrecyclerview.InboxRecyclerView;
+import me.saket.inboxrecyclerview.page.ExpandablePageLayout;
+import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks;
 
 public class GradesFragment extends Fragment {
 
-    InboxRecyclerView inboxRecyclerView;
+    static InboxRecyclerView inboxRecyclerView;
     private GradesLineAdapter mAdapter;
     SubjectDatabaseHelper subjectDatabase;
 
@@ -36,23 +44,23 @@ public class GradesFragment extends Fragment {
 
         inboxRecyclerView = getView().findViewById(R.id.inbox_recyclerview);
 
-        setupThreadView();
+        // Sets the toolbar name
+        AppCompatActivity activity = (AppCompatActivity) view.getContext();
+        activity.getSupportActionBar().setTitle(getString(R.string.grades));
+
+        setupThreadView(view);
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
+    private void setupThreadView(final View view) {
 
-    private void setupThreadView() {
+        ExpandablePageLayout expandablePageLayout = getView().findViewById(R.id.expandablePageLayout);
+
         inboxRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mAdapter = new GradesLineAdapter(new ArrayList<>(0));
 
         // Needed to avoid "Adapter needs to have stable IDs so that the expanded item can be restored across orientation changes." error
-        // TODO Check if this brokes the app in some usage
-
         mAdapter.setHasStableIds(true);
 
         inboxRecyclerView.setAdapter(mAdapter);
@@ -79,6 +87,58 @@ public class GradesFragment extends Fragment {
         }
         cursor.close();
         subjectDatabase.close();
-    }
 
+        inboxRecyclerView.setExpandablePage(expandablePageLayout);
+
+        expandablePageLayout.addStateChangeCallbacks(new SimplePageStateChangeCallbacks() {
+
+            AppCompatActivity activity = (AppCompatActivity) view.getContext();
+
+            @Override
+            public void onPageAboutToCollapse(long collapseAnimDuration) {
+                super.onPageAboutToCollapse(collapseAnimDuration);
+                MainActivity.anim.reverse();
+                activity.getSupportActionBar().setTitle(getString(R.string.grades));
+
+                // The following lines makes the user able to open the drawer after coming from a
+                // subject grade fragment
+                MainActivity.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MainActivity.drawer.openDrawer(GravityCompat.START);
+                    }
+                });
+            }
+
+            @Override
+            public void onPageAboutToExpand(long expandAnimDuration) {
+                super.onPageAboutToExpand(expandAnimDuration);
+                MainActivity.anim.start();
+            }
+
+            @Override
+            public void onPageCollapsed() {
+                super.onPageCollapsed();
+                activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+
+            @Override
+            public void onPageExpanded() {
+                super.onPageExpanded();
+
+                Class fragmentClass = SubjectGradesFragment.class;
+
+                Fragment fragment = null;
+                try {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // Insert the fragment by replacing any existing fragment
+                FragmentManager fragmentManager = activity.getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.frameLayoutContent, fragment).commit();
+            }
+        });
+    }
 }

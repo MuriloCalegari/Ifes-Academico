@@ -16,26 +16,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <!---
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <me.saket.inboxrecyclerview.page.ExpandablePageLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/expandablePageLayout"
+        android:background="@android:color/white">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:tint="@android:color/white"
-            app:backgroundTint="@color/colorAccent"
-            app:fabSize="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_add_white_24dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/frameLayoutContent">
+        </FrameLayout>
+
+    </me.saket.inboxrecyclerview.page.ExpandablePageLayout>
 </FrameLayout>

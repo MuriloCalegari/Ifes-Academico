@@ -1,5 +1,6 @@
 package calegari.murilo.agendaescolar;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,11 +20,14 @@ import calegari.murilo.agendaescolar.subjecthelper.SubjectsFragment;
 
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private DrawerLayout drawer;
+    public static DrawerLayout drawer;
+    public static ValueAnimator anim;
+    public static Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +38,27 @@ public class MainActivity extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
 
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        anim = ValueAnimator.ofFloat(0f, 1f);
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float slideOffset = (Float) valueAnimator.getAnimatedValue();
+                toggle.onDrawerSlide(drawer, slideOffset);
+            }
+        });
+        anim.setInterpolator(new DecelerateInterpolator());
+        // You can change this duration to more closely match that of the default animation.
+        anim.setDuration(250);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -121,15 +138,6 @@ public class MainActivity extends AppCompatActivity
 
     public void startFragment(Class fragmentClass, MenuItem item) {
 
-        Log.d("MainActivityLog", "Starting " + fragmentClass.getName());
-
-        /* Set action bar title
-        It would be preferable that this was called just after navigation bar is begin closed,
-        But I'd need to set this only when calling a fragment, and not an activity, this would increase
-        code complexity and it's just not worth it
-        */
-        setTitle(item.getTitle());
-
         Fragment fragment = null;
         try {
             fragment = (Fragment) fragmentClass.newInstance();
@@ -139,7 +147,9 @@ public class MainActivity extends AppCompatActivity
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        if (fragment != null) {
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
 
     }
 }
