@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
         and is said to be within an app example presented by Google in Google IO 2014
         */
 
-        int NAVBAR_CLOSE_DELAY = 200;
+        int NAVBAR_CLOSE_DELAY = getResources().getInteger(R.integer.navigation_bar_close_delay);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

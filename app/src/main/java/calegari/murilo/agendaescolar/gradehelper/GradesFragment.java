@@ -1,10 +1,13 @@
 package calegari.murilo.agendaescolar.gradehelper;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import java.util.ArrayList;
 
@@ -64,6 +67,7 @@ public class GradesFragment extends Fragment {
         mAdapter.setHasStableIds(true);
 
         inboxRecyclerView.setAdapter(mAdapter);
+        //inboxRecyclerView.scheduleLayoutAnimation();
 
         // Populates the list:
         subjectDatabase = new SubjectDatabaseHelper(getContext());
@@ -87,6 +91,7 @@ public class GradesFragment extends Fragment {
         }
         cursor.close();
         subjectDatabase.close();
+
 
         inboxRecyclerView.setExpandablePage(expandablePageLayout);
 
