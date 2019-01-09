@@ -1,4 +1,4 @@
-package calegari.murilo.agendaescolar.subjecthelper;
+package calegari.murilo.agendaescolar.subjects;
 
 public class Subject {
 

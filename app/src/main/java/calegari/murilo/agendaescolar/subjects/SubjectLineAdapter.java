@@ -1,4 +1,4 @@
-package calegari.murilo.agendaescolar.subjecthelper;
+package calegari.murilo.agendaescolar.subjects;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

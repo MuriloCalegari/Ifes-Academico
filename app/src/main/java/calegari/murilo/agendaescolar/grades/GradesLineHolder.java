@@ -1,4 +1,4 @@
-package calegari.murilo.agendaescolar.gradehelper;
+package calegari.murilo.agendaescolar.grades;
 
 import android.view.View;
 import android.widget.TextView;
@@ -7,14 +7,9 @@ import com.mancj.slimchart.SlimChart;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
-import calegari.murilo.agendaescolar.subjectgrades.SubjectGradesFragment;
-import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks;
 
 
 public class GradesLineHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

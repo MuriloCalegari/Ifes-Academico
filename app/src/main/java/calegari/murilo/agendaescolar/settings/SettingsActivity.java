@@ -1,8 +1,10 @@
-package calegari.murilo.agendaescolar;
+package calegari.murilo.agendaescolar.settings;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import calegari.murilo.agendaescolar.R;
+
 import android.view.View;
 
 public class SettingsActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package calegari.murilo.agendaescolar.gradehelper;
+package calegari.murilo.agendaescolar.grades;
 
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
@@ -10,15 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
-import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
-import calegari.murilo.agendaescolar.subjecthelper.Subject;
-import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks;
+import calegari.murilo.agendaescolar.subjects.Subject;
 
 public class GradesLineAdapter extends RecyclerView.Adapter<GradesLineHolder> {
 

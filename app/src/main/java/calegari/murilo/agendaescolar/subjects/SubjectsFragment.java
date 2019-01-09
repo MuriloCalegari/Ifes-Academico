@@ -1,4 +1,4 @@
-package calegari.murilo.agendaescolar.subjecthelper;
+package calegari.murilo.agendaescolar.subjects;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.R;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

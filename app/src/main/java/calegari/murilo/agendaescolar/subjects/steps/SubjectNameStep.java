@@ -1,4 +1,4 @@
-package calegari.murilo.agendaescolar.subjecthelper.steps;
+package calegari.murilo.agendaescolar.subjects.steps;
 
 import android.text.Editable;
 import android.text.TextWatcher;

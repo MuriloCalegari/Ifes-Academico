@@ -6,10 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
-import calegari.murilo.agendaescolar.subjecthelper.Subject;
+import calegari.murilo.agendaescolar.subjects.Subject;
 
 public class SubjectDatabaseHelper extends SQLiteOpenHelper {
 

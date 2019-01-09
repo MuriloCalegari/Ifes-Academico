@@ -1,9 +1,11 @@
-package calegari.murilo.agendaescolar;
+package calegari.murilo.agendaescolar.settings;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
+import calegari.murilo.agendaescolar.R;
+
 import android.view.View;
 import android.widget.ListView;
 

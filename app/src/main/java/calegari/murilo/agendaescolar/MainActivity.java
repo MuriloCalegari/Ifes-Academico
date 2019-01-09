@@ -8,15 +8,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Handler;
-import android.util.Log;
+
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import calegari.murilo.agendaescolar.gradehelper.GradesFragment;
-import calegari.murilo.agendaescolar.subjecthelper.SubjectsFragment;
+import calegari.murilo.agendaescolar.grades.GradesFragment;
+import calegari.murilo.agendaescolar.settings.SettingsActivity;
+import calegari.murilo.agendaescolar.subjects.SubjectsFragment;
 
 import android.view.MenuItem;
 import android.view.WindowManager;

@@ -1,13 +1,10 @@
-package calegari.murilo.agendaescolar.gradehelper;
+package calegari.murilo.agendaescolar.grades;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 
 import java.util.ArrayList;
 
@@ -16,14 +13,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.subjectgrades.SubjectGradesFragment;
-import calegari.murilo.agendaescolar.subjecthelper.Subject;
+import calegari.murilo.agendaescolar.subjects.Subject;
 import me.saket.inboxrecyclerview.InboxRecyclerView;
 import me.saket.inboxrecyclerview.page.ExpandablePageLayout;
 import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks;
@@ -51,23 +47,20 @@ public class GradesFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) view.getContext();
         activity.getSupportActionBar().setTitle(getString(R.string.grades));
 
-        setupThreadView(view);
+        setupInboxRecyclerView(view);
 
     }
 
-    private void setupThreadView(final View view) {
-
-        ExpandablePageLayout expandablePageLayout = getView().findViewById(R.id.expandablePageLayout);
+    private void setupInboxRecyclerView(final View view) {
 
         inboxRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mAdapter = new GradesLineAdapter(new ArrayList<>(0));
 
-        // Needed to avoid "Adapter needs to have stable IDs so that the expanded item can be restored across orientation changes." error
+        // Needed to avoid "Adapter needs to have stable IDs so that the expanded item can be restored across orientation changes." exception
         mAdapter.setHasStableIds(true);
 
         inboxRecyclerView.setAdapter(mAdapter);
-        //inboxRecyclerView.scheduleLayoutAnimation();
 
         // Populates the list:
         subjectDatabase = new SubjectDatabaseHelper(getContext());
@@ -92,9 +85,8 @@ public class GradesFragment extends Fragment {
         cursor.close();
         subjectDatabase.close();
 
-
+        ExpandablePageLayout expandablePageLayout = getView().findViewById(R.id.expandablePageLayout);
         inboxRecyclerView.setExpandablePage(expandablePageLayout);
-
         expandablePageLayout.addStateChangeCallbacks(new SimplePageStateChangeCallbacks() {
 
             AppCompatActivity activity = (AppCompatActivity) view.getContext();

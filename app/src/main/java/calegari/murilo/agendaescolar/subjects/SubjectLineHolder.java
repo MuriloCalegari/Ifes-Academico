@@ -1,15 +1,12 @@
-package calegari.murilo.agendaescolar.subjecthelper;
+package calegari.murilo.agendaescolar.subjects;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.R;
-import calegari.murilo.agendaescolar.gradehelper.GradesFragment;
-import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks;
 
 public class SubjectLineHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 

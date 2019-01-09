@@ -24,7 +24,7 @@
                 android:value="calegari.murilo.agendaescolar.MainActivity" />
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".subjecthelper.NewSubjectActivity"
+            android:name=".subjects.NewSubjectActivity"
             android:label="@string/title_activity_new_subject"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -46,7 +46,7 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name=".subjecthelper.EditSubjectActivity"
+            android:name=".subjects.EditSubjectActivity"
             android:label="@string/title_activity_edit_subject"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

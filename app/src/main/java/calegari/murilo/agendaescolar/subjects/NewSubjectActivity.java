@@ -1,4 +1,4 @@
-package calegari.murilo.agendaescolar.subjecthelper;
+package calegari.murilo.agendaescolar.subjects;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,9 +8,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.R;
-import calegari.murilo.agendaescolar.subjecthelper.steps.SubjectAbbreviationStep;
-import calegari.murilo.agendaescolar.subjecthelper.steps.SubjectNameStep;
-import calegari.murilo.agendaescolar.subjecthelper.steps.SubjectProfessorStep;
+import calegari.murilo.agendaescolar.subjects.steps.SubjectAbbreviationStep;
+import calegari.murilo.agendaescolar.subjects.steps.SubjectNameStep;
+import calegari.murilo.agendaescolar.subjects.steps.SubjectProfessorStep;
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormView;
 import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
 

@@ -1,4 +1,4 @@
-package calegari.murilo.agendaescolar.subjecthelper.steps;
+package calegari.murilo.agendaescolar.subjects.steps;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -6,26 +6,41 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 
+import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.R;
 import ernestoyaquello.com.verticalstepperform.Step;
 
-public class SubjectProfessorStep extends Step<String> {
-    private EditText subjectProfessorView;
+public class SubjectAbbreviationStep extends Step<String> {
+    private EditText subjectAbbreviationView;
+
     private Integer MINIMUM_CHARACTERS_PARAMETER = 2;
-    private Integer MAXIMUM_CHARACTERS_PARAMETER = 40;
+    private Integer MAXIMUM_CHARACTERS_PARAMETER = 6;
+    private boolean checkOnDatabase = true;
+    private String ignoreStringOnDatabase;
 
 
-    public SubjectProfessorStep(String stepTitle) {
+    public SubjectAbbreviationStep(String stepTitle) {
         super(stepTitle);
+    }
+
+    public SubjectAbbreviationStep(String stepTitle, boolean checkDatabase) {
+        super(stepTitle);
+        checkOnDatabase = checkDatabase;
+    }
+
+    public SubjectAbbreviationStep(String stepTitle, boolean checkDatabase, String ignoreString) {
+        super(stepTitle);
+        checkOnDatabase = checkDatabase;
+        ignoreStringOnDatabase = ignoreString;
     }
 
     @Override
     protected View createStepContentLayout() {
-        subjectProfessorView = new EditText(getContext());
-        subjectProfessorView.setSingleLine(true);
-        subjectProfessorView.setHint(getContext().getResources().getString(R.string.professor));
+        subjectAbbreviationView = new EditText(getContext());
+        subjectAbbreviationView.setSingleLine(true);
+        subjectAbbreviationView.setHint(getContext().getResources().getString(R.string.abbreviation));
 
-        subjectProfessorView.addTextChangedListener(new TextWatcher() {
+        subjectAbbreviationView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -42,7 +57,7 @@ public class SubjectProfessorStep extends Step<String> {
             public void afterTextChanged(Editable s) {}
         });
 
-        subjectProfessorView.setOnKeyListener(new View.OnKeyListener() {
+        subjectAbbreviationView.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
@@ -55,25 +70,44 @@ public class SubjectProfessorStep extends Step<String> {
             }
         });
 
-        return subjectProfessorView;
+        return subjectAbbreviationView;
     }
 
     @Override
     protected IsDataValid isStepDataValid(String stepData) {
-        /* The step's data (i.e., the user name) will be considered valid only if it is between
-        two and forty characters. In case it is not, we will display an error message for feedback.
-        n an optional step, you should implement this method to always return a valid value. */
-        boolean isNameValid = (stepData.length() >= MINIMUM_CHARACTERS_PARAMETER) && (stepData.length() <= MAXIMUM_CHARACTERS_PARAMETER);
-        String errorMessage = !isNameValid ? getContext().getResources().getString(R.string.min_max_character_professor_error) : "";
+        /* The step's data (i.e., the subject abbreviation) will be considered valid only if this method
+         * returns a new IsDataValid(true, "") object */
+        boolean isNameSizeValid = (stepData.length() >= MINIMUM_CHARACTERS_PARAMETER) && (stepData.length() <= MAXIMUM_CHARACTERS_PARAMETER);
+        String errorMessage;
 
-        return new IsDataValid(isNameValid, errorMessage);
+        if(!isNameSizeValid) {
+            errorMessage = getContext().getResources().getString(R.string.min_max_character_abbreviation_error);
+            return new IsDataValid(false, errorMessage);
+        }
+
+        /* Only checks if entry is unique after consulting if name size is valid
+         * and if stepData is different of ignore param, this is important on
+         * EditSubjectActivity */
+
+        if(checkOnDatabase && !stepData.equals(ignoreStringOnDatabase)) {
+            SubjectDatabaseHelper subjectDatabase = new SubjectDatabaseHelper(getContext());
+
+            boolean isAbbreviationOnDataBase = subjectDatabase.hasObject(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, stepData);
+
+            if (isAbbreviationOnDataBase) {
+                errorMessage = getContext().getResources().getString(R.string.abbreviation_already_on_database);
+                return new IsDataValid(false, errorMessage);
+            }
+        }
+
+        return new IsDataValid(true, "");
     }
 
     @Override
     public String getStepData() {
         // We get the step's data from the value that the user has typed in the EditText view.
-        Editable subjectProfessor = subjectProfessorView.getText();
-        return subjectProfessor != null ? subjectProfessor.toString() : "";
+        Editable subjectAbbreviation = subjectAbbreviationView.getText();
+        return subjectAbbreviation != null ? subjectAbbreviation.toString() : "";
     }
 
     @Override
@@ -81,8 +115,8 @@ public class SubjectProfessorStep extends Step<String> {
         // Because the step's data is already a human-readable string, we don't need to convert it.
         // However, we return "(Empty)" if the text is empty to avoid not having any text to display.
         // This string will be displayed in the subtitle of the step whenever the step gets closed.
-        String subjectProfessor = getStepData();
-        return !subjectProfessor.isEmpty() ? subjectProfessor : getContext().getResources().getString(R.string.empty);
+        String subjectAbbreviation = getStepData();
+        return !subjectAbbreviation.isEmpty() ? subjectAbbreviation : getContext().getResources().getString(R.string.empty);
     }
 
     @Override
@@ -108,7 +142,7 @@ public class SubjectProfessorStep extends Step<String> {
     @Override
     public void restoreStepData(String stepData) {
         // To restore the step after a configuration change, we restore the text of its EditText view.
-        subjectProfessorView.setText(stepData);
+        subjectAbbreviationView.setText(stepData);
     }
 
 }
