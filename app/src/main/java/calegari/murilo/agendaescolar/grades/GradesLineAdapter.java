@@ -6,8 +6,11 @@ import android.view.ViewGroup;
 
 import com.mancj.slimchart.SlimChart;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -39,7 +42,11 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesLineHolder> {
 
         holder.subjectName.setText(mSubjects.get(position).getName());
 
-        String gradeText = obtainedGrade + " " +
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US); // Just to keep consistency on float default representation
+        // Define the maximum number of decimals (number of symbols #)
+        DecimalFormat df = new DecimalFormat("#.##", otherSymbols);
+
+        String gradeText = df.format(obtainedGrade) + " " +
                 holder.itemView.getContext().getResources().getString(R.string.out_of) + " " +
                 maximumGrade;
 
@@ -56,7 +63,8 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesLineHolder> {
         int warningColor = holder.itemView.getResources().getColor(R.color.slimchart_warning_color);
         int okColor = holder.itemView.getResources().getColor(R.color.slimchart_ok_color);
 
-        float averageGradePercentage = obtainedGrade / maximumGrade * 100;
+        // TODO Decide if this is going to be rounded
+        float averageGradePercentage = Math.round(obtainedGrade / maximumGrade * 100);
         final float[] stats = new float[4];
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(holder.itemView.getContext());
@@ -66,6 +74,7 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesLineHolder> {
 
         String gradeChartText;
         if(maximumGrade != 0) {
+            // TODO Decide if this is going to be rounded
             gradeChartText = String.valueOf(Math.round(averageGradePercentage)) + "%";
         } else {
             gradeChartText = "0%";

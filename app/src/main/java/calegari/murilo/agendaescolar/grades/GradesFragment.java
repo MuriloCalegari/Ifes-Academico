@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -105,6 +106,7 @@ public class GradesFragment extends Fragment {
                         MainActivity.drawer.openDrawer(GravityCompat.START);
                     }
                 });
+                MainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             }
 
             @Override
@@ -135,6 +137,9 @@ public class GradesFragment extends Fragment {
                 // Insert the fragment by replacing any existing fragment
                 FragmentManager fragmentManager = activity.getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.frameLayoutContent, fragment).commit();
+
+                // Keep the drawer closed
+                MainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             }
         });
     }
