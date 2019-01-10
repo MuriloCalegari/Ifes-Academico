@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import androidx.annotation.Nullable;
+import calegari.murilo.agendaescolar.subjectgrades.SubjectGrade;
 import calegari.murilo.agendaescolar.subjects.Subject;
 
 public class SubjectDatabaseHelper extends SQLiteOpenHelper {
@@ -65,34 +66,94 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-	/**
-	 * Replaces rows that matches the old subject abbreviation with the new Subject object parameters
-	 * @param oldSubjectAbbreviation Old subject abbreviation to be compared in database
-	 * @param newSubject New subject object to edit database
-	 */
+    /**
+     * Replaces rows that matches the old subject abbreviation with the new Subject object parameters
+     * @param oldSubjectAbbreviation Old subject abbreviation to be compared in database
+     * @param newSubject New subject object to edit database
+     */
 
-	public void updateData(String oldSubjectAbbreviation, Subject newSubject) {
-    	SQLiteDatabase db = this.getWritableDatabase();
+    public void updateData(String oldSubjectAbbreviation, Subject newSubject) {
+        SQLiteDatabase db = this.getWritableDatabase();
 
-    	ContentValues contentValues = new ContentValues();
-	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_NAME, newSubject.getName());
-	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, newSubject.getAbbreviation());
-	    contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, newSubject.getProfessor());
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SubjectEntry.COLUMN_SUBJECT_NAME, newSubject.getName());
+        contentValues.put(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, newSubject.getAbbreviation());
+        contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, newSubject.getProfessor());
 
-	    db.update(SubjectEntry.TABLE_NAME, contentValues, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {oldSubjectAbbreviation});
-	    db.close();
+        db.update(SubjectEntry.TABLE_NAME, contentValues, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {oldSubjectAbbreviation});
+        db.close();
+    }
+
+    public void addGradeData(SubjectGrade subjectGrade) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String subjectAbbreviation = subjectGrade.getSubjectAbbreviation();
+
+        Cursor cursor = db.query(SubjectEntry.TABLE_NAME, // Table name
+                new String[] {SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE, SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE}, // Columns to return
+                SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", // WHERE clause
+                new String[] {subjectAbbreviation},
+                null, null, null
+        );
+
+        Integer subjectObtainedGradeIndex = cursor.getColumnIndex(SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE);
+        Integer subjectMaximumGradeIndex = cursor.getColumnIndex(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE);
+
+        cursor.moveToFirst(); // Abbreviation is unique, so our desired subject should be the first
+
+        float newTotalObtainedGrade = cursor.getFloat(subjectObtainedGradeIndex) + subjectGrade.getObtainedGrade();
+        float newTotalMaximumGrade = cursor.getFloat(subjectMaximumGradeIndex) + subjectGrade.getMaximumGrade();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE, newTotalObtainedGrade);
+        contentValues.put(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE, newTotalMaximumGrade);
+
+        cursor.close();
+
+        db.update(SubjectEntry.TABLE_NAME, contentValues, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {subjectAbbreviation});
+        db.close();
+    }
+
+    public void removeGradeData(SubjectGrade subjectGrade) {
+        /* Yes, I'm just copy and pasting the entire code from addGradeData
+         * and just changing + to - in newTotal[...]
+         */
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String subjectAbbreviation = subjectGrade.getSubjectAbbreviation();
+
+        Cursor cursor = db.query(SubjectEntry.TABLE_NAME, // Table name
+                new String[] {SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE, SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE}, // Columns to return
+                SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", // WHERE clause
+                new String[] {subjectAbbreviation}, // arguments to WHERE clause
+                null, null, null
+        );
+
+        Integer subjectObtainedGradeIndex = cursor.getColumnIndex(SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE);
+        Integer subjectMaximumGradeIndex = cursor.getColumnIndex(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE);
+
+        cursor.moveToFirst(); // Abbreviation is unique, so our desired subject should be the first
+
+        float newTotalObtainedGrade = cursor.getFloat(subjectObtainedGradeIndex) - subjectGrade.getObtainedGrade();
+        float newTotalMaximumGrade = cursor.getFloat(subjectMaximumGradeIndex) - subjectGrade.getMaximumGrade();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE, newTotalObtainedGrade);
+        contentValues.put(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE, newTotalMaximumGrade);
+
+        cursor.close();
+
+        db.update(SubjectEntry.TABLE_NAME, contentValues, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {subjectAbbreviation});
+        db.close();
     }
 
     public Cursor getAllDataInAlphabeticalOrder() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME + " ORDER BY " + SubjectEntry.COLUMN_SUBJECT_NAME + " ASC", null);
-        return cursor;
+        return db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME + " ORDER BY " + SubjectEntry.COLUMN_SUBJECT_NAME + " ASC", null);
     }
 
     public Cursor getAllData() {
-	    SQLiteDatabase db = this.getWritableDatabase();
-	    Cursor cursor = db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME + "", null);
-	    return cursor;
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME + "", null);
     }
 
     public boolean hasObject(String columnName, String entry) {
