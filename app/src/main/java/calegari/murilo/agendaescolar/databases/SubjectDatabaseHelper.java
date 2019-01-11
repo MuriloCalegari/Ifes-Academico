@@ -27,6 +27,7 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         public static final String COLUMN_SUBJECT_OBTAINED_GRADE = "obtainedgrade";
         public static final String COLUMN_SUBJECT_MAXIMUM_GRADE = "maximumgrade";
         public static final Integer DATABASE_VERSION = 1;
+
         private static final String SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
                 SubjectEntry.TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
                 SubjectEntry.COLUMN_SUBJECT_NAME + " TEXT," +
@@ -105,7 +106,10 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE, newTotalObtainedGrade);
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE, newTotalMaximumGrade);
+
+        if(!subjectGrade.isExtraGrade()) {
+            contentValues.put(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE, newTotalMaximumGrade);
+        }
 
         cursor.close();
 
@@ -138,7 +142,10 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE, newTotalObtainedGrade);
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE, newTotalMaximumGrade);
+
+        if(!subjectGrade.isExtraGrade()) {
+            contentValues.put(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE, newTotalMaximumGrade);
+        }
 
         cursor.close();
 

@@ -10,14 +10,12 @@ import calegari.murilo.agendaescolar.R;
 
 public class SubjectLineHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-    public CardView subjectCard;
     public TextView subjectName;
     public TextView subjectProfessor;
     public TextView subjectAbbreviation;
 
     public SubjectLineHolder(final View itemView) {
         super(itemView);
-        subjectCard = itemView.findViewById(R.id.cardView);
         subjectName = itemView.findViewById(R.id.subjectName);
         subjectProfessor = itemView.findViewById(R.id.subjectProfessor);
         subjectAbbreviation = itemView.findViewById(R.id.subjectAbbreviation);

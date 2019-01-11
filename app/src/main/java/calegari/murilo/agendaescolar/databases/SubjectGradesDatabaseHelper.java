@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import calegari.murilo.agendaescolar.subjectgrades.SubjectGrade;
@@ -21,14 +22,19 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
     private Context mContext;
 
     public static class SubjectGradesEntry implements BaseColumns {
-        public static final String DATABASE_NAME = "schooltools.db";
+    	/*
+    	I know I should have put all tables inside a single database, but by the time I realized
+    	this I had already written too many code that relies on this class and now it's just not
+    	worth it. Please good practice people, do not kill me.
+    	 */
+        public static final String DATABASE_NAME = "schooltools_subject_grades.db";
         public static final String TABLE_NAME = "subjectgrades";
         public static final String COLUMN_GRADE_ID = "gradeid";
         public static final String COLUMN_GRADE_SUBJECT_ABBREVIATION = "subjectabbreviation";
         public static final String COLUMN_GRADE_DESCRIPTION = "gradedescription";
         public static final String COLUMN_GRADE_OBTAINED = "obtainedgrade";
         public static final String COLUMN_GRADE_MAXIMUM = "maximumgrade";
-        public static final Integer DATABASE_VERSION = 1;
+        public static final Integer DATABASE_VERSION = 3;
 
         private static final String SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
                 SubjectGradesEntry.TABLE_NAME + "( " +
@@ -36,7 +42,7 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
                 SubjectGradesEntry.COLUMN_GRADE_SUBJECT_ABBREVIATION + " TEXT," +
                 SubjectGradesEntry.COLUMN_GRADE_DESCRIPTION + " TEXT," +
                 SubjectGradesEntry.COLUMN_GRADE_OBTAINED + " REAL," +
-                SubjectGradesEntry.COLUMN_GRADE_MAXIMUM + "REAL)";
+                SubjectGradesEntry.COLUMN_GRADE_MAXIMUM + " REAL)";
 
         private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + SubjectGradesEntry.TABLE_NAME;
     }
@@ -48,12 +54,14 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+		Log.d(getClass().getCanonicalName(), SubjectGradesEntry.SQL_CREATE_ENTRIES);
         db.execSQL(SubjectGradesEntry.SQL_CREATE_ENTRIES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(SubjectGradesEntry.SQL_DELETE_ENTRIES);
+        db.execSQL(SubjectGradesEntry.SQL_CREATE_ENTRIES);
     }
 
     public void insertData(SubjectGrade subjectGrade) {
@@ -139,5 +147,16 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         subjectDatabase.close();
     }
+
+    public Cursor getSubjectGradesData(String gradeSubjectAbbreviation) {
+    	SQLiteDatabase db = this.getWritableDatabase();
+    	return db.query(
+    			tableName,
+				new String[] {columnGradeId, columnGradeDescription, columnGradeObtained, columnGradeMaximum},
+				columnGradeSubjectAbbreviation + "=?",
+				new String[] {gradeSubjectAbbreviation},
+				null, null, null
+		);
+	}
 
 }

@@ -5,8 +5,8 @@ public class Subject {
     private String name;
     private String professor;
     private String abbreviation;
-    private Float maximumGrade;
     private Float obtainedGrade;
+    private Float maximumGrade;
 
     public Subject(String name, String professor, String abbreviation) {
         this.name = name;
@@ -14,11 +14,17 @@ public class Subject {
         this.abbreviation = abbreviation;
     }
 
-    public Subject(String name, String professor, Float maximumGrade, Float obtainedGrade) {
+    public Subject(String name, String abbreviation, Float obtainedGrade, Float maximumGrade) {
         this.name = name;
-        this.professor = professor;
-        this.maximumGrade = maximumGrade;
+        this.abbreviation = abbreviation;
         this.obtainedGrade = obtainedGrade;
+        this.maximumGrade = maximumGrade;
+    }
+
+    public Subject(String name, Float obtainedGrade, Float maximumGrade) {
+        this.name = name;
+        this.obtainedGrade = obtainedGrade;
+        this.maximumGrade = maximumGrade;
     }
 
     public String getName() {

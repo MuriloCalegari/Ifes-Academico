@@ -1,7 +1,10 @@
 package calegari.murilo.agendaescolar.grades;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.mancj.slimchart.SlimChart;
@@ -13,128 +16,124 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
+import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
+import calegari.murilo.agendaescolar.subjectgrades.SubjectGradesFragment;
 import calegari.murilo.agendaescolar.subjects.Subject;
 
-public class GradesLineAdapter extends RecyclerView.Adapter<GradesLineHolder> {
+public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder> {
 
-    private final List<Subject> mSubjects;
+	private final List<Subject> mSubjects;
+	private Context context;
+	private View view;
 
-    public GradesLineAdapter(ArrayList subjects) {
-        mSubjects = subjects;
-    }
+	public GradesLineAdapter(ArrayList subjects) {
+		mSubjects = subjects;
+	}
 
-    @NonNull
-    @Override
-    public GradesLineHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+	public GradesLineAdapter(ArrayList subjects, Context context, View view) {
+		this.mSubjects = subjects;
+		this.context = context;
+		this.view = view;
+	}
 
-        return new GradesLineHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.subject_grade_card,parent,false));
-    }
+	@NonNull
+	@Override
+	public GradesBaseLineHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-    @Override
-    public void onBindViewHolder(@NonNull final GradesLineHolder holder, int position) {
+		return new GradesBaseLineHolder(LayoutInflater.from(parent.getContext())
+				.inflate(R.layout.subject_grade_card,parent,false));
+	}
 
-        float obtainedGrade = mSubjects.get(position).getObtainedGrade();
-        float maximumGrade = mSubjects.get(position).getMaximumGrade();
+	@Override
+	public void onBindViewHolder(@NonNull final GradesBaseLineHolder holder, final int position) {
 
-        holder.subjectName.setText(mSubjects.get(position).getName());
+		float obtainedGrade = mSubjects.get(position).getObtainedGrade();
+		float maximumGrade = mSubjects.get(position).getMaximumGrade();
 
-        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US); // Just to keep consistency on float default representation
-        // Define the maximum number of decimals (number of symbols #)
-        DecimalFormat df = new DecimalFormat("#.##", otherSymbols);
+		holder.subjectName.setText(mSubjects.get(position).getName());
 
-        String gradeText = df.format(obtainedGrade) + " " +
-                holder.itemView.getContext().getResources().getString(R.string.out_of) + " " +
-                maximumGrade;
+		String gradeText = Math.round(obtainedGrade*100)/100 + " " +
+				holder.itemView.getContext().getResources().getString(R.string.out_of) + " " +
+				Math.round(maximumGrade*100f)/100f;
 
-        holder.gradeText.setText(gradeText);
+		holder.gradeText.setText(gradeText);
 
-        holder.subjectName.setText(mSubjects.get(position).getName());
+		holder.subjectName.setText(mSubjects.get(position).getName());
 
-        setupGradeChart(holder, obtainedGrade, maximumGrade);
-    }
+		GradeChart.setupGradeChart(holder, obtainedGrade, maximumGrade);
 
-    private void setupGradeChart(@NonNull GradesLineHolder holder, float obtainedGrade, float maximumGrade) {
-        SlimChart gradeChart = holder.gradeChart;
-        int dangerColor = holder.itemView.getResources().getColor(R.color.slimchart_danger_color);
-        int warningColor = holder.itemView.getResources().getColor(R.color.slimchart_warning_color);
-        int okColor = holder.itemView.getResources().getColor(R.color.slimchart_ok_color);
+		holder.itemView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
 
-        // TODO Decide if this is going to be rounded
-        float averageGradePercentage = Math.round(obtainedGrade / maximumGrade * 100);
-        final float[] stats = new float[4];
+				setupGradesView(holder, position);
+			}
+		});
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(holder.itemView.getContext());
-        Integer dangerGradePercentage = sharedPreferences.getInt("minimumPercentage",60);
-        Integer DANGER_WARNING_THRESHOLD = 10;
-        Integer warningGradePercentage = dangerGradePercentage + DANGER_WARNING_THRESHOLD;
+	}
 
-        String gradeChartText;
-        if(maximumGrade != 0) {
-            // TODO Decide if this is going to be rounded
-            gradeChartText = String.valueOf(Math.round(averageGradePercentage)) + "%";
-        } else {
-            gradeChartText = "0%";
-        }
-        gradeChart.setText(gradeChartText);
+	public void setupGradesView(GradesBaseLineHolder holder, int position) {
+		AppCompatActivity activity = (AppCompatActivity) view.getContext();
 
-        // Create color array for slimChart
-        int[] graphColors = new int[4];
+		Class fragmentClass = SubjectGradesFragment.class;
 
-        if(averageGradePercentage >= warningGradePercentage) { // If grade is in "safe zone"
-            graphColors[0] = okColor;
-            graphColors[1] = warningColor;
-            graphColors[2] = dangerColor;
+		Fragment fragment = null;
+		try {
+			fragment = (Fragment) fragmentClass.newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-            stats[0] = averageGradePercentage;
-            stats[1] = warningGradePercentage;
-            stats[2] = dangerGradePercentage;
+		// Bundles the subject abbreviation to be send to SubjectGradesFragment
+		String subjectAbbreviation = mSubjects.get(position).getAbbreviation();
+		Bundle bundle = new Bundle();
+		bundle.putString("subjectAbbreviation", subjectAbbreviation);
+		fragment.setArguments(bundle);
 
-            gradeChart.setTextColor(R.color.slimchart_ok_color);
+		// Insert the fragment by replacing any existing fragment
+		FragmentManager fragmentManager = activity.getSupportFragmentManager();
+		fragmentManager.beginTransaction().replace(R.id.frameLayoutContent, fragment).commit();
 
-        } else if (averageGradePercentage >= dangerGradePercentage && averageGradePercentage < warningGradePercentage) {
-            graphColors[0] = warningColor;
-            graphColors[1] = dangerColor;
+		// Keep the drawer closed
+		MainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-            gradeChart.setColors(graphColors);
-            stats[0] = averageGradePercentage;
-            stats[1] = dangerGradePercentage;
 
-            gradeChart.setTextColor(R.color.slimchart_warning_color);
+		GradesFragment.inboxRecyclerView.expandItem(view.getId());
 
-        } else {
-            graphColors[0] = dangerColor;
-            stats[0] = averageGradePercentage;
+		ActionBar actionBar = activity.getSupportActionBar();
 
-            gradeChart.setTextColor(R.color.slimchart_danger_color);
-        }
+		actionBar.setTitle(holder.subjectName.getText());
 
-        gradeChart.setColors(graphColors);
-        gradeChart.setStats(stats);
+		MainActivity.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				GradesFragment.inboxRecyclerView.collapse();
+			}
+		});
+	}
 
-        //Play animation
-        gradeChart.setStartAnimationDuration(2000);
-        gradeChart.playStartAnimation();
+	@Override
+	public int getItemCount() {
+		return mSubjects != null ? mSubjects.size() : 0;
+	}
 
-    }
+	public void updateList(Subject subject) {
+		insertItem(subject);
+	}
 
-    @Override
-    public int getItemCount() {
-        return mSubjects != null ? mSubjects.size() : 0;
-    }
+	// Responsible to insert a new item in list and notify that there are new items on list.
 
-    public void updateList(Subject subject) {
-        insertItem(subject);
-    }
-
-    // Responsible to insert a new item in list and notify that there are new items on list.
-
-    private void insertItem(Subject subject) {
-        mSubjects.add(subject);
-        notifyItemInserted(getItemCount());
-    }
+	private void insertItem(Subject subject) {
+		mSubjects.add(subject);
+		notifyItemInserted(getItemCount());
+	}
 
 }

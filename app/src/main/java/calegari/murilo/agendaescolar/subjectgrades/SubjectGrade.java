@@ -9,6 +9,13 @@ public class SubjectGrade {
     private float obtainedGrade;
     private float maximumGrade;
 
+	/*
+	By default grades are set as not extra,
+	adding it or not to maximum grade field
+	in the database is handled at SubjectDatabase Helper
+	*/
+	private boolean isExtraGrade = false;
+
     public SubjectGrade(String subjectAbbreviation, String gradeDescription, float obtainedGrade, float maximumGrade) {
         this.subjectAbbreviation = subjectAbbreviation;
         this.gradeDescription = gradeDescription;
@@ -16,10 +23,30 @@ public class SubjectGrade {
         this.maximumGrade = maximumGrade;
     }
 
-    public SubjectGrade(float obtainedGrade, float maximumGrade) {
+	public SubjectGrade(String gradeDescription, float obtainedGrade, float maximumGrade) {
+		this.gradeDescription = gradeDescription;
+		this.obtainedGrade = obtainedGrade;
+		this.maximumGrade = maximumGrade;
+	}
+
+	public SubjectGrade(float obtainedGrade, float maximumGrade) {
         this.obtainedGrade = obtainedGrade;
         this.maximumGrade = maximumGrade;
     }
+
+	public SubjectGrade(String subjectAbbreviation, String gradeDescription, float obtainedGrade, float maximumGrade, boolean isExtraGrade) {
+		this.subjectAbbreviation = subjectAbbreviation;
+		this.gradeDescription = gradeDescription;
+		this.obtainedGrade = obtainedGrade;
+		this.maximumGrade = maximumGrade;
+		this.isExtraGrade = isExtraGrade;
+	}
+
+	public SubjectGrade(float obtainedGrade, float maximumGrade, boolean isExtraGrade) {
+		this.obtainedGrade = obtainedGrade;
+		this.maximumGrade = maximumGrade;
+		this.isExtraGrade = isExtraGrade;
+	}
 
     public String getSubjectAbbreviation() {
         return subjectAbbreviation;
@@ -52,4 +79,12 @@ public class SubjectGrade {
     public void setMaximumGrade(float maximumGrade) {
         this.maximumGrade = maximumGrade;
     }
+
+	public boolean isExtraGrade() {
+		return isExtraGrade;
+	}
+
+	public void setExtraGrade(boolean extraGrade) {
+		isExtraGrade = extraGrade;
+	}
 }
