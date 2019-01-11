@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                // TODO: Add proper default statement and make Home do not change App Bar title
                 switch (id) {
                     case R.id.nav_about:
                         Intent aboutIntent = new Intent(context,AboutActivity.class);

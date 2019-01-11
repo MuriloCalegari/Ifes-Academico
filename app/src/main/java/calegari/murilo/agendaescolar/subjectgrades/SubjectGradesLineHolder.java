@@ -22,15 +22,5 @@ public class SubjectGradesLineHolder extends RecyclerView.ViewHolder {
 		gradeText = itemView.findViewById(R.id.grade);
 		subjectName = itemView.findViewById(R.id.subjectName);
 		gradeChart = itemView.findViewById(R.id.slimChart);
-
-		itemView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Define some behavior for click listener
-			}
-		});
 	}
-
-
-
 }

@@ -73,7 +73,6 @@ public class SubjectGradesFragment extends Fragment {
 		// Populates the list
 		subjectGradesDatabase = new SubjectGradesDatabaseHelper(getContext());
 
-		// TODO get from previous fragment
 		Bundle bundle = this.getArguments();
 		String gradeSubjectAbbreviation = bundle.getString("subjectAbbreviation");
 		Cursor cursor = subjectGradesDatabase.getSubjectGradesData(gradeSubjectAbbreviation);
