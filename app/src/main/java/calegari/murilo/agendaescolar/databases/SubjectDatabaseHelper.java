@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import calegari.murilo.agendaescolar.subjectgrades.SubjectGrade;
@@ -56,6 +57,8 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(SubjectEntry.COLUMN_SUBJECT_NAME, subject.getName());
         contentValues.put(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, subject.getAbbreviation());
         contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, subject.getProfessor());
+        contentValues.put(SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE, 0);
+        contentValues.put(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE, 0);
 
         db.insert(SubjectEntry.TABLE_NAME, null, contentValues);
         db.close();
@@ -86,6 +89,8 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void addGradeData(SubjectGrade subjectGrade) {
+        Log.d(getClass().getName(), "Querying data for " + subjectGrade.getSubjectAbbreviation());
+
         SQLiteDatabase db = this.getWritableDatabase();
         String subjectAbbreviation = subjectGrade.getSubjectAbbreviation();
 

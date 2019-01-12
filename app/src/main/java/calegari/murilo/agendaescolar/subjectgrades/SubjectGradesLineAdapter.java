@@ -35,9 +35,9 @@ public class SubjectGradesLineAdapter extends RecyclerView.Adapter<GradesBaseLin
 		float obtainedGrade = mSubjectGrades.get(position).getObtainedGrade();
 		float maximumGrade = mSubjectGrades.get(position).getMaximumGrade();
 
-		String gradeText = Math.round(obtainedGrade *100)/100 + " " +
+		String gradeText = Math.round(obtainedGrade *100f)/100f + " " +
 				holder.itemView.getContext().getResources().getString(R.string.out_of) + " " +
-				Math.round(maximumGrade *100)/100;
+				Math.round(maximumGrade *100f)/100f;
 
 		holder.gradeText.setText(gradeText);
 

@@ -60,7 +60,7 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 
 		holder.subjectName.setText(mSubjects.get(position).getName());
 
-		String gradeText = Math.round(obtainedGrade*100)/100 + " " +
+		String gradeText = Math.round(obtainedGrade*100f)/100f + " " +
 				holder.itemView.getContext().getResources().getString(R.string.out_of) + " " +
 				Math.round(maximumGrade*100f)/100f;
 

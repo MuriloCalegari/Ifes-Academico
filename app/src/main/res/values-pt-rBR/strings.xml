@@ -63,5 +63,13 @@
     <!-- Strings related to Grades -->
 
     <string name="out_of">de</string>
+    <string name="description">Descrição</string>
+    <string name="obtained_grade">Nota obtida</string>
+    <string name="maximum_grade">Nota máxima</string>
+    <string name="maximum_grade_different_from_zero">A nota máxima deve ser diferente de zero</string>
+    <string name="min_max_character_subject_grade_description_error">O tamanho da descrição deve estar entre 2 e 40 caracteres</string>
+    <string name="title_activity_edit_subject_grade">Editar nota</string>
+    <string name="is_extra_credit">É ponto extra?</string>
+    <string name="save_grade">Salvar nota</string>
 
 </resources>

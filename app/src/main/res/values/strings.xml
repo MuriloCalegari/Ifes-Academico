@@ -71,5 +71,14 @@
 
     <!-- Strings related to Subject Grades -->
     <string name="out_of">out of</string>
+    <string name="title_activity_edit_subject_grade">Edit grade</string>
+    <string name="description">Description</string>
+    <string name="min_max_character_subject_grade_description_error">Description size must have 2 to 40 characters</string>
+    <string name="obtained_grade">Obtained Grade</string>
+    <string name="maximum_grade">Maximum Grade</string>
+    <string name="maximum_grade_different_from_zero">Maximum grade must not equal zero</string>
+    <string name="title_activity_new_subject_grade">NewSubjectGrade</string>
+    <string name="is_extra_credit">Is extra credit?</string>
+    <string name="save_grade">Save grade</string>
 
 </resources>

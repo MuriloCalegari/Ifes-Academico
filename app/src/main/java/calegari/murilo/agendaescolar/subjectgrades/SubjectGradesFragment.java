@@ -1,5 +1,6 @@
 package calegari.murilo.agendaescolar.subjectgrades;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.SubjectGradesDatabaseHelper;
+import calegari.murilo.agendaescolar.subjects.NewSubjectActivity;
 
 public class SubjectGradesFragment extends Fragment {
 
@@ -24,6 +26,7 @@ public class SubjectGradesFragment extends Fragment {
     FloatingActionButton fab;
     private SubjectGradesLineAdapter mAdapter;
     SubjectGradesDatabaseHelper subjectGradesDatabase;
+	String gradeSubjectAbbreviation;
 
     @Nullable
     @Override
@@ -32,16 +35,22 @@ public class SubjectGradesFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         fab = view.findViewById(R.id.floatingActionButton);
         mRecyclerView = view.findViewById(R.id.recyclerView);
 
+		Bundle bundle = this.getArguments();
+		gradeSubjectAbbreviation = bundle.getString("subjectAbbreviation");
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Set click listener behavior
+                Intent newSubjectIntent = new Intent(view.getContext(), NewSubjectGradeActivity.class);
+
+                newSubjectIntent.putExtra("subjectAbbreviation", gradeSubjectAbbreviation);
+                v.getContext().startActivity(newSubjectIntent);
             }
         });
 
@@ -73,8 +82,6 @@ public class SubjectGradesFragment extends Fragment {
 		// Populates the list
 		subjectGradesDatabase = new SubjectGradesDatabaseHelper(getContext());
 
-		Bundle bundle = this.getArguments();
-		String gradeSubjectAbbreviation = bundle.getString("subjectAbbreviation");
 		Cursor cursor = subjectGradesDatabase.getSubjectGradesData(gradeSubjectAbbreviation);
 
 		Integer gradeDescriptionIndex = cursor.getColumnIndex(SubjectGradesDatabaseHelper.SubjectGradesEntry.COLUMN_GRADE_DESCRIPTION);

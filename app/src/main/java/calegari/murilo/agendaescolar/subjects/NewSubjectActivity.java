@@ -56,7 +56,6 @@ public class NewSubjectActivity extends AppCompatActivity implements StepperForm
                 .displayCancelButtonInLastStep(true)
                 .lastStepCancelButtonText(getString(R.string.cancel))
                 .stepNextButtonText(getString(R.string.next))
-                .lastStepNextButtonText(getString(R.string.subject_confirm_save_button))
                 .init();
     }
 
