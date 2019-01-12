@@ -65,12 +65,15 @@ public class SubjectGradesFragment extends Fragment {
                 }
             }
         });
-
-        setupRecycler();
-
     }
 
-    private void setupRecycler() {
+	@Override
+	public void onStart() {
+		super.onStart();
+		setupRecycler();
+	}
+
+	private void setupRecycler() {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
