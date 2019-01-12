@@ -73,7 +73,6 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 		holder.itemView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
 				setupGradesView(holder, position);
 			}
 		});
@@ -136,4 +135,8 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 		notifyItemInserted(getItemCount());
 	}
 
+	@Override
+	public long getItemId(int position) {
+		return super.getItemId(position);
+	}
 }
