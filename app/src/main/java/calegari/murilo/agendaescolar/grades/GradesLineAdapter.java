@@ -120,7 +120,8 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 		notifyItemInserted(getItemCount());
 	}
 
-	public long getItemId(Integer position) {
+	@Override
+	public long getItemId(int position) {
 		return position;
 	}
 }
