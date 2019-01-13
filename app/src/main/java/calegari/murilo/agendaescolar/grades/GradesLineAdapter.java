@@ -1,19 +1,13 @@
 package calegari.murilo.agendaescolar.grades;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mancj.slimchart.SlimChart;
-
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -21,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
@@ -70,12 +63,7 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 
 		GradeChart.setupGradeChart(holder, obtainedGrade, maximumGrade);
 
-		holder.itemView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				setupGradesView(holder, position);
-			}
-		});
+		holder.itemView.setOnClickListener(v -> setupGradesView(holder, position));
 
 	}
 
@@ -91,6 +79,8 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 			e.printStackTrace();
 		}
 
+		GradesFragment.inboxRecyclerView.expandItem(position);
+
 		// Bundles the subject abbreviation to be send to SubjectGradesFragment
 		String subjectAbbreviation = mSubjects.get(position).getAbbreviation();
 		Bundle bundle = new Bundle();
@@ -99,24 +89,19 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 
 		// Insert the fragment by replacing any existing fragment
 		FragmentManager fragmentManager = activity.getSupportFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.frameLayoutContent, fragment).commit();
+		fragmentManager
+				.beginTransaction()
+				.replace(R.id.frameLayoutContent, fragment)
+				.commit();
 
 		// Keep the drawer closed
 		MainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
-
-		GradesFragment.inboxRecyclerView.expandItem(view.getId());
 
 		ActionBar actionBar = activity.getSupportActionBar();
 
 		actionBar.setTitle(holder.subjectName.getText());
 
-		MainActivity.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				GradesFragment.inboxRecyclerView.collapse();
-			}
-		});
+		MainActivity.toolbar.setNavigationOnClickListener(v -> GradesFragment.inboxRecyclerView.collapse());
 	}
 
 	@Override
@@ -133,5 +118,9 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 	private void insertItem(Subject subject) {
 		mSubjects.add(subject);
 		notifyItemInserted(getItemCount());
+	}
+
+	public long getItemId(Integer position) {
+		return position;
 	}
 }

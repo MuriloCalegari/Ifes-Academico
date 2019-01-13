@@ -71,5 +71,7 @@
     <string name="title_activity_edit_subject_grade">Editar nota</string>
     <string name="is_extra_credit">É ponto extra?</string>
     <string name="save_grade">Salvar nota</string>
+    <string name="title_activity_new_subject_grade">Nova nota</string>
+
 
 </resources>

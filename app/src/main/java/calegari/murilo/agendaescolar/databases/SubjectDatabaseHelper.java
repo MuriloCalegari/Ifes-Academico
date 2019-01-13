@@ -18,7 +18,7 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         super(context, SubjectEntry.DATABASE_NAME, null, SubjectEntry.DATABASE_VERSION);
     }
 
-    public static class SubjectEntry implements BaseColumns {
+	public static class SubjectEntry implements BaseColumns {
         public static final String DATABASE_NAME = "schooltools.db";
         public static final String TABLE_NAME = "subjects";
         public static final String COLUMN_SUBJECT_NAME = "name";
@@ -27,10 +27,11 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         // This naming is very bad, sorry english speakers
         public static final String COLUMN_SUBJECT_OBTAINED_GRADE = "obtainedgrade";
         public static final String COLUMN_SUBJECT_MAXIMUM_GRADE = "maximumgrade";
+        public static final String COLUMN_SUBJECT_ID = "ID";
         public static final Integer DATABASE_VERSION = 1;
 
         private static final String SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
-                SubjectEntry.TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                SubjectEntry.TABLE_NAME + " (" + SubjectEntry.COLUMN_SUBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 SubjectEntry.COLUMN_SUBJECT_NAME + " TEXT," +
                 SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + " TEXT," +
                 SubjectEntry.COLUMN_SUBJECT_PROFESSOR + " TEXT," +
@@ -166,6 +167,11 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME + "", null);
+    }
+
+    public Cursor getItemsId() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT " + SubjectEntry.COLUMN_SUBJECT_ID + " FROM " + SubjectEntry.TABLE_NAME + " ORDER BY " + SubjectEntry.COLUMN_SUBJECT_NAME + " ASC", null);
     }
 
     public boolean hasObject(String columnName, String entry) {

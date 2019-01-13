@@ -30,6 +30,8 @@ public class NewSubjectGradeActivity extends AppCompatActivity implements Steppe
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
+		setTitle(getString(R.string.title_activity_new_subject_grade));
+
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Finishes the activity

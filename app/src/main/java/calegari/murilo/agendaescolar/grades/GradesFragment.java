@@ -26,7 +26,7 @@ import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks;
 
 public class GradesFragment extends Fragment {
 
-	static InboxRecyclerView inboxRecyclerView;
+	public static InboxRecyclerView inboxRecyclerView;
 	private GradesLineAdapter mAdapter;
 	SubjectDatabaseHelper subjectDatabase;
 
