@@ -29,15 +29,27 @@ public abstract class GradeChart {
 		if(maximumGrade != 0) {
 			// TODO Decide if this is going to be rounded
 			gradeChartText = String.valueOf(Math.round(averageGradePercentage)) + "%";
+		} else if (obtainedGrade != 0){
+			gradeChartText = "100%";
 		} else {
 			gradeChartText = "0%";
 		}
 		gradeChart.setText(gradeChartText);
 
 		// Create color array for slimChart
-		int[] graphColors = new int[4];
+		int[] graphColors = new int[4]; // For some reason this must be 4 and not 3
 
-		if(averageGradePercentage >= warningGradePercentage) { // If grade is in "safe zone"
+		if (averageGradePercentage >= 100){ // Static behavior for percentage >= 100
+			graphColors[0] = okColor;
+			graphColors[1] = warningColor;
+			graphColors[2] = dangerColor;
+
+			stats[0] = 100;
+			stats[1] = warningGradePercentage;
+			stats[2] = dangerGradePercentage;
+
+			gradeChart.setTextColor(R.color.slimchart_ok_color);
+		} else if(averageGradePercentage >= warningGradePercentage) { // If grade is in "safe zone"
 			graphColors[0] = okColor;
 			graphColors[1] = warningColor;
 			graphColors[2] = dangerColor;
