@@ -123,7 +123,7 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {
 						subjectDbHelper.removeData(subjectAbbreviation);
-						// TODO: Remove all entries in grades database
+						subjectDbHelper.close();
 						finish();
 					}
 				})

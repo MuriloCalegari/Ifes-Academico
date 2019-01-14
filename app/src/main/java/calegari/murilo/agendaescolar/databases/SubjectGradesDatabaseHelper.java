@@ -88,6 +88,17 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
+    public void deleteAllGrades(String subjectAbbreviation) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(
+                tableName,
+                columnGradeSubjectAbbreviation + "=?",
+                new String[] {subjectAbbreviation}
+        );
+        db.close();
+    }
+
     public void updateData(Integer oldSubjectGradeID, SubjectGrade newSubjectGrade){
         removeFromTotalGrade(oldSubjectGradeID);
 

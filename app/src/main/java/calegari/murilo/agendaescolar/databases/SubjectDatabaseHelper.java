@@ -14,8 +14,11 @@ import calegari.murilo.agendaescolar.subjects.Subject;
 
 public class SubjectDatabaseHelper extends SQLiteOpenHelper {
 
+    private Context context;
+
     public SubjectDatabaseHelper(@Nullable Context context) {
         super(context, SubjectEntry.DATABASE_NAME, null, SubjectEntry.DATABASE_VERSION);
+        this.context = context;
     }
 
 	public static class SubjectEntry implements BaseColumns {
@@ -65,10 +68,14 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void removeData(String Abbreviation) {
+    public void removeData(String abbreviation) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(SubjectEntry.TABLE_NAME, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {Abbreviation});
+        db.delete(SubjectEntry.TABLE_NAME, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {abbreviation});
         db.close();
+
+        SubjectGradesDatabaseHelper subjectGradesDatabase = new SubjectGradesDatabaseHelper(context);
+        subjectGradesDatabase.deleteAllGrades(abbreviation);
+        subjectGradesDatabase.close();
     }
 
     /**
