@@ -51,7 +51,7 @@ public class NewSubjectGradeActivity extends AppCompatActivity implements Steppe
 		newGradeDescription = new GradeDescriptionStep(getString(R.string.description));
 		newObtainedGrade = new GradeObtainedStep(getString(R.string.obtained_grade));
 		newMaximumGrade = new GradeMaximumStep(getString(R.string.maximum_grade));
-		newIsExtraCredit = new GradeIsExtraCreditStep(getString(R.string.is_extra_credit));
+		newIsExtraCredit = new GradeIsExtraCreditStep(getString(R.string.is_extra_credit), getString(R.string.extra_credit_subtitle));
 
 		// Find the form view, set it up and initialize it
 		verticalStepperForm = findViewById(R.id.stepper_form);

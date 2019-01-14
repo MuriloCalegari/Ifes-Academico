@@ -80,5 +80,8 @@
     <string name="title_activity_new_subject_grade">NewSubjectGrade</string>
     <string name="is_extra_credit">Is extra credit?</string>
     <string name="save_grade">Save grade</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="extra_credit_subtitle">This maximum grade  won\'t be added to the subject\'s maximum grade</string>
 
 </resources>

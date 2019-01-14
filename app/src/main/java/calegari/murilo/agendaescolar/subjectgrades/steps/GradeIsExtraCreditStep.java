@@ -14,6 +14,10 @@ public class GradeIsExtraCreditStep extends Step<Boolean> {
 		super(title);
 	}
 
+	public GradeIsExtraCreditStep(String title, String subtitle) {
+		super(title, subtitle);
+	}
+
 	@Override
 	protected View createStepContentLayout() {
 		checkBoxView = new AppCompatCheckBox(getContext());
@@ -62,7 +66,7 @@ public class GradeIsExtraCreditStep extends Step<Boolean> {
 		// Because the step's data is already a human-readable string, we don't need to convert it.
 		// However, we return "(Empty)" if the text is empty to avoid not having any text to display.
 		// This string will be displayed in the subtitle of the step whenever the step gets closed.
-		String isExtraCreditString = String.valueOf(getStepData());
+		String isExtraCreditString = getStepData() ? getContext().getString(R.string.yes) :  getContext().getString(R.string.no);
 		return !isExtraCreditString.isEmpty() ? isExtraCreditString : getContext().getResources().getString(R.string.empty);
 	}
 }

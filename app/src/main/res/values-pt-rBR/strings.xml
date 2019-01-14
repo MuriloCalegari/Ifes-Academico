@@ -72,6 +72,9 @@
     <string name="is_extra_credit">É ponto extra?</string>
     <string name="save_grade">Salvar nota</string>
     <string name="title_activity_new_subject_grade">Nova nota</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="extra_credit_subtitle">O cálculo da nota máxima não leverá em conta esta nota</string>
 
 
 </resources>
