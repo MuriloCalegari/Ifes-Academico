@@ -75,6 +75,8 @@
     <string name="yes">Sim</string>
     <string name="no">Não</string>
     <string name="extra_credit_subtitle">O cálculo da nota máxima não leverá em conta esta nota</string>
+    <string name="confirm_subject_grade_delete_title">Deletar nota?</string>
+    <string name="confirm_subject_grade_delete_message">Isso irá deletar permanentemente esta nota</string>
 
 
 </resources>

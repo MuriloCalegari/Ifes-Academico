@@ -98,16 +98,21 @@ public class SubjectGradesFragment extends Fragment {
 
 		Cursor cursor = subjectGradesDatabase.getSubjectGradesData(gradeSubjectAbbreviation);
 
+		Integer gradeIdIndex = cursor.getColumnIndex(SubjectGradesDatabaseHelper.SubjectGradesEntry.COLUMN_GRADE_ID);
 		Integer gradeDescriptionIndex = cursor.getColumnIndex(SubjectGradesDatabaseHelper.SubjectGradesEntry.COLUMN_GRADE_DESCRIPTION);
 		Integer obtainedGradeIndex = cursor.getColumnIndex(SubjectGradesDatabaseHelper.SubjectGradesEntry.COLUMN_GRADE_OBTAINED);
 		Integer maximumGradeIndex = cursor.getColumnIndex(SubjectGradesDatabaseHelper.SubjectGradesEntry.COLUMN_GRADE_MAXIMUM);
+		Integer isExtraCreditIndex = cursor.getColumnIndex(SubjectGradesDatabaseHelper.SubjectGradesEntry.COLUMN_GRADE_IS_EXTRA_CREDIT);
 
 		while(cursor.moveToNext()) {
+			Integer gradeId = cursor.getInt(gradeIdIndex);
 			String gradeDescription = cursor.getString(gradeDescriptionIndex);
 			float obtainedGrade = cursor.getFloat(obtainedGradeIndex);
 			float maximumGrade = cursor.getFloat(maximumGradeIndex);
+			boolean isExtraCredit = (cursor.getInt(isExtraCreditIndex) == 1);
 
-			SubjectGrade subjectGrade = new SubjectGrade(gradeDescription, obtainedGrade, maximumGrade);
+			SubjectGrade subjectGrade = new SubjectGrade(gradeId, gradeDescription, obtainedGrade, maximumGrade, isExtraCredit);
+			subjectGrade.setSubjectAbbreviation(gradeSubjectAbbreviation);
 
 			mAdapter.updateList(subjectGrade);
 		}

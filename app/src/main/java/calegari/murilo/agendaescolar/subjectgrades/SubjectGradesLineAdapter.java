@@ -1,5 +1,7 @@
 package calegari.murilo.agendaescolar.subjectgrades;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +32,14 @@ public class SubjectGradesLineAdapter extends RecyclerView.Adapter<GradesBaseLin
 
 	@Override
 	public void onBindViewHolder(@NonNull GradesBaseLineHolder holder, int position) {
-		holder.subjectName.setText(mSubjectGrades.get(position).getGradeDescription());
-
+		Integer gradeId = mSubjectGrades.get(position).getGradeId();
+		String subjectAbbreviation = mSubjectGrades.get(position).getSubjectAbbreviation();
+		String gradeDescription = mSubjectGrades.get(position).getGradeDescription();
 		float obtainedGrade = mSubjectGrades.get(position).getObtainedGrade();
 		float maximumGrade = mSubjectGrades.get(position).getMaximumGrade();
+		boolean isExtraCredit = mSubjectGrades.get(position).isExtraGrade();
+
+		holder.subjectName.setText(gradeDescription);
 
 		String gradeText = Math.round(obtainedGrade *100f)/100f + " " +
 				holder.itemView.getContext().getResources().getString(R.string.out_of) + " " +
@@ -43,11 +49,18 @@ public class SubjectGradesLineAdapter extends RecyclerView.Adapter<GradesBaseLin
 
 		GradeChart.setupGradeChart(holder, obtainedGrade, maximumGrade);
 
-		holder.itemView.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Add behavior for click listener
-			}
+		holder.itemView.setOnClickListener((v) -> {
+			Intent editGradeIntent = new Intent(v.getContext(), EditSubjectGradeActivity.class);
+
+			// Sends the data from this line
+			editGradeIntent.putExtra("oldGradeId", gradeId);
+			editGradeIntent.putExtra("subjectAbbreviation", subjectAbbreviation);
+			editGradeIntent.putExtra("oldGradeDescription", gradeDescription);
+			editGradeIntent.putExtra("oldObtainedGrade", obtainedGrade);
+			editGradeIntent.putExtra("oldMaximumGrade", maximumGrade);
+			editGradeIntent.putExtra("oldIsExtraCredit", isExtraCredit);
+
+			v.getContext().startActivity(editGradeIntent);
 		});
 
 	}

@@ -8,6 +8,7 @@ public class SubjectGrade {
     private String gradeDescription;
     private float obtainedGrade;
     private float maximumGrade;
+	private Integer gradeId;
 
 	/*
 	By default grades are set as not extra,
@@ -16,23 +17,13 @@ public class SubjectGrade {
 	*/
 	private boolean isExtraGrade = false;
 
-    public SubjectGrade(String subjectAbbreviation, String gradeDescription, float obtainedGrade, float maximumGrade) {
-        this.subjectAbbreviation = subjectAbbreviation;
-        this.gradeDescription = gradeDescription;
-        this.obtainedGrade = obtainedGrade;
-        this.maximumGrade = maximumGrade;
-    }
-
-	public SubjectGrade(String gradeDescription, float obtainedGrade, float maximumGrade) {
-		this.gradeDescription = gradeDescription;
+	public SubjectGrade(Integer gradeId, String gradeDescription, float obtainedGrade, float maximumGrade, boolean isExtraGrade) {
+		this.gradeId = gradeId;
+    	this.gradeDescription = gradeDescription;
 		this.obtainedGrade = obtainedGrade;
 		this.maximumGrade = maximumGrade;
+		this.isExtraGrade = isExtraGrade;
 	}
-
-	public SubjectGrade(float obtainedGrade, float maximumGrade) {
-        this.obtainedGrade = obtainedGrade;
-        this.maximumGrade = maximumGrade;
-    }
 
 	public SubjectGrade(String subjectAbbreviation, String gradeDescription, float obtainedGrade, float maximumGrade, boolean isExtraGrade) {
 		this.subjectAbbreviation = subjectAbbreviation;
@@ -48,7 +39,7 @@ public class SubjectGrade {
 		this.isExtraGrade = isExtraGrade;
 	}
 
-    public String getSubjectAbbreviation() {
+	public String getSubjectAbbreviation() {
         return subjectAbbreviation;
     }
 
@@ -86,5 +77,13 @@ public class SubjectGrade {
 
 	public void setExtraGrade(boolean extraGrade) {
 		isExtraGrade = extraGrade;
+	}
+
+	public Integer getGradeId() {
+		return gradeId;
+	}
+
+	public void setGradeId(Integer gradeId) {
+		this.gradeId = gradeId;
 	}
 }

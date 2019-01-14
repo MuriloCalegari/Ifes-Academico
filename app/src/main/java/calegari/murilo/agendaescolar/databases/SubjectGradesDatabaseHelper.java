@@ -19,14 +19,15 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
     private final String columnGradeObtained = SubjectGradesEntry.COLUMN_GRADE_OBTAINED;
     private final String columnGradeMaximum = SubjectGradesEntry.COLUMN_GRADE_MAXIMUM;
     private final String columnGradeId = SubjectGradesEntry.COLUMN_GRADE_ID;
+    private final String columnIsExtraCredit = SubjectGradesEntry.COLUMN_GRADE_IS_EXTRA_CREDIT;
     private Context mContext;
 
     public static class SubjectGradesEntry implements BaseColumns {
-    	/*
-    	I know I should have put all tables inside a single database, but by the time I realized
-    	this I had already written too many code that relies on this class and now it's just not
-    	worth it. Please good practice people, do not kill me.
-    	 */
+        /*
+		I know I should have put all tables inside a single database, but by the time I realized
+		this I had already written too many code that relies on this class and now it's just not
+		worth it. Please good practice people, do not kill me.
+		 */
         public static final String DATABASE_NAME = "schooltools_subject_grades.db";
         public static final String TABLE_NAME = "subjectgrades";
         public static final String COLUMN_GRADE_ID = "gradeid";
@@ -34,7 +35,8 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
         public static final String COLUMN_GRADE_DESCRIPTION = "gradedescription";
         public static final String COLUMN_GRADE_OBTAINED = "obtainedgrade";
         public static final String COLUMN_GRADE_MAXIMUM = "maximumgrade";
-        public static final Integer DATABASE_VERSION = 3;
+        public static final String COLUMN_GRADE_IS_EXTRA_CREDIT = "isextracredit";
+        public static final Integer DATABASE_VERSION = 4;
 
         private static final String SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
                 SubjectGradesEntry.TABLE_NAME + "( " +
@@ -42,7 +44,8 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
                 SubjectGradesEntry.COLUMN_GRADE_SUBJECT_ABBREVIATION + " TEXT," +
                 SubjectGradesEntry.COLUMN_GRADE_DESCRIPTION + " TEXT," +
                 SubjectGradesEntry.COLUMN_GRADE_OBTAINED + " REAL," +
-                SubjectGradesEntry.COLUMN_GRADE_MAXIMUM + " REAL)";
+                SubjectGradesEntry.COLUMN_GRADE_MAXIMUM + " REAL," +
+                SubjectGradesEntry.COLUMN_GRADE_IS_EXTRA_CREDIT + " INTEGER)";
 
         private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + SubjectGradesEntry.TABLE_NAME;
     }
@@ -54,7 +57,7 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-		Log.d(getClass().getCanonicalName(), SubjectGradesEntry.SQL_CREATE_ENTRIES);
+        Log.d(getClass().getCanonicalName(), SubjectGradesEntry.SQL_CREATE_ENTRIES);
         db.execSQL(SubjectGradesEntry.SQL_CREATE_ENTRIES);
     }
 
@@ -73,6 +76,7 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(columnGradeDescription, subjectGrade.getGradeDescription());
         contentValues.put(columnGradeObtained, subjectGrade.getObtainedGrade());
         contentValues.put(columnGradeMaximum, subjectGrade.getMaximumGrade());
+        contentValues.put(columnIsExtraCredit, subjectGrade.isExtraGrade());
 
         db.insert(tableName, null, contentValues);
         db.close();
@@ -108,6 +112,7 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(columnGradeDescription, newSubjectGrade.getGradeDescription());
         contentValues.put(columnGradeObtained, newSubjectGrade.getObtainedGrade());
         contentValues.put(columnGradeMaximum, newSubjectGrade.getMaximumGrade());
+        contentValues.put(columnIsExtraCredit, newSubjectGrade.isExtraGrade());
 
         db.update(
                 tableName,
@@ -120,9 +125,9 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void addToTotalGrade(SubjectGrade subjectGrade) {
-        SubjectDatabaseHelper subjectDatabase = new SubjectDatabaseHelper(mContext);
-        subjectDatabase.addGradeData(subjectGrade);
-        subjectDatabase.close();
+            SubjectDatabaseHelper subjectDatabase = new SubjectDatabaseHelper(mContext);
+            subjectDatabase.addGradeData(subjectGrade);
+            subjectDatabase.close();
     }
 
     /**
@@ -138,13 +143,15 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = subjectGradesDatabase.query(
                 tableName,
-                new String[] {columnGradeObtained,columnGradeMaximum},
+                new String[] {columnGradeId,columnGradeSubjectAbbreviation,columnGradeObtained,columnGradeMaximum, columnIsExtraCredit},
                 columnGradeId + "=?",
                 new String[] {String.valueOf(oldSubjectGradeID)},
                 null, null, null
 
         );
 
+        Integer subjectGradeIsExtraCreditIndex = cursor.getColumnIndex(columnIsExtraCredit);
+        Integer subjectGradeSubjectAbbreviation = cursor.getColumnIndex(columnGradeSubjectAbbreviation);
         Integer subjectGradeObtainedIndex = cursor.getColumnIndex(columnGradeObtained);
         Integer subjectGradeMaximumIndex = cursor.getColumnIndex(columnGradeMaximum);
 
@@ -152,25 +159,32 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
 
         SubjectGrade subjectGrade = new SubjectGrade(
                 cursor.getFloat(subjectGradeObtainedIndex),
-                cursor.getFloat(subjectGradeMaximumIndex));
+                cursor.getFloat(subjectGradeMaximumIndex),
+                getBoolean(cursor.getInt(subjectGradeIsExtraCreditIndex))
+                );
+        subjectGrade.setSubjectAbbreviation(cursor.getString(subjectGradeSubjectAbbreviation));
 
         subjectDatabase.removeGradeData(subjectGrade);
         cursor.close();
         subjectDatabase.close();
     }
 
-    public Cursor getSubjectGradesData(String gradeSubjectAbbreviation) {
-    	SQLiteDatabase db = this.getWritableDatabase();
-    	return db.query(
-    			tableName,
-				new String[] {columnGradeId, columnGradeDescription, columnGradeObtained, columnGradeMaximum},
-				columnGradeSubjectAbbreviation + "=?",
-				new String[] {gradeSubjectAbbreviation},
-				null, null, null
-		);
-	}
+    private boolean getBoolean(int intBoolean) {
+        return intBoolean == 1;
+    }
 
-	public void updateSubjectAbbreviation(String oldSubjectAbbreviation, String newSubjectAbbreviation) {
+    public Cursor getSubjectGradesData(String gradeSubjectAbbreviation) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.query(
+                tableName,
+                new String[] {columnGradeId, columnGradeDescription, columnGradeObtained, columnGradeMaximum, columnIsExtraCredit},
+                columnGradeSubjectAbbreviation + "=?",
+                new String[] {gradeSubjectAbbreviation},
+                null, null, null
+        );
+    }
+
+    public void updateSubjectAbbreviation(String oldSubjectAbbreviation, String newSubjectAbbreviation) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();

@@ -83,5 +83,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="extra_credit_subtitle">This maximum grade  won\'t be added to the subject\'s maximum grade</string>
+    <string name="confirm_subject_grade_delete_title">Delete grade?</string>
+    <string name="confirm_subject_grade_delete_message">This will permanently delete this grade</string>
 
 </resources>
