@@ -170,4 +170,18 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
 		);
 	}
 
+	public void updateSubjectAbbreviation(String oldSubjectAbbreviation, String newSubjectAbbreviation) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(columnGradeSubjectAbbreviation, newSubjectAbbreviation);
+
+        db.update(
+                tableName,
+                contentValues,
+                columnGradeSubjectAbbreviation + "=?",
+                new String[] {oldSubjectAbbreviation}
+        );
+    }
+
 }

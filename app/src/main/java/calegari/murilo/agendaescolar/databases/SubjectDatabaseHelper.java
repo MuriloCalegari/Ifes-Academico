@@ -94,6 +94,11 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
 
         db.update(SubjectEntry.TABLE_NAME, contentValues, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {oldSubjectAbbreviation});
         db.close();
+
+        if(!oldSubjectAbbreviation.equals(newSubject.getAbbreviation())) {
+            SubjectGradesDatabaseHelper subjectGradesDatabase = new SubjectGradesDatabaseHelper(context);
+            subjectGradesDatabase.updateSubjectAbbreviation(oldSubjectAbbreviation, newSubject.getAbbreviation());
+        }
     }
 
     public void addGradeData(SubjectGrade subjectGrade) {
