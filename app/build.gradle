@@ -39,4 +39,5 @@ dependencies {
     implementation 'com.github.medyo:android-about-page:1.2.4'
     implementation 'me.saket:inboxrecyclerview:1.0.0-rc1'
     implementation 'com.github.mancj:SlimChart:0.1.2'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
 }

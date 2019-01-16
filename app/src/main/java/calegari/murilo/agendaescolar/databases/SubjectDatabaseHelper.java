@@ -203,4 +203,10 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+
+    public Cursor getAllDataInAverageGradeOrder() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME + " ORDER BY (" + SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE + "/"+ SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE + ") ASC", null);
+    }
+
 }

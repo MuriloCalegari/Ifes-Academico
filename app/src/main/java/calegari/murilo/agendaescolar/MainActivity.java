@@ -16,6 +16,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import calegari.murilo.agendaescolar.grades.GradesFragment;
+import calegari.murilo.agendaescolar.home.HomeFragment;
 import calegari.murilo.agendaescolar.settings.SettingsActivity;
 import calegari.murilo.agendaescolar.subjects.SubjectsFragment;
 
@@ -64,6 +65,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true); // Defines this activity as checked
+        toolbar.setTitle(getString(R.string.app_name));
+
+        startFragment(HomeFragment.class);
     }
 
     @Override
@@ -106,27 +110,28 @@ public class MainActivity extends AppCompatActivity
         */
 
         int NAVBAR_CLOSE_DELAY = getResources().getInteger(R.integer.navigation_bar_close_delay);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                switch (id) {
-                    case R.id.nav_about:
-                        Intent aboutIntent = new Intent(context,AboutActivity.class);
-                        startActivity(aboutIntent);
-                        break;
-                    case R.id.nav_settings:
-                        Intent settingsIntent = new Intent(context,SettingsActivity.class);
-                        startActivity(settingsIntent);
-                        break;
-                    case R.id.nav_subjects:
-                        startFragment(SubjectsFragment.class, item);
-                        break;
-                    case R.id.nav_grades:
-                        startFragment(GradesFragment.class, item);
-                        break;
-                    default:
-                        break;
-                }
+        new Handler().postDelayed(() -> {
+            switch (id) {
+                case R.id.nav_home:
+                    toolbar.setTitle(getString(R.string.app_name));
+                    startFragment(HomeFragment.class);
+                    break;
+                case R.id.nav_about:
+                    Intent aboutIntent = new Intent(context,AboutActivity.class);
+                    startActivity(aboutIntent);
+                    break;
+                case R.id.nav_settings:
+                    Intent settingsIntent = new Intent(context,SettingsActivity.class);
+                    startActivity(settingsIntent);
+                    break;
+                case R.id.nav_subjects:
+                    startFragment(SubjectsFragment.class);
+                    break;
+                case R.id.nav_grades:
+                    startFragment(GradesFragment.class);
+                    break;
+                default:
+                    break;
             }
         }, NAVBAR_CLOSE_DELAY);
 
@@ -136,7 +141,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void startFragment(Class fragmentClass, MenuItem item) {
+    public void startFragment(Class fragmentClass) {
 
         Fragment fragment = null;
         try {
