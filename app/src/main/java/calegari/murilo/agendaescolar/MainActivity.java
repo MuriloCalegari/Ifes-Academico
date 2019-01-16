@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity
     public static DrawerLayout drawer;
     public static ValueAnimator anim;
     public static Toolbar toolbar;
+    public static FragmentManager fragmentManager;
+    public static NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +64,12 @@ public class MainActivity extends AppCompatActivity
         // You can change this duration to more closely match that of the default animation.
         anim.setDuration(250);
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true); // Defines this activity as checked
         toolbar.setTitle(getString(R.string.app_name));
+
+		fragmentManager = getSupportFragmentManager();
 
         startFragment(HomeFragment.class);
     }
@@ -135,13 +139,12 @@ public class MainActivity extends AppCompatActivity
             }
         }, NAVBAR_CLOSE_DELAY);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
     }
 
-    public void startFragment(Class fragmentClass) {
+    public static void startFragment(Class fragmentClass) {
 
         Fragment fragment = null;
         try {
@@ -151,7 +154,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragment != null) {
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }

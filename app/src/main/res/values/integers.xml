@@ -2,4 +2,5 @@
 <resources>
     <integer name="anim_duration_medium">250</integer>
     <integer name="navigation_bar_close_delay">200</integer>
+    <integer name="anim_graph_home_page">1000</integer>
 </resources>

@@ -85,5 +85,8 @@
     <string name="extra_credit_subtitle">This maximum grade  won\'t be added to the subject\'s maximum grade</string>
     <string name="confirm_subject_grade_delete_title">Delete grade?</string>
     <string name="confirm_subject_grade_delete_message">This will permanently delete this grade</string>
+    <string name="your_lowest_grades">Your lowest grades</string>
+    <string name="to_keep_an_eye">To keep an eye!</string>
+    <string name="title_activity_base_fragment">BaseFragmentActivity</string>
 
 </resources>

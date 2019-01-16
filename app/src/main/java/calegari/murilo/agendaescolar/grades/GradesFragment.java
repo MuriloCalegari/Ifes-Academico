@@ -2,6 +2,7 @@ package calegari.murilo.agendaescolar.grades;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
+import calegari.murilo.agendaescolar.home.HomeFragment;
 import calegari.murilo.agendaescolar.subjects.Subject;
 import me.saket.inboxrecyclerview.InboxRecyclerView;
 import me.saket.inboxrecyclerview.page.ExpandablePageLayout;
@@ -43,12 +45,25 @@ public class GradesFragment extends Fragment {
 
 		inboxRecyclerView = getView().findViewById(R.id.inbox_recyclerview);
 
-		// Sets the toolbar name
+		// Sets the toolbar name and item checked on nav bar
 		AppCompatActivity activity = (AppCompatActivity) view.getContext();
 		activity.getSupportActionBar().setTitle(getString(R.string.grades));
+		Integer GRADE_MENU_INDEX = 3; // Yes, hardcoded;
+		MainActivity.navigationView.getMenu().getItem(GRADE_MENU_INDEX).setChecked(true);
 
 		setupInboxRecyclerView();
 		initInboxRecyclerView();
+
+		view.setFocusableInTouchMode(true);
+		view.requestFocus();
+		view.setOnKeyListener((View v, int keyCode, KeyEvent event) -> {
+			if(keyCode == KeyEvent.KEYCODE_BACK) {
+				MainActivity.startFragment(HomeFragment.class);
+				return true;
+			}
+			return false;
+		});
+
 	}
 
 	@Override
@@ -115,7 +130,7 @@ public class GradesFragment extends Fragment {
 				super.onPageExpanded();
 			}
 		});
-	};
+	}
 
 	private void initInboxRecyclerView() {
 		mAdapter = new GradesLineAdapter(new ArrayList<>(0), getContext(), getView());
