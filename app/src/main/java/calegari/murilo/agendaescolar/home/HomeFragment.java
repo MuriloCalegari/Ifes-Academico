@@ -1,6 +1,5 @@
 package calegari.murilo.agendaescolar.home;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -36,12 +35,10 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
-import calegari.murilo.agendaescolar.BaseFragmentActivity;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.grades.GradesFragment;
-import calegari.murilo.agendaescolar.subjectgrades.SubjectGradesFragment;
 
 public class HomeFragment extends Fragment {
 
@@ -60,7 +57,7 @@ public class HomeFragment extends Fragment {
 		MainActivity.toolbar.setTitle(R.string.app_name);
 
 		TextView gradesChartTitle = view.findViewById(R.id.titleTextView);
-		gradesChartTitle.setText(R.string.your_lowest_grades);
+		gradesChartTitle.setText(R.string.your_grades);
 
 		TextView gradesChartSubtitle = view.findViewById(R.id.subtitleTextView);
 		gradesChartSubtitle.setText(R.string.to_keep_an_eye);

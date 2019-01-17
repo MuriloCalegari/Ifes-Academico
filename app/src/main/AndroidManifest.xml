@@ -58,7 +58,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".BaseFragmentActivity"
-            android:label="@string/title_activity_base_fragment"
             android:theme="@style/PullCollapsibleTheme"></activity>
     </application>
 
