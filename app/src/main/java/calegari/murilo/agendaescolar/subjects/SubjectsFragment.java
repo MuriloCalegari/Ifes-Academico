@@ -8,9 +8,9 @@ import androidx.annotation.Nullable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import calegari.murilo.agendaescolar.BaseFragment;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.R;
 
@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-public class SubjectsFragment extends Fragment {
+public class SubjectsFragment extends BaseFragment {
 
     RecyclerView mRecyclerView;
     FloatingActionButton fab;

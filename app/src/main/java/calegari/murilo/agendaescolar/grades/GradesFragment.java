@@ -14,19 +14,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import calegari.murilo.agendaescolar.BaseFragment;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
-import calegari.murilo.agendaescolar.home.HomeFragment;
 import calegari.murilo.agendaescolar.subjects.Subject;
 import me.saket.inboxrecyclerview.InboxRecyclerView;
 import me.saket.inboxrecyclerview.page.ExpandablePageLayout;
 import me.saket.inboxrecyclerview.page.InterceptResult;
 import me.saket.inboxrecyclerview.page.SimplePageStateChangeCallbacks;
 
-public class GradesFragment extends Fragment {
+public class GradesFragment extends BaseFragment {
 
 	public static InboxRecyclerView inboxRecyclerView;
 	private GradesLineAdapter mAdapter;
@@ -53,16 +52,6 @@ public class GradesFragment extends Fragment {
 
 		setupInboxRecyclerView();
 		initInboxRecyclerView();
-
-		view.setFocusableInTouchMode(true);
-		view.requestFocus();
-		view.setOnKeyListener((View v, int keyCode, KeyEvent event) -> {
-			if(keyCode == KeyEvent.KEYCODE_BACK) {
-				MainActivity.startFragment(HomeFragment.class);
-				return true;
-			}
-			return false;
-		});
 
 	}
 

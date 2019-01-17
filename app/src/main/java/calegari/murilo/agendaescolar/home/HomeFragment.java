@@ -162,8 +162,8 @@ public class HomeFragment extends Fragment {
 
 			// Since data is ordered from minimum to maximum, getDataSetByIndex(0) will
 			// return the minimumValue of the chart
-			float valueThreshold = 10f;
-			float minimumValue = data.getDataSetByIndex(0).getEntryForIndex(0).getY() - valueThreshold;
+			//float valueThreshold = 10f;
+			//float minimumValue = data.getDataSetByIndex(0).getEntryForIndex(0).getY() - valueThreshold;
 			float maximumValue = data.getDataSetByIndex(data.getDataSetCount() - 1).getEntryForIndex(0).getY();
 
 			/*
