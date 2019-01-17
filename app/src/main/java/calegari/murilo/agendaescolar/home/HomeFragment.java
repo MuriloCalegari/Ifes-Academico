@@ -1,5 +1,6 @@
 package calegari.murilo.agendaescolar.home;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -35,10 +36,12 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
+import calegari.murilo.agendaescolar.BaseFragmentActivity;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.grades.GradesFragment;
+import calegari.murilo.agendaescolar.subjectgrades.SubjectGradesFragment;
 
 public class HomeFragment extends Fragment {
 
@@ -175,16 +178,25 @@ public class HomeFragment extends Fragment {
 			// Initializes the graph
 			chart.animateY(getResources().getInteger(R.integer.anim_graph_home_page), Easing.EaseInOutExpo);
 
+			// For putting this to work, I need to wait for
+			// PullCollapsibleActivity from InboxRecyclerView
+			// to support setting an interceptor
+			/*
 			chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
 				@Override
 				public void onValueSelected(Entry e, Highlight h) {
-					MainActivity.startFragment(GradesFragment.class);
+
+					Intent baseFragmentActivity = new Intent(getActivity(), BaseFragmentActivity.class);
+					baseFragmentActivity.putExtra("fragment", SubjectGradesFragment.class.getName());
+					baseFragmentActivity.putExtra("subjectAbbreviation",data.getDataSetForEntry(e).getLabel());
+					startActivity(baseFragmentActivity);
+
 				}
 
 				@Override
 				public void onNothingSelected() {}
 			});
-
+			*/
 		}
 	}
 
