@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity
     public static Toolbar toolbar;
     public static FragmentManager fragmentManager;
     public static NavigationView navigationView;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,31 +48,46 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
-        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        anim = ValueAnimator.ofFloat(0f, 1f);
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                float slideOffset = (Float) valueAnimator.getAnimatedValue();
-                toggle.onDrawerSlide(drawer, slideOffset);
-            }
-        });
-        anim.setInterpolator(new DecelerateInterpolator());
-        // You can change this duration to more closely match that of the default animation.
-        anim.setDuration(250);
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true); // Defines this activity as checked
         toolbar.setTitle(getString(R.string.app_name));
 
-		fragmentManager = getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
+
+        drawerToggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerToggle.syncState();
+
+        setupListeners();
 
         startFragment(HomeFragment.class);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        setupListeners();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    private void setupListeners() {
+        drawer.addDrawerListener(drawerToggle);
+
+        anim = ValueAnimator.ofFloat(0f, 1f);
+        anim.addUpdateListener(valueAnimator -> {
+            float slideOffset = (Float) valueAnimator.getAnimatedValue();
+            drawerToggle.onDrawerSlide(drawer, slideOffset);
+        });
+
+        anim.setInterpolator(new DecelerateInterpolator());
+        // You can change this duration to more closely match that of the default animation.
+        anim.setDuration(250);
     }
 
     @Override
