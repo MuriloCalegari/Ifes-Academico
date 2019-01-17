@@ -140,6 +140,17 @@ public class HomeFragment extends Fragment {
 
 			chart.setFitBars(true);
 			chart.setDrawValueAboveBar(false);
+			chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+				@Override
+				public void onValueSelected(Entry e, Highlight h) {
+					MainActivity.startFragment(GradesFragment.class);
+				}
+
+				@Override
+				public void onNothingSelected() {
+
+				}
+			});
 
 			YAxis left = chart.getAxisLeft();
 			left.setDrawLabels(true); // axis labels
