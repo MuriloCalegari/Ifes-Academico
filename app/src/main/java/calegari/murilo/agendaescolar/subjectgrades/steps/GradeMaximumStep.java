@@ -69,7 +69,9 @@ public class GradeMaximumStep extends Step<Float> {
 	public Float getStepData() {
 		// We get the step's data from the value that the user has typed in the EditText view.
 		Editable maximumGrade = maximumGradeView.getText();
-		return !maximumGrade.toString().equals("") ? Float.valueOf(maximumGrade.toString()) : 0f;
+		if (!maximumGrade.toString().equals("") && !maximumGrade.toString().equals(".") && !maximumGrade.toString().equals(",")) {
+			return Float.valueOf(maximumGrade.toString());
+		} else { return 0f;}
 	}
 
 	@Override

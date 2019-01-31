@@ -67,7 +67,9 @@ public class GradeObtainedStep extends Step<Float> {
 	public Float getStepData() {
 		// We get the step's data from the value that the user has typed in the EditText view.
 		Editable gradeObtained = obtainedGradeView.getText();
-		return !gradeObtained.toString().equals("") ? Float.valueOf(gradeObtained.toString()) : 0f;
+		if (!gradeObtained.toString().equals("") && !gradeObtained.toString().equals(".") && !gradeObtained.toString().equals(",")) {
+			return Float.valueOf(gradeObtained.toString());
+		} else { return 0f;}
 	}
 
 	@Override
