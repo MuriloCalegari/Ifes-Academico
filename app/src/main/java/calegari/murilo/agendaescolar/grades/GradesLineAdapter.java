@@ -20,6 +20,7 @@ import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.subjectgrades.SubjectGradesFragment;
 import calegari.murilo.agendaescolar.subjects.Subject;
+import calegari.murilo.agendaescolar.utils.GradeChart;
 
 public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder> {
 

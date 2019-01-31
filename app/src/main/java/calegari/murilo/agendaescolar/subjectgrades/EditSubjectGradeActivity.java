@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.SubjectGradesDatabaseHelper;
-import calegari.murilo.agendaescolar.subjectgrades.steps.GradeDescriptionStep;
+import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.GradeDescriptionStep;
 import calegari.murilo.agendaescolar.subjectgrades.steps.GradeIsExtraCreditStep;
 import calegari.murilo.agendaescolar.subjectgrades.steps.GradeMaximumStep;
 import calegari.murilo.agendaescolar.subjectgrades.steps.GradeObtainedStep;

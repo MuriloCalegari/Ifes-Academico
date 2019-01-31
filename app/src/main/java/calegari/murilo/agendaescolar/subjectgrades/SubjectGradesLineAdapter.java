@@ -1,9 +1,7 @@
 package calegari.murilo.agendaescolar.subjectgrades;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -12,7 +10,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.R;
-import calegari.murilo.agendaescolar.grades.GradeChart;
+import calegari.murilo.agendaescolar.utils.GradeChart;
 import calegari.murilo.agendaescolar.grades.GradesBaseLineHolder;
 
 public class SubjectGradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder> {

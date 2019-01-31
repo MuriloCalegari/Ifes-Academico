@@ -1,4 +1,4 @@
-package calegari.murilo.agendaescolar.grades;
+package calegari.murilo.agendaescolar.utils;
 
 import android.content.SharedPreferences;
 
@@ -7,6 +7,7 @@ import com.mancj.slimchart.SlimChart;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import calegari.murilo.agendaescolar.R;
+import calegari.murilo.agendaescolar.grades.GradesBaseLineHolder;
 
 public abstract class GradeChart {
 

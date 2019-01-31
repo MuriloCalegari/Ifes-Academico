@@ -1,4 +1,4 @@
-package calegari.murilo.agendaescolar.subjectgrades.steps;
+package calegari.murilo.agendaescolar.utils.verticalstepperform.steps;
 
 import android.text.Editable;
 import android.text.TextWatcher;
