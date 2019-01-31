@@ -9,14 +9,14 @@ import android.widget.EditText;
 import calegari.murilo.agendaescolar.R;
 import ernestoyaquello.com.verticalstepperform.Step;
 
-public class GradeDescriptionStep extends Step<String> {
+public class DescriptionStep extends Step<String> {
 
 	private EditText gradeDescriptionView;
 
 	private Integer MINIMUM_CHARACTERS_PARAMETER = 2;
 	private Integer MAXIMUM_CHARACTERS_PARAMETER = 40;
 
-	public GradeDescriptionStep(String stepTitle) {
+	public DescriptionStep(String stepTitle) {
 		super(stepTitle);
 	}
 

@@ -40,4 +40,6 @@ dependencies {
     implementation 'me.saket:inboxrecyclerview:1.0.0-rc1'
     implementation 'com.github.mancj:SlimChart:0.1.2'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+    implementation 'com.github.tobiasschuerg:android-week-view:-SNAPSHOT'
+
 }

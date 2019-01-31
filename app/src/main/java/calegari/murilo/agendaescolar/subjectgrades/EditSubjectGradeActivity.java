@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.SubjectGradesDatabaseHelper;
-import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.GradeDescriptionStep;
+import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.DescriptionStep;
 import calegari.murilo.agendaescolar.subjectgrades.steps.GradeIsExtraCreditStep;
 import calegari.murilo.agendaescolar.subjectgrades.steps.GradeMaximumStep;
 import calegari.murilo.agendaescolar.subjectgrades.steps.GradeObtainedStep;
@@ -17,7 +17,7 @@ import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
 
 public class EditSubjectGradeActivity extends AppCompatActivity implements StepperFormListener {
 
-	private GradeDescriptionStep newGradeDescription;
+	private DescriptionStep newGradeDescription;
 	private GradeObtainedStep newObtainedGrade;
 	private GradeMaximumStep newMaximumGrade;
 	private GradeIsExtraCreditStep newIsExtraCredit;
@@ -58,7 +58,7 @@ public class EditSubjectGradeActivity extends AppCompatActivity implements Stepp
 		oldIsExtraCredit = getIntent().getBooleanExtra("oldIsExtraCredit", false);
 
 		// Create the steps
-		newGradeDescription = new GradeDescriptionStep(getString(R.string.description));
+		newGradeDescription = new DescriptionStep(getString(R.string.description));
 		newObtainedGrade = new GradeObtainedStep(getString(R.string.obtained_grade));
 		newMaximumGrade = new GradeMaximumStep(getString(R.string.maximum_grade));
 		newIsExtraCredit = new GradeIsExtraCreditStep(getString(R.string.is_extra_credit), getString(R.string.extra_credit_subtitle));
