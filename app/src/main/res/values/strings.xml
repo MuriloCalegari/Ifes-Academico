@@ -114,4 +114,5 @@
     </string-array>
 
     <string name="class_event_save_button">Save class</string>
+    <string name="day_of_the_week">Day of the week</string>
 </resources>

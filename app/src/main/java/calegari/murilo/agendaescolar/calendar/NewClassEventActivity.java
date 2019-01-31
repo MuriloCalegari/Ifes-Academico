@@ -29,7 +29,7 @@ public class NewClassEventActivity extends AppCompatActivity implements StepperF
 		toolbar.setNavigationOnClickListener((v) -> finish());
 
 		// Create the steps
-		dayPickerStep = new DayPickerStep("Dia da semana", true);
+		dayPickerStep = new DayPickerStep(getString(R.string.day_of_the_week), true);
 
 		// Find the form view, set it up and initialize it.
 		VerticalStepperFormView verticalStepperForm = findViewById(R.id.stepper_form);

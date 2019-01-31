@@ -106,5 +106,6 @@
 
     <string name="error_alarm_days_min_days">Você deve marcar um dia</string>
     <string name="class_event_save_button">Salvar aula</string>
+    <string name="day_of_the_week">Dia da semana</string>
 
 </resources>
