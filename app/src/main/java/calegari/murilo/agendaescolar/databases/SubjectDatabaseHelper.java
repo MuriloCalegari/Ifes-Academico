@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.Nullable;
 import calegari.murilo.agendaescolar.subjectgrades.SubjectGrade;
 import calegari.murilo.agendaescolar.subjects.Subject;
@@ -206,7 +209,34 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAllDataInAverageGradeOrder() {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME + " ORDER BY (" + SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE + "/"+ SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE + ") ASC", null);
+        return db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME + " ORDER BY (" + SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE + "/" + SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE + ") ASC", null);
+    }
+
+    public List<Subject> getAllSubjectsInAlphabeticalOrder() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<Subject> subjectList = new ArrayList<>();
+
+        Cursor subjectsCursor = db.query(
+                SubjectEntry.TABLE_NAME, // Table name
+                new String[] {SubjectEntry.COLUMN_SUBJECT_NAME, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION}, // Columns to return
+                null,
+                null,
+                null, null,
+                SubjectEntry.COLUMN_SUBJECT_NAME + " ASC"
+        );
+
+        int columnSubjectNameIndex = subjectsCursor.getColumnIndex(SubjectEntry.COLUMN_SUBJECT_NAME);
+        int columnSubjectAbbreviationIndex = subjectsCursor.getColumnIndex(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION);
+
+        while(subjectsCursor.moveToNext()) {
+            Subject subject = new Subject();
+            subject.setName(subjectsCursor.getString(columnSubjectNameIndex));
+            subject.setAbbreviation(subjectsCursor.getString(columnSubjectAbbreviationIndex));
+
+            subjectList.add(subject);
+        }
+
+        return subjectList;
     }
 
 }

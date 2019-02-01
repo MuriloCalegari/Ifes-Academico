@@ -5,15 +5,15 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import calegari.murilo.agendaescolar.R;
+import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.DayPickerStep;
-import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.DescriptionStep;
+import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.SubjectSpinnerStep;
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormView;
 import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
 
 public class NewClassEventActivity extends AppCompatActivity implements StepperFormListener {
 
-	private DescriptionStep descriptionStep;
-	private DayPickerStep dayPickerStep;
+	private SubjectSpinnerStep spinnerStep;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +29,18 @@ public class NewClassEventActivity extends AppCompatActivity implements StepperF
 		toolbar.setNavigationOnClickListener((v) -> finish());
 
 		// Create the steps
-		dayPickerStep = new DayPickerStep(getString(R.string.day_of_the_week), true);
+		SubjectDatabaseHelper subjectDatabaseHelper = new SubjectDatabaseHelper(this);
+		SubjectSpinnerStep subjectSpinnerStep = new SubjectSpinnerStep(getString(R.string.subject), subjectDatabaseHelper.getAllSubjectsInAlphabeticalOrder());
+		subjectDatabaseHelper.close();
+
+		DayPickerStep dayPickerStep = new DayPickerStep(getString(R.string.day_of_the_week), true);
+
+
 
 		// Find the form view, set it up and initialize it.
 		VerticalStepperFormView verticalStepperForm = findViewById(R.id.stepper_form);
 		verticalStepperForm
-				.setup(this, dayPickerStep)
+				.setup(this, subjectSpinnerStep, dayPickerStep)
 				.lastStepNextButtonText(getString(R.string.class_event_save_button))
 				.displayCancelButtonInLastStep(true)
 				.lastStepCancelButtonText(getString(R.string.cancel))

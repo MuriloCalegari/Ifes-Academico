@@ -9,6 +9,7 @@
     <string name="navigation_drawer_open">Abrir barra de navegação</string>
     <string name="navigation_drawer_close">Fechar barra de navegação</string>
     <string name="action_settings">Configurações</string>
+    <string name="subject">Matéria</string>
     <string name="subjects">Matérias</string>
     <string name="schedule">Horários</string>
     <string name="grades">Notas</string>

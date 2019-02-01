@@ -8,6 +8,8 @@ public class Subject {
     private Float obtainedGrade;
     private Float maximumGrade;
 
+    public Subject() {}
+
     public Subject(String name, String professor, String abbreviation) {
         this.name = name;
         this.professor = professor;
