@@ -15,12 +15,14 @@ import androidx.annotation.Nullable;
 import calegari.murilo.agendaescolar.subjectgrades.SubjectGrade;
 import calegari.murilo.agendaescolar.subjects.Subject;
 
+import static calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper.SubjectEntry.*;
+
 public class SubjectDatabaseHelper extends SQLiteOpenHelper {
 
     private Context context;
 
     public SubjectDatabaseHelper(@Nullable Context context) {
-        super(context, SubjectEntry.DATABASE_NAME, null, SubjectEntry.DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
 
@@ -36,44 +38,44 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         public static final String COLUMN_SUBJECT_ID = "ID";
         public static final Integer DATABASE_VERSION = 1;
 
-        private static final String SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
-                SubjectEntry.TABLE_NAME + " (" + SubjectEntry.COLUMN_SUBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                SubjectEntry.COLUMN_SUBJECT_NAME + " TEXT," +
-                SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + " TEXT," +
-                SubjectEntry.COLUMN_SUBJECT_PROFESSOR + " TEXT," +
-                SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE + " REAL," +
-                SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE + " REAL)";
+        protected static final String SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
+                TABLE_NAME + " (" + COLUMN_SUBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COLUMN_SUBJECT_NAME + " TEXT," +
+                COLUMN_SUBJECT_ABBREVIATION + " TEXT," +
+                COLUMN_SUBJECT_PROFESSOR + " TEXT," +
+                COLUMN_SUBJECT_OBTAINED_GRADE + " REAL," +
+                COLUMN_SUBJECT_MAXIMUM_GRADE + " REAL)";
 
-        private static final String SQL_DELETE_ENTRIES =
-                "DROP TABLE IF EXISTS " + SubjectEntry.TABLE_NAME;
+        protected static final String SQL_DELETE_ENTRIES =
+                "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SubjectEntry.SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_ENTRIES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(SubjectEntry.SQL_DELETE_ENTRIES);
+        db.execSQL(SQL_DELETE_ENTRIES);
     }
 
     public void insertData(Subject subject) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_NAME, subject.getName());
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, subject.getAbbreviation());
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, subject.getProfessor());
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE, 0);
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE, 0);
+        contentValues.put(COLUMN_SUBJECT_NAME, subject.getName());
+        contentValues.put(COLUMN_SUBJECT_ABBREVIATION, subject.getAbbreviation());
+        contentValues.put(COLUMN_SUBJECT_PROFESSOR, subject.getProfessor());
+        contentValues.put(COLUMN_SUBJECT_OBTAINED_GRADE, 0);
+        contentValues.put(COLUMN_SUBJECT_MAXIMUM_GRADE, 0);
 
-        db.insert(SubjectEntry.TABLE_NAME, null, contentValues);
+        db.insert(TABLE_NAME, null, contentValues);
         db.close();
     }
 
     public void removeData(String abbreviation) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(SubjectEntry.TABLE_NAME, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {abbreviation});
+        db.delete(TABLE_NAME, COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {abbreviation});
         db.close();
 
         SubjectGradesDatabaseHelper subjectGradesDatabase = new SubjectGradesDatabaseHelper(context);
@@ -91,11 +93,11 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_NAME, newSubject.getName());
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, newSubject.getAbbreviation());
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_PROFESSOR, newSubject.getProfessor());
+        contentValues.put(COLUMN_SUBJECT_NAME, newSubject.getName());
+        contentValues.put(COLUMN_SUBJECT_ABBREVIATION, newSubject.getAbbreviation());
+        contentValues.put(COLUMN_SUBJECT_PROFESSOR, newSubject.getProfessor());
 
-        db.update(SubjectEntry.TABLE_NAME, contentValues, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {oldSubjectAbbreviation});
+        db.update(TABLE_NAME, contentValues, COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {oldSubjectAbbreviation});
         db.close();
 
         if(!oldSubjectAbbreviation.equals(newSubject.getAbbreviation())) {
@@ -110,15 +112,15 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String subjectAbbreviation = subjectGrade.getSubjectAbbreviation();
 
-        Cursor cursor = db.query(SubjectEntry.TABLE_NAME, // Table name
-                new String[] {SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE, SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE}, // Columns to return
-                SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", // WHERE clause
+        Cursor cursor = db.query(TABLE_NAME, // Table name
+                new String[] {COLUMN_SUBJECT_OBTAINED_GRADE, COLUMN_SUBJECT_MAXIMUM_GRADE}, // Columns to return
+                COLUMN_SUBJECT_ABBREVIATION + "=?", // WHERE clause
                 new String[] {subjectAbbreviation},
                 null, null, null
         );
 
-        Integer subjectObtainedGradeIndex = cursor.getColumnIndex(SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE);
-        Integer subjectMaximumGradeIndex = cursor.getColumnIndex(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE);
+        Integer subjectObtainedGradeIndex = cursor.getColumnIndex(COLUMN_SUBJECT_OBTAINED_GRADE);
+        Integer subjectMaximumGradeIndex = cursor.getColumnIndex(COLUMN_SUBJECT_MAXIMUM_GRADE);
 
         cursor.moveToFirst(); // Abbreviation is unique, so our desired subject should be the first
 
@@ -126,15 +128,15 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         float newTotalMaximumGrade = cursor.getFloat(subjectMaximumGradeIndex) + subjectGrade.getMaximumGrade();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE, newTotalObtainedGrade);
+        contentValues.put(COLUMN_SUBJECT_OBTAINED_GRADE, newTotalObtainedGrade);
 
         if(!subjectGrade.isExtraGrade()) {
-            contentValues.put(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE, newTotalMaximumGrade);
+            contentValues.put(COLUMN_SUBJECT_MAXIMUM_GRADE, newTotalMaximumGrade);
         }
 
         cursor.close();
 
-        db.update(SubjectEntry.TABLE_NAME, contentValues, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {subjectAbbreviation});
+        db.update(TABLE_NAME, contentValues, COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {subjectAbbreviation});
         db.close();
     }
 
@@ -146,15 +148,15 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String subjectAbbreviation = subjectGrade.getSubjectAbbreviation();
 
-        Cursor cursor = db.query(SubjectEntry.TABLE_NAME, // Table name
-                new String[] {SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE, SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE}, // Columns to return
-                SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", // WHERE clause
+        Cursor cursor = db.query(TABLE_NAME, // Table name
+                new String[] {COLUMN_SUBJECT_OBTAINED_GRADE, COLUMN_SUBJECT_MAXIMUM_GRADE}, // Columns to return
+                COLUMN_SUBJECT_ABBREVIATION + "=?", // WHERE clause
                 new String[] {subjectAbbreviation}, // arguments to WHERE clause
                 null, null, null
         );
 
-        Integer subjectObtainedGradeIndex = cursor.getColumnIndex(SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE);
-        Integer subjectMaximumGradeIndex = cursor.getColumnIndex(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE);
+        Integer subjectObtainedGradeIndex = cursor.getColumnIndex(COLUMN_SUBJECT_OBTAINED_GRADE);
+        Integer subjectMaximumGradeIndex = cursor.getColumnIndex(COLUMN_SUBJECT_MAXIMUM_GRADE);
 
         cursor.moveToFirst(); // Abbreviation is unique, so our desired subject should be the first
 
@@ -162,38 +164,38 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         float newTotalMaximumGrade = cursor.getFloat(subjectMaximumGradeIndex) - subjectGrade.getMaximumGrade();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE, newTotalObtainedGrade);
+        contentValues.put(COLUMN_SUBJECT_OBTAINED_GRADE, newTotalObtainedGrade);
 
         if(!subjectGrade.isExtraGrade()) {
-            contentValues.put(SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE, newTotalMaximumGrade);
+            contentValues.put(COLUMN_SUBJECT_MAXIMUM_GRADE, newTotalMaximumGrade);
         }
 
         cursor.close();
 
-        db.update(SubjectEntry.TABLE_NAME, contentValues, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {subjectAbbreviation});
+        db.update(TABLE_NAME, contentValues, COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {subjectAbbreviation});
         db.close();
     }
 
     public Cursor getAllDataInAlphabeticalOrder() {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME + " ORDER BY " + SubjectEntry.COLUMN_SUBJECT_NAME + " ASC", null);
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_SUBJECT_NAME + " ASC", null);
     }
 
     public Cursor getAllData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME + "", null);
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME + "", null);
     }
 
     public Cursor getItemsId() {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT " + SubjectEntry.COLUMN_SUBJECT_ID + " FROM " + SubjectEntry.TABLE_NAME + " ORDER BY " + SubjectEntry.COLUMN_SUBJECT_NAME + " ASC", null);
+        return db.rawQuery("SELECT " + SubjectEntry.COLUMN_SUBJECT_ID + " FROM " + TABLE_NAME + " ORDER BY " + COLUMN_SUBJECT_NAME + " ASC", null);
     }
 
     public boolean hasObject(String columnName, String entry) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.query(SubjectEntry.TABLE_NAME, new String[] {columnName}, columnName  + "=?", new String[] {entry}, null, null, null);
+        Cursor cursor = db.query(TABLE_NAME, new String[] {columnName}, columnName  + "=?", new String[] {entry}, null, null, null);
 
         if(cursor.moveToFirst()) {
             cursor.close();
@@ -206,32 +208,38 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-
     public Cursor getAllDataInAverageGradeOrder() {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * FROM " + SubjectEntry.TABLE_NAME + " ORDER BY (" + SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE + "/" + SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE + ") ASC", null);
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY (" + COLUMN_SUBJECT_OBTAINED_GRADE + "/" + COLUMN_SUBJECT_MAXIMUM_GRADE + ") ASC", null);
     }
 
-    public List<Subject> getAllSubjectsInAlphabeticalOrder() {
+    public List<Subject> getAllSubjects() {
         SQLiteDatabase db = this.getWritableDatabase();
         List<Subject> subjectList = new ArrayList<>();
 
         Cursor subjectsCursor = db.query(
-                SubjectEntry.TABLE_NAME, // Table name
-                new String[] {SubjectEntry.COLUMN_SUBJECT_NAME, SubjectEntry.COLUMN_SUBJECT_ABBREVIATION}, // Columns to return
+                TABLE_NAME, // Table name
+                new String[] {COLUMN_SUBJECT_NAME, COLUMN_SUBJECT_ABBREVIATION, COLUMN_SUBJECT_PROFESSOR, COLUMN_SUBJECT_OBTAINED_GRADE, COLUMN_SUBJECT_MAXIMUM_GRADE}, // Columns to return
                 null,
                 null,
                 null, null,
-                SubjectEntry.COLUMN_SUBJECT_NAME + " ASC"
+                COLUMN_SUBJECT_NAME + " ASC"
         );
 
-        int columnSubjectNameIndex = subjectsCursor.getColumnIndex(SubjectEntry.COLUMN_SUBJECT_NAME);
-        int columnSubjectAbbreviationIndex = subjectsCursor.getColumnIndex(SubjectEntry.COLUMN_SUBJECT_ABBREVIATION);
+        int columnSubjectNameIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_NAME);
+        int columnSubjectAbbreviationIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_ABBREVIATION);
+        int columnSubjectProfessorIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_PROFESSOR);
+        int columnSubjectObtainedGradeIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_OBTAINED_GRADE);
+        int columnSubjectMaximumGradeIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_MAXIMUM_GRADE);
 
         while(subjectsCursor.moveToNext()) {
             Subject subject = new Subject();
+
             subject.setName(subjectsCursor.getString(columnSubjectNameIndex));
             subject.setAbbreviation(subjectsCursor.getString(columnSubjectAbbreviationIndex));
+	        subject.setProfessor(subjectsCursor.getString(columnSubjectProfessorIndex));
+	        subject.setObtainedGrade(subjectsCursor.getFloat(columnSubjectObtainedGradeIndex));
+	        subject.setMaximumGrade(subjectsCursor.getFloat(columnSubjectMaximumGradeIndex));
 
             subjectList.add(subject);
         }

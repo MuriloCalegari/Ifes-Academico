@@ -30,7 +30,7 @@ public class NewClassEventActivity extends AppCompatActivity implements StepperF
 
 		// Create the steps
 		SubjectDatabaseHelper subjectDatabaseHelper = new SubjectDatabaseHelper(this);
-		SubjectSpinnerStep subjectSpinnerStep = new SubjectSpinnerStep(getString(R.string.subject), subjectDatabaseHelper.getAllSubjectsInAlphabeticalOrder());
+		SubjectSpinnerStep subjectSpinnerStep = new SubjectSpinnerStep(getString(R.string.subject), subjectDatabaseHelper.getAllSubjects());
 		subjectDatabaseHelper.close();
 
 		DayPickerStep dayPickerStep = new DayPickerStep(getString(R.string.day_of_the_week), true);

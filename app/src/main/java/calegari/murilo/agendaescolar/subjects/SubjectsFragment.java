@@ -98,23 +98,9 @@ public class SubjectsFragment extends BaseFragment {
 
         // Populates the list:
         subjectDatabase = new SubjectDatabaseHelper(getContext());
-        Cursor cursor = subjectDatabase.getAllDataInAlphabeticalOrder();
 
-        Integer subjectNameIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_NAME);
-        Integer subjectProfessorIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_PROFESSOR);
-        Integer subjectAbbreviationIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_ABBREVIATION);
+        mAdapter.setSubjects(subjectDatabase.getAllSubjects());
 
-        while(cursor.moveToNext()) {
-
-            String subjectName = cursor.getString(subjectNameIndex);
-            String subjectProfessor = cursor.getString(subjectProfessorIndex);
-            String subjectAbbreviation = cursor.getString(subjectAbbreviationIndex);
-
-            Subject subject = new Subject(subjectName,subjectProfessor,subjectAbbreviation);
-
-            mAdapter.updateList(subject);
-        }
-        cursor.close();
         subjectDatabase.close();
     }
 }

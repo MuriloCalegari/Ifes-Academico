@@ -12,10 +12,18 @@ import calegari.murilo.agendaescolar.R;
 
 public class SubjectLineAdapter extends RecyclerView.Adapter<SubjectLineHolder> {
 
-    private final List<Subject> mSubjects;
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
+    }
+
+    private List<Subject> subjects;
 
     public SubjectLineAdapter(ArrayList subjects) {
-        mSubjects = subjects;
+        this.subjects = subjects;
     }
 
     @NonNull
@@ -27,14 +35,14 @@ public class SubjectLineAdapter extends RecyclerView.Adapter<SubjectLineHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull SubjectLineHolder holder, int position) {
-        holder.subjectName.setText(mSubjects.get(position).getName());
-        holder.subjectProfessor.setText(mSubjects.get(position).getProfessor());
-        holder.subjectAbbreviation.setText(mSubjects.get(position).getAbbreviation());
+        holder.subjectName.setText(subjects.get(position).getName());
+        holder.subjectProfessor.setText(subjects.get(position).getProfessor());
+        holder.subjectAbbreviation.setText(subjects.get(position).getAbbreviation());
     }
 
     @Override
     public int getItemCount() {
-        return mSubjects != null ? mSubjects.size() : 0;
+        return subjects != null ? subjects.size() : 0;
     }
 
     /**
@@ -49,7 +57,7 @@ public class SubjectLineAdapter extends RecyclerView.Adapter<SubjectLineHolder> 
     // Responsible to insert a new item in list and notify that there are new items on list.
 
     private void insertItem(Subject subject) {
-        mSubjects.add(subject);
+        subjects.add(subject);
         notifyItemInserted(getItemCount());
     }
 }

@@ -24,16 +24,25 @@ import calegari.murilo.agendaescolar.utils.GradeChart;
 
 public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder> {
 
-	private final List<Subject> mSubjects;
+	private List<Subject> subjects;
 	private Context context;
+
+	public List<Subject> getSubjects() {
+		return subjects;
+	}
+
+	public void setSubjects(List<Subject> subjects) {
+		this.subjects = subjects;
+	}
+
 	private View view;
 
 	public GradesLineAdapter(ArrayList subjects) {
-		mSubjects = subjects;
+		this.subjects = subjects;
 	}
 
 	public GradesLineAdapter(ArrayList subjects, Context context, View view) {
-		this.mSubjects = subjects;
+		this.subjects = subjects;
 		this.context = context;
 		this.view = view;
 	}
@@ -49,10 +58,10 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 	@Override
 	public void onBindViewHolder(@NonNull final GradesBaseLineHolder holder, final int position) {
 
-		float obtainedGrade = mSubjects.get(position).getObtainedGrade();
-		float maximumGrade = mSubjects.get(position).getMaximumGrade();
+		float obtainedGrade = subjects.get(position).getObtainedGrade();
+		float maximumGrade = subjects.get(position).getMaximumGrade();
 
-		holder.subjectName.setText(mSubjects.get(position).getName());
+		holder.subjectName.setText(subjects.get(position).getName());
 
 		String gradeText = Math.round(obtainedGrade*100f)/100f + " " +
 				holder.itemView.getContext().getResources().getString(R.string.out_of) + " " +
@@ -60,7 +69,7 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 
 		holder.gradeText.setText(gradeText);
 
-		holder.subjectName.setText(mSubjects.get(position).getName());
+		holder.subjectName.setText(subjects.get(position).getName());
 
 		GradeChart.setupGradeChart(holder, obtainedGrade, maximumGrade);
 
@@ -83,7 +92,7 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 		GradesFragment.inboxRecyclerView.expandItem(position);
 
 		// Bundles the subject abbreviation to be send to SubjectGradesFragment
-		String subjectAbbreviation = mSubjects.get(position).getAbbreviation();
+		String subjectAbbreviation = subjects.get(position).getAbbreviation();
 		Bundle bundle = new Bundle();
 		bundle.putString("subjectAbbreviation", subjectAbbreviation);
 		fragment.setArguments(bundle);
@@ -107,7 +116,7 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 
 	@Override
 	public int getItemCount() {
-		return mSubjects != null ? mSubjects.size() : 0;
+		return subjects != null ? subjects.size() : 0;
 	}
 
 	public void updateList(Subject subject) {
@@ -117,7 +126,7 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 	// Responsible to insert a new item in list and notify that there are new items on list.
 
 	private void insertItem(Subject subject) {
-		mSubjects.add(subject);
+		subjects.add(subject);
 		notifyItemInserted(getItemCount());
 	}
 

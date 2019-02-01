@@ -131,25 +131,9 @@ public class GradesFragment extends BaseFragment {
 
 		// Populates the list:
 		subjectDatabase = new SubjectDatabaseHelper(getContext());
-		Cursor cursor = subjectDatabase.getAllDataInAlphabeticalOrder();
 
-		Integer subjectNameIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_NAME);
-		Integer subjectAbbreviationIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_ABBREVIATION);
-		Integer subjectMaximumGradeIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE);
-		Integer subjectObtainedGradeIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE);
+		mAdapter.setSubjects(subjectDatabase.getAllSubjects());
 
-		while(cursor.moveToNext()) {
-
-			String subjectName = cursor.getString(subjectNameIndex);
-			String subjectAbbreviation = cursor.getString(subjectAbbreviationIndex);
-			Float subjectObtainedGrade = cursor.getFloat(subjectObtainedGradeIndex);
-			Float subjectMaximumGrade = cursor.getFloat(subjectMaximumGradeIndex);
-
-			Subject subject = new Subject(subjectName,subjectAbbreviation,subjectObtainedGrade,subjectMaximumGrade);
-
-			mAdapter.updateList(subject);
-		}
-		cursor.close();
 		subjectDatabase.close();
 	}
 }
