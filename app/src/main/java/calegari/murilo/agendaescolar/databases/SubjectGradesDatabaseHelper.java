@@ -67,7 +67,7 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SubjectGradesEntry.SQL_CREATE_ENTRIES);
     }
 
-    public void insertData(SubjectGrade subjectGrade) {
+    public void insertGrade(SubjectGrade subjectGrade) {
         addToTotalGrade(subjectGrade);
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -82,7 +82,7 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void removeData(Integer gradeID) {
+    public void removeGrade(Integer gradeID) {
         removeFromTotalGrade(gradeID);
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -103,7 +103,7 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateData(Integer oldSubjectGradeID, SubjectGrade newSubjectGrade){
+    public void updateGrade(Integer oldSubjectGradeID, SubjectGrade newSubjectGrade){
         removeFromTotalGrade(oldSubjectGradeID);
 
         SQLiteDatabase db = this.getWritableDatabase();

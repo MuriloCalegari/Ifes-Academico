@@ -219,13 +219,14 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
 
         Cursor subjectsCursor = db.query(
                 TABLE_NAME, // Table name
-                new String[] {COLUMN_SUBJECT_NAME, COLUMN_SUBJECT_ABBREVIATION, COLUMN_SUBJECT_PROFESSOR, COLUMN_SUBJECT_OBTAINED_GRADE, COLUMN_SUBJECT_MAXIMUM_GRADE}, // Columns to return
+                new String[] {COLUMN_SUBJECT_ID, COLUMN_SUBJECT_NAME, COLUMN_SUBJECT_ABBREVIATION, COLUMN_SUBJECT_PROFESSOR, COLUMN_SUBJECT_OBTAINED_GRADE, COLUMN_SUBJECT_MAXIMUM_GRADE}, // Columns to return
                 null,
                 null,
                 null, null,
                 COLUMN_SUBJECT_NAME + " ASC"
         );
 
+        int columnSubjectIdIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_ID);
         int columnSubjectNameIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_NAME);
         int columnSubjectAbbreviationIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_ABBREVIATION);
         int columnSubjectProfessorIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_PROFESSOR);
@@ -235,6 +236,7 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         while(subjectsCursor.moveToNext()) {
             Subject subject = new Subject();
 
+            subject.setId(subjectsCursor.getInt(columnSubjectIdIndex));
             subject.setName(subjectsCursor.getString(columnSubjectNameIndex));
             subject.setAbbreviation(subjectsCursor.getString(columnSubjectAbbreviationIndex));
 	        subject.setProfessor(subjectsCursor.getString(columnSubjectProfessorIndex));

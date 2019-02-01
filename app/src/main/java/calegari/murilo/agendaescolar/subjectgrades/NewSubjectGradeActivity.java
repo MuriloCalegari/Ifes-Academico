@@ -81,7 +81,7 @@ public class NewSubjectGradeActivity extends AppCompatActivity implements Steppe
 				newIsExtraCredit.getStepData()
 		);
 
-		subjectGradeDbHelper.insertData(subjectGrade);
+		subjectGradeDbHelper.insertGrade(subjectGrade);
 		finish();
 	}
 

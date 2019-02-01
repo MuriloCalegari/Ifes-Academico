@@ -55,7 +55,7 @@ public class SchedulesFragment extends BaseFragment {
 		FloatingActionButton fab = getView().findViewById(R.id.floatingActionButton);
 
 		fab.setOnClickListener((l) -> {
-			Intent newSubjectScheduleIntent = new Intent(view.getContext(), NewClassEventActivity.class);
+			Intent newSubjectScheduleIntent = new Intent(view.getContext(), NewClassTimeActivity.class);
 			view.getContext().startActivity(newSubjectScheduleIntent);
 		});
 

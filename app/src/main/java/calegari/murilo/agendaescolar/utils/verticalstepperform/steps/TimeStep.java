@@ -143,5 +143,9 @@ public class TimeStep extends Step<TimeStep.TimeHolder> {
 			this.hour = hour;
 			this.minutes = minutes;
 		}
+
+		public String getDateTime() {
+			return String.valueOf(hour) + ":" + String.valueOf(minutes);
+		}
 	}
 }

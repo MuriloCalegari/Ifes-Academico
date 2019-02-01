@@ -62,7 +62,7 @@
             android:name=".BaseFragmentActivity"
             android:theme="@style/PullCollapsibleTheme" />
         <activity
-            android:name=".calendar.NewClassEventActivity"
+            android:name=".calendar.NewClassTimeActivity"
             android:label="@string/title_activity_new_subject_schedule"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

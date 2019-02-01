@@ -2,6 +2,7 @@ package calegari.murilo.agendaescolar.subjects;
 
 public class Subject {
 
+    private int id;
     private String name;
     private String professor;
     private String abbreviation;
@@ -27,6 +28,14 @@ public class Subject {
         this.name = name;
         this.obtainedGrade = obtainedGrade;
         this.maximumGrade = maximumGrade;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

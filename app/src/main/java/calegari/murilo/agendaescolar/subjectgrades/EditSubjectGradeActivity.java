@@ -88,7 +88,7 @@ public class EditSubjectGradeActivity extends AppCompatActivity implements Stepp
 
 		// Updates data on database
 		SubjectGradesDatabaseHelper subjectGradesDatabase = new SubjectGradesDatabaseHelper(this);
-		subjectGradesDatabase.updateData(
+		subjectGradesDatabase.updateGrade(
 				oldGradeId,
 				new SubjectGrade(
 						subjectAbbreviation,
@@ -116,7 +116,7 @@ public class EditSubjectGradeActivity extends AppCompatActivity implements Stepp
 				.setTitle(getString(R.string.confirm_subject_grade_delete_title))
 				.setMessage(getString(R.string.confirm_subject_grade_delete_message))
 				.setPositiveButton(getString(R.string.delete), ((dialogInterface, i) -> {
-					subjectGradesDatabase.removeData(oldGradeId);
+					subjectGradesDatabase.removeGrade(oldGradeId);
 					subjectGradesDatabase.close();
 					finish();
 				}))
