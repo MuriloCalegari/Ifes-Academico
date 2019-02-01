@@ -116,4 +116,8 @@
 
     <string name="class_event_save_button">Save class</string>
     <string name="day_of_the_week">Day of the week</string>
+    <string name="start_time">Start time</string>
+    <string name="which_time_start">At which time does the class start?</string>
+    <string name="end_time">End time</string>
+    <string name="which_time_end">At which time does the class finish?</string>
 </resources>

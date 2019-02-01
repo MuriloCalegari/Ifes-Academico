@@ -8,6 +8,7 @@ import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.DayPickerStep;
 import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.SubjectSpinnerStep;
+import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.TimeStep;
 import ernestoyaquello.com.verticalstepperform.VerticalStepperFormView;
 import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
 
@@ -34,13 +35,14 @@ public class NewClassEventActivity extends AppCompatActivity implements StepperF
 		subjectDatabaseHelper.close();
 
 		DayPickerStep dayPickerStep = new DayPickerStep(getString(R.string.day_of_the_week), true);
-
+		TimeStep startTimeStep = new TimeStep(getString(R.string.start_time), getString(R.string.which_time_start));
+		TimeStep endTimeStep = new TimeStep(getString(R.string.end_time), getString(R.string.which_time_end));
 
 
 		// Find the form view, set it up and initialize it.
 		VerticalStepperFormView verticalStepperForm = findViewById(R.id.stepper_form);
 		verticalStepperForm
-				.setup(this, subjectSpinnerStep, dayPickerStep)
+				.setup(this, subjectSpinnerStep, dayPickerStep, startTimeStep, endTimeStep)
 				.lastStepNextButtonText(getString(R.string.class_event_save_button))
 				.displayCancelButtonInLastStep(true)
 				.lastStepCancelButtonText(getString(R.string.cancel))

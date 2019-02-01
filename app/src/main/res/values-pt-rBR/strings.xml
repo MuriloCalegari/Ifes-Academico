@@ -108,5 +108,9 @@
     <string name="error_alarm_days_min_days">Você deve marcar um dia</string>
     <string name="class_event_save_button">Salvar aula</string>
     <string name="day_of_the_week">Dia da semana</string>
+    <string name="start_time">Hora de início</string>
+    <string name="which_time_start">A que horas a aula começa?</string>
+    <string name="end_time">Hora de fim</string>
+    <string name="which_time_end">A que horas a aula termina?</string>
 
 </resources>
