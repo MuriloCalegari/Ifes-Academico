@@ -26,7 +26,7 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         this.context = context;
     }
 
-	public static class SubjectEntry implements BaseColumns {
+    public static class SubjectEntry implements BaseColumns {
         public static final String DATABASE_NAME = "schooltools.db";
         public static final String TABLE_NAME = "subjects";
         public static final String COLUMN_SUBJECT_NAME = "name";
@@ -239,14 +239,52 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
             subject.setId(subjectsCursor.getInt(columnSubjectIdIndex));
             subject.setName(subjectsCursor.getString(columnSubjectNameIndex));
             subject.setAbbreviation(subjectsCursor.getString(columnSubjectAbbreviationIndex));
-	        subject.setProfessor(subjectsCursor.getString(columnSubjectProfessorIndex));
-	        subject.setObtainedGrade(subjectsCursor.getFloat(columnSubjectObtainedGradeIndex));
-	        subject.setMaximumGrade(subjectsCursor.getFloat(columnSubjectMaximumGradeIndex));
+            subject.setProfessor(subjectsCursor.getString(columnSubjectProfessorIndex));
+            subject.setObtainedGrade(subjectsCursor.getFloat(columnSubjectObtainedGradeIndex));
+            subject.setMaximumGrade(subjectsCursor.getFloat(columnSubjectMaximumGradeIndex));
 
             subjectList.add(subject);
         }
 
+        db.close();
+        subjectsCursor.close();
         return subjectList;
+    }
+
+    public Subject getSubject(int subjectId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String TAG = getClass().getSimpleName();
+
+        Log.d(TAG, String.valueOf(subjectId));
+
+        Cursor subjectsCursor = db.query(
+                TABLE_NAME, // Table name
+                new String[] {COLUMN_SUBJECT_ID, COLUMN_SUBJECT_NAME, COLUMN_SUBJECT_ABBREVIATION, COLUMN_SUBJECT_PROFESSOR, COLUMN_SUBJECT_OBTAINED_GRADE, COLUMN_SUBJECT_MAXIMUM_GRADE}, // Columns to return
+                COLUMN_SUBJECT_ID + "=?",
+                new String[] {String.valueOf(subjectId)},
+                null, null, null
+        );
+
+        int columnSubjectIdIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_ID);
+        int columnSubjectNameIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_NAME);
+        int columnSubjectAbbreviationIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_ABBREVIATION);
+        int columnSubjectProfessorIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_PROFESSOR);
+        int columnSubjectObtainedGradeIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_OBTAINED_GRADE);
+        int columnSubjectMaximumGradeIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_MAXIMUM_GRADE);
+
+        subjectsCursor.moveToFirst();
+
+        Subject subject = new Subject();
+        subject.setId(subjectsCursor.getInt(columnSubjectIdIndex));
+        subject.setName(subjectsCursor.getString(columnSubjectNameIndex));
+        subject.setAbbreviation(subjectsCursor.getString(columnSubjectAbbreviationIndex));
+        subject.setProfessor(subjectsCursor.getString(columnSubjectProfessorIndex));
+        subject.setObtainedGrade(subjectsCursor.getFloat(columnSubjectObtainedGradeIndex));
+        subject.setMaximumGrade(subjectsCursor.getFloat(columnSubjectMaximumGradeIndex));
+
+        subjectsCursor.close();
+        return subject;
+
     }
 
 }

@@ -112,5 +112,6 @@
     <string name="which_time_start">A que horas a aula começa?</string>
     <string name="end_time">Hora de fim</string>
     <string name="which_time_end">A que horas a aula termina?</string>
+    <string name="create_subject_first">Crie uma matéria primeiro!</string>
 
 </resources>

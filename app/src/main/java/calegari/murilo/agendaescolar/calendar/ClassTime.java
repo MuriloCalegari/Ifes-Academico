@@ -1,8 +1,9 @@
-package calegari.murilo.agendaescolar.databases;
+package calegari.murilo.agendaescolar.calendar;
 
 public class ClassTime {
 
 	private int subjectId;
+	private int timeId;
 	private int dayOfTheWeek;
 	private String startTime;
 	private String endTime;
@@ -12,6 +13,21 @@ public class ClassTime {
 		this.dayOfTheWeek = dayOfTheWeek;
 		this.startTime = startTime;
 		this.endTime = endTime;
+	}
+
+	public ClassTime(int subjectId, int timeId, int dayOfTheWeek, String startTime, String endTime) {
+		this.subjectId = subjectId;
+		this.dayOfTheWeek = dayOfTheWeek;
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
+
+	public int getTimeId() {
+		return timeId;
+	}
+
+	public void setTimeId(int timeId) {
+		this.timeId = timeId;
 	}
 
 	public int getSubjectId() {
@@ -34,12 +50,28 @@ public class ClassTime {
 		return startTime;
 	}
 
+	public int getStartTimeHour() {
+		return Integer.valueOf(getStartTime().split(":")[0]);
+	}
+
+	public int getStartTimeMinute() {
+		return Integer.valueOf(getStartTime().split(":")[1]);
+	}
+
 	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
 	public String getEndTime() {
 		return endTime;
+	}
+
+	public int getEndTimeHour() {
+		return Integer.valueOf(getEndTime().split(":")[0]);
+	}
+
+	public int getEndTimeMinute() {
+		return Integer.valueOf(getEndTime().split(":")[1]);
 	}
 
 	public void setEndTime(String endTime) {

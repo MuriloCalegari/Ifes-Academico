@@ -3,6 +3,7 @@ package calegari.murilo.agendaescolar.calendar;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,21 +21,28 @@ import java.util.List;
 */
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import calegari.murilo.agendaescolar.BaseFragment;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
+import calegari.murilo.agendaescolar.databases.DatabaseHelper;
+import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import de.tobiasschuerg.weekview.data.Event;
 import de.tobiasschuerg.weekview.data.WeekData;
 import de.tobiasschuerg.weekview.view.WeekView;
 
 public class SchedulesFragment extends BaseFragment {
+	private FloatingActionButton fab;
 
 	//WeekView weekView;
 
@@ -52,11 +60,15 @@ public class SchedulesFragment extends BaseFragment {
 
 		setupScheduleView();
 
-		FloatingActionButton fab = getView().findViewById(R.id.floatingActionButton);
+		fab = getView().findViewById(R.id.floatingActionButton);
 
 		fab.setOnClickListener((l) -> {
 			Intent newSubjectScheduleIntent = new Intent(view.getContext(), NewClassTimeActivity.class);
-			view.getContext().startActivity(newSubjectScheduleIntent);
+			if(!isSubjectDatabaseEmpty()) {
+				getContext().startActivity(newSubjectScheduleIntent);
+			} else {
+				displayEmptyDatabaseError();
+			}
 		});
 
 
@@ -102,6 +114,24 @@ public class SchedulesFragment extends BaseFragment {
 
 	}
 
+	private void displayEmptyDatabaseError() {
+		Snackbar snackbar = Snackbar.make(getView(), getString(R.string.create_subject_first), Snackbar.LENGTH_SHORT);
+
+		// Displays SnackBar above the floating action button, as stated in the material docs
+		snackbar.setAnchorView(fab);
+
+		snackbar.show();
+	}
+
+	private boolean isSubjectDatabaseEmpty() {
+		SubjectDatabaseHelper subjectDatabaseHelper = new SubjectDatabaseHelper(getContext());
+
+		boolean isSubjectDatabaseEmpty = subjectDatabaseHelper.getAllSubjects().isEmpty();
+		subjectDatabaseHelper.close();
+
+		return isSubjectDatabaseEmpty;
+	}
+
 	private void setupScheduleView() {
 
 		AndroidThreeTen.init(getContext());
@@ -109,23 +139,30 @@ public class SchedulesFragment extends BaseFragment {
 		WeekView weekView = getView().findViewById(R.id.week_view_foo);
 		WeekData data = new WeekData();
 
-		Event.Single event = new Event.Single(
-				1,
-				LocalDate.now(),
-				"title",
-				"Física",
-				"sub",
-				1,
-				LocalTime.of(7,0),
-				LocalTime.of(8,50),
-				null,
-				null,
-				Color.WHITE,
-				Color.BLACK
-		);
+		DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+		SubjectDatabaseHelper subjectDatabaseHelper = new SubjectDatabaseHelper(getContext());
 
-		data.add(event);
+		List<ClassTime> classTimeList = databaseHelper.getSchedule();
 
-		weekView.addLessonsToTimetable(data);
+		for(ClassTime classtime : classTimeList) {
+			Log.d(getClass().getSimpleName(), String.valueOf(classtime.getDayOfTheWeek()));
+			Event.Single event = new Event.Single(
+					classtime.getTimeId(),
+					LocalDate.now(),
+					"",
+					subjectDatabaseHelper.getSubject(classtime.getSubjectId()).getAbbreviation(),
+					"",
+					classtime.getDayOfTheWeek(),
+					LocalTime.of(classtime.getStartTimeHour(), classtime.getStartTimeMinute()),
+					LocalTime.of(classtime.getEndTimeHour(), classtime.getEndTimeMinute()),
+					null, null,
+					Color.WHITE,
+					Color.BLACK
+			);
+			data.add(event);
+		}
+		if(!data.isEmpty()) {
+			weekView.addLessonsToTimetable(data);
+		}
 	}
 }

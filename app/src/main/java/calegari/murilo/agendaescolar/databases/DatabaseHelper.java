@@ -2,11 +2,16 @@ package calegari.murilo.agendaescolar.databases;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import androidx.annotation.Nullable;
+import calegari.murilo.agendaescolar.calendar.ClassTime;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -30,8 +35,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				COLUMN_CLASS_TIME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 				COLUMN_CLASS_SUBJECT_ID + " INTEGER," +
 				COLUMN_CLASS_DAY + " INTEGER," +
-				COLUMN_CLASS_START_TIME + " DATETIME," +
-				COLUMN_CLASS_END_TIME + " DATETIME)";
+				COLUMN_CLASS_START_TIME + " TEXT," +
+				COLUMN_CLASS_END_TIME + " TEXT)";
 
 		public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	}
@@ -69,4 +74,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.close();
 	}
 
+	public List<ClassTime> getSchedule() {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		Cursor cursor = db.query(ScheduleEntry.TABLE_NAME,
+				new String[] {ScheduleEntry.COLUMN_CLASS_SUBJECT_ID, ScheduleEntry.COLUMN_CLASS_TIME_ID, ScheduleEntry.COLUMN_CLASS_DAY, ScheduleEntry.COLUMN_CLASS_START_TIME, ScheduleEntry.COLUMN_CLASS_END_TIME},
+				null, null, null, null, null
+		);
+
+		int subjectIdIndex = cursor.getColumnIndex(ScheduleEntry.COLUMN_CLASS_SUBJECT_ID);
+		int timeIdIndex = cursor.getColumnIndex(ScheduleEntry.COLUMN_CLASS_TIME_ID);
+		int dayIndex = cursor.getColumnIndex(ScheduleEntry.COLUMN_CLASS_DAY);
+		int startTimeIndex = cursor.getColumnIndex(ScheduleEntry.COLUMN_CLASS_START_TIME);
+		int endTimeIndex = cursor.getColumnIndex(ScheduleEntry.COLUMN_CLASS_END_TIME);
+
+		List<ClassTime> classTimeList = new ArrayList<>();
+
+		while(cursor.moveToNext()) {
+			ClassTime classTime = new ClassTime(
+					cursor.getInt(subjectIdIndex),
+					cursor.getInt(timeIdIndex),
+					cursor.getInt(dayIndex),
+					cursor.getString(startTimeIndex),
+					cursor.getString(endTimeIndex)
+			);
+
+			classTimeList.add(classTime);
+		}
+
+		cursor.close();
+		return classTimeList;
+	}
 }

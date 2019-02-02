@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import calegari.murilo.agendaescolar.R;
-import calegari.murilo.agendaescolar.databases.ClassTime;
 import calegari.murilo.agendaescolar.databases.DatabaseHelper;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.DayPickerStep;
@@ -58,14 +57,12 @@ public class NewClassTimeActivity extends AppCompatActivity implements StepperFo
 
 	@Override
 	public void onCompletedForm() {
-		DatabaseHelper databaseHelper = new DatabaseHelper(this);
-
 		int dayOfTheWeek = 0;
 
 		// loops through the marked days and get the unique day marked
 		for(int i = 0; i < dayPickerStep.getStepData().length; i++) {
 			if(dayPickerStep.getStepData()[i]) {
-				dayOfTheWeek = i;
+				dayOfTheWeek = i + 1; // +1 because the libraries counts day of the week from 1
 			}
 		}
 
@@ -74,8 +71,12 @@ public class NewClassTimeActivity extends AppCompatActivity implements StepperFo
 				dayOfTheWeek,
 				startTimeStep.getStepData().getDateTime(),
 				endTimeStep.getStepData().getDateTime()
-
 		);
+
+		DatabaseHelper databaseHelper = new DatabaseHelper(this);
+		databaseHelper.insertClassTime(classTime);
+		databaseHelper.close();
+		finish();
 	}
 
 	@Override
