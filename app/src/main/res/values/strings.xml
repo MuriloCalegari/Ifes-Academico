@@ -121,4 +121,5 @@
     <string name="end_time">End time</string>
     <string name="which_time_end">At which time does the class finish?</string>
     <string name="create_subject_first">Create a subject first!</string>
+    <string name="start_time_after_end_time">Start time is set after end time!</string>
 </resources>
