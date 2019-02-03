@@ -54,6 +54,7 @@ public class TimeStep extends Step<TimeStep.TimeHolder> {
 							timeMinutes = minute;
 
 							updateTimeText();
+							markAsCompletedOrUncompleted(true);
 						}
 					}, timeHour, timeMinutes, true);
 			updateTimeText();

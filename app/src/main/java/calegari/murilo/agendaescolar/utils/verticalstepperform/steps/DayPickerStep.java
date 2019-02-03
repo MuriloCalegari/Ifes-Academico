@@ -145,9 +145,8 @@ public class DayPickerStep extends Step<boolean[]> {
 		for(int i = 0; i < markDay.length; i++) {
 			View dayLayout = getDayLayout(i);
 			if(i != dayExceptionIndex) {
-				markDay[i] = false;
+				unmarkDay(i, dayLayout, true);
 			}
-			unmarkDay(i, dayLayout, true);
 		}
 	}
 

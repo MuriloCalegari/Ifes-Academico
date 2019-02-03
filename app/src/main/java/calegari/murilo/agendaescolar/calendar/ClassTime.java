@@ -17,6 +17,7 @@ public class ClassTime {
 
 	public ClassTime(int subjectId, int timeId, int dayOfTheWeek, String startTime, String endTime) {
 		this.subjectId = subjectId;
+		this.timeId = timeId;
 		this.dayOfTheWeek = dayOfTheWeek;
 		this.startTime = startTime;
 		this.endTime = endTime;

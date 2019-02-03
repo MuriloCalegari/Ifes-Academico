@@ -1,5 +1,6 @@
 package calegari.murilo.agendaescolar.calendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -46,7 +47,12 @@ public class NewClassTimeActivity extends AppCompatActivity implements StepperFo
 
 		dayPickerStep = new DayPickerStep(getString(R.string.day_of_the_week), true);
 		startTimeStep = new TimeStep(getString(R.string.start_time), getString(R.string.which_time_start));
-		endTimeStep = new TimeStep(getString(R.string.end_time), getString(R.string.which_time_end));
+		endTimeStep = new TimeStep(getString(R.string.end_time), getString(R.string.which_time_end)) {
+			@Override
+			protected IsDataValid isStepDataValid(TimeHolder stepData) {
+				return new IsDataValid(isTimeIntervalValid(startTimeStep.getStepData(), stepData), getString(R.string.end_time_before_start_time));
+			}
+		};
 
 		// Find the form view, set it up and initialize it.
 		verticalStepperForm = findViewById(R.id.stepper_form);
@@ -65,35 +71,50 @@ public class NewClassTimeActivity extends AppCompatActivity implements StepperFo
 		String startTime = startTimeStep.getStepData().getDateTime();
 		String endTime = endTimeStep.getStepData().getDateTime();
 
-		if(isTimeIntervalValid(startTime, endTime)) {
+		// Verification is necessary since the user might set up the start time after setting the end time
+		if(isTimeIntervalValid(startTimeStep.getStepData(), endTimeStep.getStepData())) {
 			int dayOfTheWeek = 0;
-
 			// loops through the marked days and get the unique day marked
 			for(int i = 0; i < dayPickerStep.getStepData().length; i++) {
 				if(dayPickerStep.getStepData()[i]) {
-					dayOfTheWeek = i + 1; // +1 because the library counts day of the week from 1
+					if(i == 6) { // If it's sunday
+						// Library counts days from sunday, but I chose to display the date picker having sunday as the last day,
+						// since the library also displays (but doesn't consider) sunday as the last day of the week
+						dayOfTheWeek = 0;
+					} else {
+						dayOfTheWeek = i + 2; // +2 because the library counts day of the week with sunday as day 1
+					}
+					break;
 				}
 			}
-
+			int subjectId = subjectSpinnerStep.getStepData().getId();
 			ClassTime classTime = new ClassTime(
-					subjectSpinnerStep.getStepData().getId(),
+					subjectId,
 					dayOfTheWeek,
-					startTimeStep.getStepData().getDateTime(),
-					endTimeStep.getStepData().getDateTime()
+					startTime,
+					endTime
 			);
 
 			DatabaseHelper databaseHelper = new DatabaseHelper(this);
 			databaseHelper.insertClassTime(classTime);
 			databaseHelper.close();
+
+			Intent returnIntent = new Intent();
+			returnIntent.putExtra("subjectId", subjectId);
+			returnIntent.putExtra("dayOfTheWeek", dayOfTheWeek);
+			returnIntent.putExtra("startTime", startTime);
+			returnIntent.putExtra("endTime", endTime);
+			setResult(RESULT_OK, returnIntent);
+
 			finish();
 		} else {
-			displayStartTimeAfterEndTimeError();
 			verticalStepperForm.cancelFormCompletionOrCancellationAttempt();
+			displayStartTimeAfterEndTimeError();
 		}
 	}
 
 	private void displayStartTimeAfterEndTimeError() {
-		Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.start_time_after_end_time), Snackbar.LENGTH_SHORT);
+		Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.end_time_before_start_time ), Snackbar.LENGTH_SHORT);
 		snackbar.show();
 	}
 
@@ -102,9 +123,9 @@ public class NewClassTimeActivity extends AppCompatActivity implements StepperFo
 		finish();
 	}
 
-	private boolean isTimeIntervalValid(String startTime, String endTime) {
-		LocalTime startLocalTime = LocalTime.of(Integer.valueOf(startTime.split(":")[0]), Integer.valueOf(startTime.split(":")[1]));
-		LocalTime endLocalTime = LocalTime.of(Integer.valueOf(endTime.split(":")[0]), Integer.valueOf(endTime.split(":")[1]));
+	private boolean isTimeIntervalValid(TimeStep.TimeHolder startTime, TimeStep.TimeHolder endTime) {
+		LocalTime startLocalTime = LocalTime.of(startTime.getHour(),startTime.getMinutes());
+		LocalTime endLocalTime = LocalTime.of(endTime.getHour(), endTime.getMinutes());
 
 		return endLocalTime.isAfter(startLocalTime);
 	}
