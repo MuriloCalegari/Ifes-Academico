@@ -172,4 +172,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		db.close();
 	}
+
+	public void deleteSubjectClasses(int subjectId) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		db.delete(
+				ScheduleEntry.TABLE_NAME,
+				ScheduleEntry.COLUMN_CLASS_SUBJECT_ID + "=?",
+				new String[] {String.valueOf(subjectId)}
+		);
+
+		db.close();
+	}
 }

@@ -75,12 +75,31 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
 
     public void removeData(String abbreviation) {
         SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.query(
+                TABLE_NAME,
+                new String[] {COLUMN_SUBJECT_ID},
+                COLUMN_SUBJECT_ABBREVIATION + "=?",
+                new String[]{abbreviation},
+                null, null, null
+        );
+
+        int columnSubjectIdIndex = cursor.getColumnIndex(COLUMN_SUBJECT_ID);
+        cursor.moveToFirst();
+        int subjectId = cursor.getInt(columnSubjectIdIndex);
+
+        cursor.close();
+
         db.delete(TABLE_NAME, COLUMN_SUBJECT_ABBREVIATION + "=?", new String[] {abbreviation});
         db.close();
 
         SubjectGradesDatabaseHelper subjectGradesDatabase = new SubjectGradesDatabaseHelper(context);
         subjectGradesDatabase.deleteAllGrades(abbreviation);
         subjectGradesDatabase.close();
+
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+        databaseHelper.deleteSubjectClasses(subjectId);
+        databaseHelper.close();
     }
 
     /**
