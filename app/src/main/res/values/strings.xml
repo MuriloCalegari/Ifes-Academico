@@ -95,23 +95,23 @@
     <string name="error_alarm_days_min_days">A day should be marked</string>
 
     <string-array name="week_days">
+        <item>S</item>
         <item>M</item>
         <item>T</item>
         <item>W</item>
         <item>T</item>
         <item>F</item>
         <item>S</item>
-        <item>S</item>
     </string-array>
 
     <string-array name="week_days_extended">
+        <item>Sunday</item>
         <item>Monday</item>
         <item>Tuesday</item>
         <item>Wednesday</item>
         <item>Thursday</item>
         <item>Friday</item>
         <item>Saturday</item>
-        <item>Sunday</item>
     </string-array>
 
     <string name="class_event_save_button">Save class</string>

@@ -55,7 +55,13 @@ public class EditClassTimeActivity extends NewClassTimeActivity {
 		databaseHelper.close();
 
 		boolean[] markedDays = new boolean[7];
-		markedDays[oldClassTime.getDayOfTheWeek() - 1] = true;
+
+		// if it's sunday (for the library), set the first day (0, for the UI) as marked
+		if(oldClassTime.getDayOfTheWeek() == 7) {
+			markedDays[0] = true;
+		} else {
+			markedDays[oldClassTime.getDayOfTheWeek()] = true;
+		}
 		this.dayPickerStep.restoreStepData(markedDays);
 
 		this.startTimeStep.restoreStepData(new TimeStep.TimeHolder(oldClassTime.getStartTimeHour(), oldClassTime.getStartTimeMinute()));

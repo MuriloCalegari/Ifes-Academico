@@ -86,23 +86,23 @@
     <string name="title_activity_new_subject_schedule">NewSubjectSchedule</string>
 
     <string-array name="week_days">
+        <item>D</item>
         <item>S</item>
         <item>T</item>
         <item>Q</item>
         <item>Q</item>
         <item>S</item>
         <item>S</item>
-        <item>D</item>
     </string-array>
 
     <string-array name="week_days_extended">
+        <item>Domingo</item>
         <item>Segunda</item>
         <item>Terça</item>
         <item>Quarta</item>
         <item>Quinta</item>
         <item>Sexta</item>
         <item>Sábado</item>
-        <item>Domingo</item>
     </string-array>
 
     <string name="error_alarm_days_min_days">Você deve marcar um dia</string>
