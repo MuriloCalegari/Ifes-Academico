@@ -57,7 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(ScheduleEntry.SQL_CREATE_ENTRIES);
 	}
 
-	public void insertClassTime(ClassTime classTime) {
+	public int insertClassTime(ClassTime classTime) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues contentValues = new ContentValues();
@@ -66,12 +66,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		contentValues.put(ScheduleEntry.COLUMN_CLASS_START_TIME, classTime.getStartTime());
 		contentValues.put(ScheduleEntry.COLUMN_CLASS_END_TIME, classTime.getEndTime());
 
-		db.insert(
+		long id = db.insert(
 				ScheduleEntry.TABLE_NAME,
 				null,
 				contentValues
 		);
 		db.close();
+
+		return (int) id;
 	}
 
 	public List<ClassTime> getSchedule() {
@@ -103,6 +105,71 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 
 		cursor.close();
+		db.close();
 		return classTimeList;
+	}
+
+	public ClassTime getClassTime(int timeId) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		Cursor cursor = db.query(
+				ScheduleEntry.TABLE_NAME,
+				new String[] {ScheduleEntry.COLUMN_CLASS_SUBJECT_ID, ScheduleEntry.COLUMN_CLASS_TIME_ID, ScheduleEntry.COLUMN_CLASS_DAY, ScheduleEntry.COLUMN_CLASS_START_TIME, ScheduleEntry.COLUMN_CLASS_END_TIME},
+				ScheduleEntry.COLUMN_CLASS_TIME_ID + "=?",
+				new String[] {String.valueOf(timeId)},
+				null, null, null
+		);
+
+		cursor.moveToFirst();
+
+		int subjectIdIndex = cursor.getColumnIndex(ScheduleEntry.COLUMN_CLASS_SUBJECT_ID);
+		int timeIdIndex = cursor.getColumnIndex(ScheduleEntry.COLUMN_CLASS_TIME_ID);
+		int dayIndex = cursor.getColumnIndex(ScheduleEntry.COLUMN_CLASS_DAY);
+		int startTimeIndex = cursor.getColumnIndex(ScheduleEntry.COLUMN_CLASS_START_TIME);
+		int endTimeIndex = cursor.getColumnIndex(ScheduleEntry.COLUMN_CLASS_END_TIME);
+
+		ClassTime classTime = new ClassTime(
+				cursor.getInt(subjectIdIndex),
+				cursor.getInt(timeIdIndex),
+				cursor.getInt(dayIndex),
+				cursor.getString(startTimeIndex),
+				cursor.getString(endTimeIndex)
+		);
+
+		cursor.close();
+		db.close();
+
+		return classTime;
+	}
+
+	public void deleteClassTime(int timeId) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		db.delete(
+				ScheduleEntry.TABLE_NAME,
+				ScheduleEntry.COLUMN_CLASS_TIME_ID + "=?",
+				new String[] {String.valueOf(timeId)}
+		);
+
+		db.close();
+	}
+
+	public void updateClassTime(ClassTime classTime) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(ScheduleEntry.COLUMN_CLASS_SUBJECT_ID, classTime.getSubjectId());
+		contentValues.put(ScheduleEntry.COLUMN_CLASS_DAY, classTime.getDayOfTheWeek());
+		contentValues.put(ScheduleEntry.COLUMN_CLASS_START_TIME, classTime.getStartTime());
+		contentValues.put(ScheduleEntry.COLUMN_CLASS_END_TIME, classTime.getEndTime());
+
+		db.update(
+				ScheduleEntry.TABLE_NAME,
+				contentValues,
+				ScheduleEntry.COLUMN_CLASS_TIME_ID + "=?",
+				new String[] {String.valueOf(classTime.getTimeId())}
+		);
+
+		db.close();
 	}
 }

@@ -1,6 +1,5 @@
 package calegari.murilo.agendaescolar.calendar;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,13 +23,26 @@ import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.DatabaseHelper;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
+import calegari.murilo.agendaescolar.utils.Tools;
 import de.tobiasschuerg.weekview.data.Event;
 import de.tobiasschuerg.weekview.data.WeekData;
+import de.tobiasschuerg.weekview.view.EventView;
 import de.tobiasschuerg.weekview.view.WeekView;
 
 public class SchedulesFragment extends BaseFragment {
+
+	public static final int NEW_CLASS_EVENT_REQUEST_CODE = 1;
+	public static final int EDIT_CLASS_EVENT_REQUEST_CODE = 2;
+
+	public static final int UPDATE_CLASS_EVENT_RESULT_CODE = 3;
+	public static final int DELETE_EVENT_RESULT_CODE = 4;
+	public static final int NEW_CLASS_EVENT_RESULT_CODE = 5;
+
 	private FloatingActionButton fab;
 	private WeekView weekView;
+	private DatabaseHelper databaseHelper;
+
+	private EventView selectedEventView;
 
 	//WeekView weekView;
 
@@ -51,7 +63,7 @@ public class SchedulesFragment extends BaseFragment {
 		fab.setOnClickListener((l) -> {
 			if(!isSubjectDatabaseEmpty()) {
 				Intent newSubjectScheduleIntent = new Intent(getContext(), NewClassTimeActivity.class);
-				startActivityForResult(newSubjectScheduleIntent, 1);
+				startActivityForResult(newSubjectScheduleIntent, NEW_CLASS_EVENT_REQUEST_CODE);
 			} else {
 				displayEmptyDatabaseError();
 			}
@@ -65,9 +77,28 @@ public class SchedulesFragment extends BaseFragment {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		getActivity();
-		if (resultCode == Activity.RESULT_OK && requestCode == 1) {
+		if(resultCode == DELETE_EVENT_RESULT_CODE) {
+			weekView.removeView(selectedEventView);
+		}
+		if(resultCode == NEW_CLASS_EVENT_RESULT_CODE) {
 			ClassTime classTime = new ClassTime(
 					data.getIntExtra("subjectId", 0),
+					data.getIntExtra("timeId", 0),
+					data.getIntExtra("dayOfTheWeek", 0),
+					data.getStringExtra("startTime"),
+					data.getStringExtra("endTime")
+			);
+
+			WeekData weekData = new WeekData();
+			weekData.add(createEvent(classTime));
+			weekView.addLessonsToTimetable(weekData);
+		}
+		if(resultCode == SchedulesFragment.UPDATE_CLASS_EVENT_RESULT_CODE) {
+			weekView.removeView(selectedEventView);
+
+			ClassTime classTime = new ClassTime(
+					data.getIntExtra("subjectId", 0),
+					data.getIntExtra("timeId", 0),
 					data.getIntExtra("dayOfTheWeek", 0),
 					data.getStringExtra("startTime"),
 					data.getStringExtra("endTime")
@@ -102,7 +133,7 @@ public class SchedulesFragment extends BaseFragment {
 
 		weekView = getView().findViewById(R.id.week_view_foo);
 
-		DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+		databaseHelper = new DatabaseHelper(getContext());
 		List<ClassTime> classTimeList = databaseHelper.getSchedule();
 		databaseHelper.close();
 
@@ -117,7 +148,19 @@ public class SchedulesFragment extends BaseFragment {
 		}
 
 		weekView.setLessonClickListener(eventView -> {
-			eventView.getEvent().getId();
+			Intent editSubjectIntent = new Intent(getContext(), EditClassTimeActivity.class);
+			databaseHelper = new DatabaseHelper(getContext());
+
+			ClassTime classTime = databaseHelper.getClassTime((int) eventView.getEvent().getId());
+			editSubjectIntent.putExtra("timeId", classTime.getTimeId());
+			editSubjectIntent.putExtra("oldSubjectId", classTime.getSubjectId());
+			editSubjectIntent.putExtra("oldDayOfTheWeek", classTime.getDayOfTheWeek());
+			editSubjectIntent.putExtra("oldStartTime", classTime.getStartTime());
+			editSubjectIntent.putExtra("oldEndTime", classTime.getEndTime());
+
+			selectedEventView = eventView;
+			startActivityForResult(editSubjectIntent, EDIT_CLASS_EVENT_REQUEST_CODE);
+
 			return null;
 		});
 	}
@@ -136,7 +179,7 @@ public class SchedulesFragment extends BaseFragment {
 				LocalTime.of(classTime.getEndTimeHour(), classTime.getEndTimeMinute()),
 				null, null,
 				Color.WHITE,
-				Color.BLACK
+				Tools.getRandomColorFromArray(R.array.schedule_colors, getContext())
 		);
 		subjectDatabaseHelper.close();
 

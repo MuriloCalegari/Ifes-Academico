@@ -265,7 +265,6 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
                 null, null, null
         );
 
-        int columnSubjectIdIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_ID);
         int columnSubjectNameIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_NAME);
         int columnSubjectAbbreviationIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_ABBREVIATION);
         int columnSubjectProfessorIndex = subjectsCursor.getColumnIndex(COLUMN_SUBJECT_PROFESSOR);
@@ -275,7 +274,7 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         subjectsCursor.moveToFirst();
 
         Subject subject = new Subject();
-        subject.setId(subjectsCursor.getInt(columnSubjectIdIndex));
+        subject.setId(subjectId);
         subject.setName(subjectsCursor.getString(columnSubjectNameIndex));
         subject.setAbbreviation(subjectsCursor.getString(columnSubjectAbbreviationIndex));
         subject.setProfessor(subjectsCursor.getString(columnSubjectProfessorIndex));
@@ -283,6 +282,7 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         subject.setMaximumGrade(subjectsCursor.getFloat(columnSubjectMaximumGradeIndex));
 
         subjectsCursor.close();
+        db.close();
         return subject;
 
     }

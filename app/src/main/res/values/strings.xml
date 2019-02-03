@@ -122,5 +122,7 @@
     <string name="which_time_end">At which time does the class finish?</string>
     <string name="create_subject_first">Create a subject first!</string>
     <string name="end_time_before_start_time">End time is set before start time!</string>
-    <string name="title_activity_edit_class_time">EditClassTimeActivity</string>
+    <string name="title_activity_edit_class_time">Edit class</string>
+    <string name="confirm_class_event_delete_message" />
+    <string name="confirm_class_event_delete_title">Delete class?</string>
 </resources>

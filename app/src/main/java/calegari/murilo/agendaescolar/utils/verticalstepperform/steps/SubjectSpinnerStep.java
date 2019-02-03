@@ -31,6 +31,11 @@ public class SubjectSpinnerStep extends Step<Subject> {
 		spinner = new Spinner(getContext());
 		dataAdapter = new ArrayAdapter<Subject>(getContext(), android.R.layout.simple_spinner_item, dataset) {
 			@Override
+			public long getItemId(int position) {
+				return getItem(position).getId();
+			}
+
+			@Override
 			public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 				TextView dropDownView = (TextView) super.getDropDownView(position, convertView, parent);
 				// Replace text with subject name
@@ -63,7 +68,16 @@ public class SubjectSpinnerStep extends Step<Subject> {
 
 	@Override
 	public void restoreStepData(Subject data) {
-
+		// Iterates through all items in the spinner adapter comparing
+		// its id to the data to be restored id, it it is a match, then
+		// select this item
+		for(int position = 0; position < dataAdapter.getCount(); position++) {
+			if(dataAdapter.getItem(position).getId() == data.getId()) {
+				spinner.setSelection(position);
+				break;
+			}
+		}
+		markAsCompletedOrUncompleted(false);
 	}
 
 	@Override

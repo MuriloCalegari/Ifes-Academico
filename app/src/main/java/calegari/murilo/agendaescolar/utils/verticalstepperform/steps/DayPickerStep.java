@@ -5,7 +5,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -20,9 +19,9 @@ import ernestoyaquello.com.verticalstepperform.Step;
 
 public class DayPickerStep extends Step<boolean[]> {
 
-	private boolean[] markDay;
+	private boolean[] markedDays;
 	private View daysStepContent;
-	private boolean markSingleDay = false; // By default you can mark any number of markDay
+	private boolean markSingleDay = false; // By default you can mark any number of markedDays
 
 	private boolean firstSetup;
 
@@ -71,9 +70,28 @@ public class DayPickerStep extends Step<boolean[]> {
 		// No need to do anything here
 	}
 
+	/**
+	 * Gets the single day of the week marked
+	 */
+	public int getDayOfTheWeek() {
+		if(!markSingleDay) throw new IllegalArgumentException();
+
+		int dayOfTheWeek = 0;
+
+		// loops through the marked days and get the unique day marked
+		for(int i = 0; i < getStepData().length; i++) {
+			if(getStepData()[i]) {
+				dayOfTheWeek = i + 1; // +2 because the library counts day of the week with sunday as day 1
+				break;
+			}
+		}
+
+		return dayOfTheWeek;
+	}
+
 	@Override
 	public boolean[] getStepData() {
-		return markDay;
+		return markedDays;
 	}
 
 	@Override
@@ -81,7 +99,7 @@ public class DayPickerStep extends Step<boolean[]> {
 		String[] weekDayStrings = getContext().getResources().getStringArray(R.array.week_days_extended);
 		List<String> selectedWeekDayStrings = new ArrayList<>();
 		for (int i = 0; i < weekDayStrings.length; i++) {
-			if (markDay[i]) {
+			if (markedDays[i]) {
 				selectedWeekDayStrings.add(weekDayStrings[i]);
 			}
 		}
@@ -91,8 +109,13 @@ public class DayPickerStep extends Step<boolean[]> {
 
 	@Override
 	public void restoreStepData(boolean[] data) {
-		markDay = data;
-		setupDays();
+		markedDays = data;
+		for(int index = 0; index < data.length; index++) {
+			if(data[index]) {
+				markDay(index, getDayLayout(index), false);
+			}
+		}
+		markAsCompletedOrUncompleted(false);
 	}
 
 	@Override
@@ -110,8 +133,8 @@ public class DayPickerStep extends Step<boolean[]> {
 	}
 
 	private void setupDays() {
-		firstSetup = markDay == null;
-		markDay = firstSetup ? new boolean[7] : markDay;
+		firstSetup = markedDays == null;
+		markedDays = firstSetup ? new boolean[7] : markedDays;
 
 		final String[] weekDays = getContext().getResources().getStringArray(R.array.week_days);
 
@@ -120,8 +143,8 @@ public class DayPickerStep extends Step<boolean[]> {
 			final View dayLayout = getDayLayout(index);
 
 			if (firstSetup) {
-				// By default, we don't mark any markDay as activated
-				markDay[index] = false;
+				// By default, we don't mark any markedDays as activated
+				markedDays[index] = false;
 			}
 
 			updateDayLayout(index, dayLayout, false);
@@ -129,7 +152,7 @@ public class DayPickerStep extends Step<boolean[]> {
 			if(dayLayout != null) {
 				dayLayout.setOnClickListener((v) -> {
 					firstSetup = false;
-					markDay[index] = !markDay[index]; // inverts clicked attribute
+					markedDays[index] = !markedDays[index]; // inverts clicked attribute
 					updateDayLayout(index, dayLayout, true);
 					markAsCompletedOrUncompleted(true);
 				});
@@ -142,7 +165,7 @@ public class DayPickerStep extends Step<boolean[]> {
 	}
 
 	private void unmarkAllDaysWithException(int dayExceptionIndex) {
-		for(int i = 0; i < markDay.length; i++) {
+		for(int i = 0; i < markedDays.length; i++) {
 			View dayLayout = getDayLayout(i);
 			if(i != dayExceptionIndex) {
 				unmarkDay(i, dayLayout, true);
@@ -154,7 +177,7 @@ public class DayPickerStep extends Step<boolean[]> {
 		if(markSingleDay && !firstSetup) {
 			unmarkAllDaysWithException(dayIndex);
 		}
-		if (markDay[dayIndex] || (markSingleDay && !firstSetup)) {
+		if (markedDays[dayIndex] || (markSingleDay && !firstSetup)) {
 			markDay(dayIndex, dayLayout, useAnimations);
 		} else {
 			unmarkDay(dayIndex, dayLayout, useAnimations);
@@ -162,7 +185,7 @@ public class DayPickerStep extends Step<boolean[]> {
 	}
 
 	private void markDay(int dayIndex, View dayLayout, boolean useAnimations) {
-		markDay[dayIndex] = true;
+		markedDays[dayIndex] = true;
 
 		if (dayLayout != null) {
 			Drawable bg = ContextCompat.getDrawable(getContext(), ernestoyaquello.com.verticalstepperform.R.drawable.circle_step_done);
@@ -176,7 +199,7 @@ public class DayPickerStep extends Step<boolean[]> {
 	}
 
 	private void unmarkDay(int dayIndex, View dayLayout, boolean useAnimations) {
-		markDay[dayIndex] = false;
+		markedDays[dayIndex] = false;
 
 		dayLayout.setBackgroundResource(0);
 

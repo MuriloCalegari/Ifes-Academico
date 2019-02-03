@@ -1,6 +1,5 @@
 package calegari.murilo.agendaescolar.home;
 
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -34,11 +33,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.grades.GradesFragment;
+import calegari.murilo.agendaescolar.utils.Tools;
 
 public class HomeFragment extends Fragment {
 
@@ -77,12 +76,12 @@ public class HomeFragment extends Fragment {
 
 		BarChart chart = getView().findViewById(R.id.chart);
 
-		Integer subjectAbbreviationIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_ABBREVIATION);
-		Integer obtainedGradeIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE);
-		Integer maximumGradeIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE);
+		int subjectAbbreviationIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_ABBREVIATION);
+		int obtainedGradeIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE);
+		int maximumGradeIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE);
 
-		Integer MAXIMUM_COLUMN_NUMBER = 5;
-		Integer i = 0;
+		int MAXIMUM_COLUMN_NUMBER = 5;
+		int i = 0;
 
 		List<IBarDataSet> barDataSetList = new ArrayList<>();
 
@@ -94,7 +93,7 @@ public class HomeFragment extends Fragment {
 				List<BarEntry> entries = new ArrayList<>();
 
 				String subjectAbbreviation = cursor.getString(subjectAbbreviationIndex);
-				Integer averageGradePercentage = Math.round(obtainedGrade / maximumGrade * 100f);
+				int averageGradePercentage = Math.round(obtainedGrade / maximumGrade * 100f);
 
 				entries.add(new BarEntry(
 						i, // x value
@@ -102,7 +101,7 @@ public class HomeFragment extends Fragment {
 				));
 
 				BarDataSet dataSet = new BarDataSet(entries, subjectAbbreviation);
-				dataSet.setColor(getGradeColor(obtainedGrade, maximumGrade));
+				dataSet.setColor(Tools.getGradeColor(obtainedGrade, maximumGrade, getContext()));
 				barDataSetList.add(dataSet);
 				i++;
 			}
@@ -205,27 +204,6 @@ public class HomeFragment extends Fragment {
 				public void onNothingSelected() {}
 			});
 			*/
-		}
-	}
-
-	private int getGradeColor(float obtainedGrade, float maximumGrade) {
-		int dangerColor = getResources().getColor(R.color.slimchart_danger_color);
-		int warningColor = getResources().getColor(R.color.slimchart_warning_color);
-		int okColor = getResources().getColor(R.color.slimchart_ok_color);
-
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-		Integer dangerGradePercentage = sharedPreferences.getInt("minimumPercentage",60);
-		Integer DANGER_WARNING_THRESHOLD = 10;
-		Integer warningGradePercentage = dangerGradePercentage + DANGER_WARNING_THRESHOLD;
-
-		float averageGradePercentage = obtainedGrade / maximumGrade * 100;
-
-		if (averageGradePercentage >= 100 || averageGradePercentage >= warningGradePercentage) {
-			return okColor;
-		} else if (averageGradePercentage >= dangerGradePercentage) {
-			return warningColor;
-		} else {
-			return dangerColor;
 		}
 	}
 

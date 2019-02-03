@@ -12,5 +12,12 @@
     <color name="slimchart_warning_color">#FDAD00</color>
     <color name="slimchart_ok_color">#A8CA27</color>
 
+    <string-array name="schedule_colors">
+        <item>#F80C01</item>
+        <item>#FEAE01</item>
+        <item>#6DA504</item>
+        <item>#0B46C0</item>
+        <item>#422E69</item>
+    </string-array>
 
 </resources>

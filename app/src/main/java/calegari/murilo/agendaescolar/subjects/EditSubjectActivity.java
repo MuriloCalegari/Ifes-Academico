@@ -70,7 +70,7 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
 
 		reloadSteps(oldSubjectName, oldSubjectProfessor, oldSubjectAbbreviation);
 
-		ImageButton deleteButton = findViewById(R.id.imageButton);
+		ImageButton deleteButton = findViewById(R.id.deleteButton);
 
 		deleteButton.setOnClickListener(new View.OnClickListener() {
 			@Override

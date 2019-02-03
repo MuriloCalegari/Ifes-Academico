@@ -76,7 +76,7 @@ public class EditSubjectGradeActivity extends AppCompatActivity implements Stepp
 
 		reloadSteps(oldGradeDescription, oldObtainedGrade, oldMaximumGrade, oldIsExtraCredit);
 
-		ImageButton deleteButton = findViewById(R.id.imageButton);
+		ImageButton deleteButton = findViewById(R.id.deleteButton);
 
 		deleteButton.setOnClickListener(view -> deleteGrade(oldGradeId));
 	}
@@ -108,7 +108,7 @@ public class EditSubjectGradeActivity extends AppCompatActivity implements Stepp
 		finish();
 	}
 
-	private void deleteGrade(Integer oldGradeId) {
+	private void deleteGrade(int oldGradeId) {
 		final SubjectGradesDatabaseHelper subjectGradesDatabase = new SubjectGradesDatabaseHelper(this);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);

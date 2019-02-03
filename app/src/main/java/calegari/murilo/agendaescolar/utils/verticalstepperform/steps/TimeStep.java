@@ -108,6 +108,8 @@ public class TimeStep extends Step<TimeStep.TimeHolder> {
 
 		timePicker.updateTime(timeHour, timeMinutes);
 		updateTimeText();
+
+		markAsCompletedOrUncompleted(false);
 	}
 
 	@Override

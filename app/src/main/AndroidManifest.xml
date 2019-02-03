@@ -12,6 +12,10 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".calendar.EditClassTimeActivity"
+            android:label="@string/title_activity_edit_class_time"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".MainActivity"
             android:hardwareAccelerated="true"
             android:label="@string/app_name"

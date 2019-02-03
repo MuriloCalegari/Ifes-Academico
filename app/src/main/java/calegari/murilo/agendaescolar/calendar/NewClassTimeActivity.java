@@ -20,12 +20,11 @@ import ernestoyaquello.com.verticalstepperform.listener.StepperFormListener;
 
 public class NewClassTimeActivity extends AppCompatActivity implements StepperFormListener {
 
-	private SubjectSpinnerStep spinnerStep;
-	private TimeStep endTimeStep;
-	private TimeStep startTimeStep;
-	private DayPickerStep dayPickerStep;
-	private SubjectSpinnerStep subjectSpinnerStep;
-	private VerticalStepperFormView verticalStepperForm;
+	protected TimeStep endTimeStep;
+	protected TimeStep startTimeStep;
+	protected DayPickerStep dayPickerStep;
+	protected SubjectSpinnerStep subjectSpinnerStep;
+	protected VerticalStepperFormView verticalStepperForm;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,20 +72,8 @@ public class NewClassTimeActivity extends AppCompatActivity implements StepperFo
 
 		// Verification is necessary since the user might set up the start time after setting the end time
 		if(isTimeIntervalValid(startTimeStep.getStepData(), endTimeStep.getStepData())) {
-			int dayOfTheWeek = 0;
-			// loops through the marked days and get the unique day marked
-			for(int i = 0; i < dayPickerStep.getStepData().length; i++) {
-				if(dayPickerStep.getStepData()[i]) {
-					if(i == 6) { // If it's sunday
-						// Library counts days from sunday, but I chose to display the date picker having sunday as the last day,
-						// since the library also displays (but doesn't consider) sunday as the last day of the week
-						dayOfTheWeek = 0;
-					} else {
-						dayOfTheWeek = i + 2; // +2 because the library counts day of the week with sunday as day 1
-					}
-					break;
-				}
-			}
+			int dayOfTheWeek = dayPickerStep.getDayOfTheWeek();
+
 			int subjectId = subjectSpinnerStep.getStepData().getId();
 			ClassTime classTime = new ClassTime(
 					subjectId,
@@ -96,15 +83,11 @@ public class NewClassTimeActivity extends AppCompatActivity implements StepperFo
 			);
 
 			DatabaseHelper databaseHelper = new DatabaseHelper(this);
-			databaseHelper.insertClassTime(classTime);
+			int id = databaseHelper.insertClassTime(classTime);
+			classTime.setTimeId(id);
 			databaseHelper.close();
 
-			Intent returnIntent = new Intent();
-			returnIntent.putExtra("subjectId", subjectId);
-			returnIntent.putExtra("dayOfTheWeek", dayOfTheWeek);
-			returnIntent.putExtra("startTime", startTime);
-			returnIntent.putExtra("endTime", endTime);
-			setResult(RESULT_OK, returnIntent);
+			createNewEventOnReturn(classTime);
 
 			finish();
 		} else {
@@ -113,7 +96,17 @@ public class NewClassTimeActivity extends AppCompatActivity implements StepperFo
 		}
 	}
 
-	private void displayStartTimeAfterEndTimeError() {
+	private void createNewEventOnReturn(ClassTime classTime) {
+		Intent returnIntent = new Intent();
+		returnIntent.putExtra("timeId", classTime.getTimeId());
+		returnIntent.putExtra("subjectId", classTime.getSubjectId());
+		returnIntent.putExtra("dayOfTheWeek", classTime.getDayOfTheWeek());
+		returnIntent.putExtra("startTime", classTime.getStartTime());
+		returnIntent.putExtra("endTime", classTime.getEndTime());
+		setResult(SchedulesFragment.NEW_CLASS_EVENT_RESULT_CODE, returnIntent);
+	}
+
+	protected void displayStartTimeAfterEndTimeError() {
 		Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.end_time_before_start_time ), Snackbar.LENGTH_SHORT);
 		snackbar.show();
 	}
@@ -123,7 +116,7 @@ public class NewClassTimeActivity extends AppCompatActivity implements StepperFo
 		finish();
 	}
 
-	private boolean isTimeIntervalValid(TimeStep.TimeHolder startTime, TimeStep.TimeHolder endTime) {
+	public boolean isTimeIntervalValid(TimeStep.TimeHolder startTime, TimeStep.TimeHolder endTime) {
 		LocalTime startLocalTime = LocalTime.of(startTime.getHour(),startTime.getMinutes());
 		LocalTime endLocalTime = LocalTime.of(endTime.getHour(), endTime.getMinutes());
 

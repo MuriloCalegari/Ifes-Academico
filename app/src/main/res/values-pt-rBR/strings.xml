@@ -114,5 +114,8 @@
     <string name="which_time_end">A que horas a aula termina?</string>
     <string name="create_subject_first">Crie uma matéria primeiro!</string>
     <string name="end_time_before_start_time">A hora de fim está antes da hora de início!</string>
+    <string name="confirm_class_event_delete_title">Deletar aula?</string>
+    <string name="confirm_class_event_delete_message">Isto irá permanentemente deletar esta aula</string>
+    <string name="title_activity_edit_class_time">Editar aula</string>
 
 </resources>
