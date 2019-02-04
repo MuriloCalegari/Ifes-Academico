@@ -112,6 +112,8 @@ public class HomeFragment extends Fragment {
 		if(data.getDataSetCount() != 0) {
 			// Defines behavior for the data, including labels
 
+			chart.setNoDataText(getString(R.string.no_grades_availabe));
+
 			data.setBarWidth(0.9f);
 			data.setValueTextSize(10f);
 			data.setValueTypeface(Typeface.DEFAULT_BOLD);
