@@ -19,7 +19,7 @@ public abstract class BaseFragment extends Fragment {
 		view.requestFocus();
 		view.setOnKeyListener((View v, int keyCode, KeyEvent event) -> {
 			if(keyCode == KeyEvent.KEYCODE_BACK) {
-				MainActivity.startFragment(HomeFragment.class);
+				MainActivity.startFragment(HomeFragment.class, true);
 				return true;
 			}
 			return false;

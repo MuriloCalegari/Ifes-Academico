@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
 
 		CardView gradesChartCardView = view.findViewById(R.id.cardView);
 
-		gradesChartCardView.setOnClickListener(v -> MainActivity.startFragment(GradesFragment.class));
+		gradesChartCardView.setOnClickListener(v -> MainActivity.startFragment(GradesFragment.class, true));
 
 	}
 
@@ -141,7 +141,7 @@ public class HomeFragment extends Fragment {
 			chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
 				@Override
 				public void onValueSelected(Entry e, Highlight h) {
-					MainActivity.startFragment(GradesFragment.class);
+					MainActivity.startFragment(GradesFragment.class, true);
 				}
 
 				@Override

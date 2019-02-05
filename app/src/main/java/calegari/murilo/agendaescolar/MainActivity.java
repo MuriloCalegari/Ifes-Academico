@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity
 
         setupListeners();
 
-        startFragment(HomeFragment.class);
+        startFragment(HomeFragment.class, false);
     }
 
     @Override
@@ -167,10 +167,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
-    }
-
-    public static void startFragment(Class fragmentClass) {
-        startFragment(fragmentClass, false);
     }
 
     public static void startFragment(Class fragmentClass, boolean useAnimations) {
