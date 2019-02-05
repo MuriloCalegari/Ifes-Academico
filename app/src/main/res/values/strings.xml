@@ -34,6 +34,7 @@
     <string name="aboutActivityName">About</string>
     <string name="review">Please, don\'t forget to review by pressing the following button:</string>
     <string name="review_button">Rate us!</string>
+    <string name="open_source_libraries">Open Source Libraries</string>
 
     <!-- Strings related to Settings -->
 
