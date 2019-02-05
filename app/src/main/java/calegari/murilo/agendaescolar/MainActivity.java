@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 import calegari.murilo.agendaescolar.calendar.SchedulesFragment;
 import calegari.murilo.agendaescolar.grades.GradesFragment;
 import calegari.murilo.agendaescolar.home.HomeFragment;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity
     public static NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
 
+    int NAVBAR_CLOSE_DELAY;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
+
+        NAVBAR_CLOSE_DELAY = getResources().getInteger(R.integer.navigation_bar_close_delay);
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -130,12 +135,13 @@ public class MainActivity extends AppCompatActivity
         and is said to be within an app example presented by Google in Google IO 2014
         */
 
-        int NAVBAR_CLOSE_DELAY = getResources().getInteger(R.integer.navigation_bar_close_delay);
+		boolean useAnimations = !item.isChecked();
+
         new Handler().postDelayed(() -> {
             switch (id) {
                 case R.id.nav_home:
                     toolbar.setTitle(getString(R.string.app_name));
-                    startFragment(HomeFragment.class);
+					startFragment(HomeFragment.class, useAnimations);
                     break;
                 case R.id.nav_about:
                     Intent aboutIntent = new Intent(context,AboutActivity.class);
@@ -146,13 +152,13 @@ public class MainActivity extends AppCompatActivity
                     startActivity(settingsIntent);
                     break;
                 case R.id.nav_subjects:
-                    startFragment(SubjectsFragment.class);
+                    startFragment(SubjectsFragment.class,useAnimations);
                     break;
                 case R.id.nav_grades:
-                    startFragment(GradesFragment.class);
+                    startFragment(GradesFragment.class,useAnimations);
                     break;
                 case R.id.nav_schedules:
-                    startFragment(SchedulesFragment.class);
+                    startFragment(SchedulesFragment.class,useAnimations);
                 default:
                     break;
             }
@@ -164,6 +170,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     public static void startFragment(Class fragmentClass) {
+        startFragment(fragmentClass, false);
+    }
+
+    public static void startFragment(Class fragmentClass, boolean useAnimations) {
 
         Fragment fragment = null;
         try {
@@ -174,7 +184,13 @@ public class MainActivity extends AppCompatActivity
 
         // Insert the fragment by replacing any existing fragment
         if (fragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            if(useAnimations) {
+                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            }
+
+            fragmentTransaction.replace(R.id.flContent, fragment).commit();
         }
 
     }
