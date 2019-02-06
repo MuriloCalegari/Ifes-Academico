@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.BaseFragment;
+import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.R;
 
@@ -59,15 +60,16 @@ public class SubjectsFragment extends BaseFragment {
                 }
             }
         });
-
-        // Sets the toolbar name
-        AppCompatActivity activity = (AppCompatActivity) view.getContext();
-        activity.getSupportActionBar().setTitle(getString(R.string.subjects));
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
+        // Sets the toolbar name and item checked on nav bar
+        AppCompatActivity activity = (AppCompatActivity) getContext();
+        activity.getSupportActionBar().setTitle(getString(R.string.subjects));
+        MainActivity.navigationView.setCheckedItem(R.id.nav_subjects);
 
         /*
          The setupRecycler is throwing a silent error when returning from NewSubjectActivity or after unlocking,

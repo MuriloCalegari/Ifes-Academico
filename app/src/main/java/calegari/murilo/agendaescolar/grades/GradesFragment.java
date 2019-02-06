@@ -1,8 +1,6 @@
 package calegari.murilo.agendaescolar.grades;
 
-import android.database.Cursor;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,6 @@ import calegari.murilo.agendaescolar.BaseFragment;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
-import calegari.murilo.agendaescolar.subjects.Subject;
 import me.saket.inboxrecyclerview.InboxRecyclerView;
 import me.saket.inboxrecyclerview.page.ExpandablePageLayout;
 import me.saket.inboxrecyclerview.page.InterceptResult;
@@ -44,12 +41,6 @@ public class GradesFragment extends BaseFragment {
 
 		inboxRecyclerView = getView().findViewById(R.id.inbox_recyclerview);
 
-		// Sets the toolbar name and item checked on nav bar
-		AppCompatActivity activity = (AppCompatActivity) view.getContext();
-		activity.getSupportActionBar().setTitle(getString(R.string.grades));
-		Integer GRADE_MENU_INDEX = 3; // Yes, hardcoded;
-		MainActivity.navigationView.getMenu().getItem(GRADE_MENU_INDEX).setChecked(true);
-
 		setupInboxRecyclerView();
 		initInboxRecyclerView();
 
@@ -58,6 +49,11 @@ public class GradesFragment extends BaseFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
+
+		// Sets the toolbar name and item checked on nav bar
+		AppCompatActivity activity = (AppCompatActivity) getContext();
+		activity.getSupportActionBar().setTitle(getString(R.string.grades));
+		MainActivity.navigationView.setCheckedItem(R.id.nav_grades);
 
 		/*
 		initInboxRecyclerView() needs to be separated and called alone at onStart()

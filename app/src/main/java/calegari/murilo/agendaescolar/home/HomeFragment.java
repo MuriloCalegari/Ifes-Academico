@@ -31,6 +31,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import calegari.murilo.agendaescolar.MainActivity;
@@ -52,8 +53,6 @@ public class HomeFragment extends Fragment {
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		MainActivity.navigationView.getMenu().getItem(0).setChecked(true);
-		MainActivity.toolbar.setTitle(R.string.app_name);
 
 		TextView gradesChartTitle = view.findViewById(R.id.titleTextView);
 		gradesChartTitle.setText(R.string.your_grades);
@@ -67,6 +66,15 @@ public class HomeFragment extends Fragment {
 
 		gradesChartCardView.setOnClickListener(v -> MainActivity.startFragment(GradesFragment.class, true));
 
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		MainActivity.navigationView.setCheckedItem(R.id.nav_home);
+		AppCompatActivity activity = (AppCompatActivity) getContext();
+		activity.getSupportActionBar().setTitle(R.string.app_name);
 	}
 
 	private void setupGradesChart() {

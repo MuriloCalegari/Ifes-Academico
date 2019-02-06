@@ -18,6 +18,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import calegari.murilo.agendaescolar.BaseFragment;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
@@ -55,8 +56,6 @@ public class SchedulesFragment extends BaseFragment {
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		MainActivity.navigationView.getMenu().getItem(2).setChecked(true);
-		MainActivity.toolbar.setTitle(getString(R.string.schedule));
 
 		fab = getView().findViewById(R.id.floatingActionButton);
 
@@ -70,6 +69,16 @@ public class SchedulesFragment extends BaseFragment {
 		});
 
 		setupScheduleView();
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+
+		// Sets the toolbar name and item checked on nav bar
+		AppCompatActivity activity = (AppCompatActivity) getContext();
+		activity.getSupportActionBar().setTitle(getString(R.string.schedule));
+		MainActivity.navigationView.setCheckedItem(R.id.nav_schedules);
 	}
 
 	@Override
