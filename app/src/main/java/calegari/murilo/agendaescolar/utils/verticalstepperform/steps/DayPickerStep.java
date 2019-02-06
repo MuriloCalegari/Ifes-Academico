@@ -81,11 +81,7 @@ public class DayPickerStep extends Step<boolean[]> {
 		// loops through the marked days and get the unique day marked
 		for(int i = 0; i < getStepData().length; i++) {
 			if(getStepData()[i]) {
-				if(i == 0) { // if sunday is marked
-					dayOfTheWeek = 7;
-				} else {
-					dayOfTheWeek = i; // +1 because the library counts day of the week with sunday as day 1
-				}
+				dayOfTheWeek = i + 1; // +1 because the library counts day of the week with sunday as day 1
 				break;
 			}
 		}
