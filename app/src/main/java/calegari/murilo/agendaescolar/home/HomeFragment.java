@@ -77,6 +77,7 @@ public class HomeFragment extends Fragment {
 		Cursor cursor = subjectDatabaseHelper.getAllDataInAverageGradeOrder();
 
 		BarChart chart = getView().findViewById(R.id.chart);
+		chart.setNoDataText(getString(R.string.no_grades_availabe));
 
 		int subjectAbbreviationIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_ABBREVIATION);
 		int obtainedGradeIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE);
@@ -113,8 +114,6 @@ public class HomeFragment extends Fragment {
 
 		if(data.getDataSetCount() != 0) {
 			// Defines behavior for the data, including labels
-
-			chart.setNoDataText(getString(R.string.no_grades_availabe));
 
 			data.setBarWidth(0.9f);
 			data.setValueTextSize(10f);
