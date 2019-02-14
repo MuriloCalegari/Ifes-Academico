@@ -60,21 +60,15 @@ public class HomeFragment extends Fragment {
 		TextView gradesChartSubtitle = view.findViewById(R.id.subtitleTextView);
 		gradesChartSubtitle.setText(R.string.to_keep_an_eye);
 
+		MainActivity.navigationView.setCheckedItem(R.id.nav_home);
+		AppCompatActivity activity = (AppCompatActivity) getContext();
+		activity.getSupportActionBar().setTitle(R.string.app_name);
+
 		setupGradesChart();
 
 		CardView gradesChartCardView = view.findViewById(R.id.cardView);
 
 		gradesChartCardView.setOnClickListener(v -> MainActivity.startFragment(GradesFragment.class, true));
-
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-		MainActivity.navigationView.setCheckedItem(R.id.nav_home);
-		AppCompatActivity activity = (AppCompatActivity) getContext();
-		activity.getSupportActionBar().setTitle(R.string.app_name);
 	}
 
 	private void setupGradesChart() {

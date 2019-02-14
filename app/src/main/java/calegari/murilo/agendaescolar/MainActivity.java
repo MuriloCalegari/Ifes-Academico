@@ -3,13 +3,19 @@ package calegari.murilo.agendaescolar;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Handler;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -23,8 +29,13 @@ import calegari.murilo.agendaescolar.settings.SettingsActivity;
 import calegari.murilo.agendaescolar.subjects.SubjectsFragment;
 
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,7 +47,10 @@ public class MainActivity extends AppCompatActivity
     public static NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
 
-    int NAVBAR_CLOSE_DELAY;
+    private ImageButton changeUsernameButton;
+	TextView usernameTextView;
+
+	int NAVBAR_CLOSE_DELAY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +71,18 @@ public class MainActivity extends AppCompatActivity
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(0).setChecked(true); // Defines this activity as checked
-        toolbar.setTitle(getString(R.string.app_name));
 
         fragmentManager = getSupportFragmentManager();
 
         drawerToggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerToggle.syncState();
+
+        View header = navigationView.getHeaderView(0);
+	    changeUsernameButton = header.findViewById(R.id.changeUserNameButton);
+	    usernameTextView = header.findViewById(R.id.username);
+
+	    updateUsername();
 
         setupListeners();
 
@@ -94,9 +112,46 @@ public class MainActivity extends AppCompatActivity
         anim.setInterpolator(new DecelerateInterpolator());
         // You can change this duration to more closely match that of the default animation.
         anim.setDuration(250);
+
+	    changeUsernameButton.setOnClickListener(view -> setUsernameDialog());
     }
 
-    @Override
+    private void setUsernameDialog() {
+	    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+
+	    TextInputLayout textInputLayout = new TextInputLayout(this);
+	    TextInputEditText editText = new TextInputEditText(textInputLayout.getContext());
+
+	    FrameLayout editTextContainer = new FrameLayout(this);
+	    FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+	    params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+	    params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+	    editText.setLayoutParams(params);
+	    editTextContainer.addView(editText);
+
+	    dialogBuilder
+			    .setTitle(getString(R.string.edit_username))
+			    .setView(editTextContainer)
+			    //.setMessage(getString(R.string.confirm_subject_grade_delete_message))
+			    .setPositiveButton(getString(R.string.edit), ((dialogInterface, i) -> {
+				    SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+				    SharedPreferences.Editor editor = sharedPreferences.edit();
+				    editor.putString("username", String.valueOf(editText.getText()));
+				    editor.apply();
+				    updateUsername();
+			    }))
+			    .setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> {})
+			    .show();
+    }
+
+	private void updateUsername() {
+		SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+		String username = sharedPreferences.getString("username", getString(R.string.student));
+
+		usernameTextView.setText(username);
+	}
+
+	@Override
     public void onBackPressed() {
         drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -144,7 +199,7 @@ public class MainActivity extends AppCompatActivity
 					startFragment(HomeFragment.class, useAnimations);
                     break;
                 case R.id.nav_about:
-                    Intent aboutIntent = new Intent(context,AboutActivity.class);
+                    Intent aboutIntent = new Intent(context, AboutActivity.class);
                     startActivity(aboutIntent);
                     break;
                 case R.id.nav_settings:
@@ -152,13 +207,13 @@ public class MainActivity extends AppCompatActivity
                     startActivity(settingsIntent);
                     break;
                 case R.id.nav_subjects:
-                    startFragment(SubjectsFragment.class,useAnimations);
+                    startFragment(SubjectsFragment.class, useAnimations);
                     break;
                 case R.id.nav_grades:
-                    startFragment(GradesFragment.class,useAnimations);
+                    startFragment(GradesFragment.class, useAnimations);
                     break;
                 case R.id.nav_schedules:
-                    startFragment(SchedulesFragment.class,useAnimations);
+                    startFragment(SchedulesFragment.class, useAnimations);
                 default:
                     break;
             }

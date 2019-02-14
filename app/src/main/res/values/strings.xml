@@ -18,6 +18,10 @@
     <string name="settings">Settings</string>
     <string name="about">About</string>
     <string name="Home">Home</string>
+    <string name="hi">Hi,</string>
+    <string name="edit">Edit</string>
+    <string name="edit_username">Edit username</string>
+    <string name="student">Student</string>
 
     <!-- Strings related to About -->
 

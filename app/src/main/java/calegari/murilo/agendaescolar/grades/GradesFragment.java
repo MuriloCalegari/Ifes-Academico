@@ -41,6 +41,11 @@ public class GradesFragment extends BaseFragment {
 
 		inboxRecyclerView = getView().findViewById(R.id.inbox_recyclerview);
 
+		// Sets the toolbar name and item checked on nav bar
+		AppCompatActivity activity = (AppCompatActivity) getContext();
+		activity.getSupportActionBar().setTitle(getString(R.string.grades));
+		MainActivity.navigationView.setCheckedItem(R.id.nav_grades);
+
 		setupInboxRecyclerView();
 		initInboxRecyclerView();
 
@@ -49,11 +54,6 @@ public class GradesFragment extends BaseFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-
-		// Sets the toolbar name and item checked on nav bar
-		AppCompatActivity activity = (AppCompatActivity) getContext();
-		activity.getSupportActionBar().setTitle(getString(R.string.grades));
-		MainActivity.navigationView.setCheckedItem(R.id.nav_grades);
 
 		/*
 		initInboxRecyclerView() needs to be separated and called alone at onStart()

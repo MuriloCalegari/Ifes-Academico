@@ -60,16 +60,16 @@ public class SubjectsFragment extends BaseFragment {
                 }
             }
         });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
 
         // Sets the toolbar name and item checked on nav bar
         AppCompatActivity activity = (AppCompatActivity) getContext();
         activity.getSupportActionBar().setTitle(getString(R.string.subjects));
         MainActivity.navigationView.setCheckedItem(R.id.nav_subjects);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         /*
          The setupRecycler is throwing a silent error when returning from NewSubjectActivity or after unlocking,

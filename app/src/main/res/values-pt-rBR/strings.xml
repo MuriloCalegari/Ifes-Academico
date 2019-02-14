@@ -5,6 +5,9 @@
     ]>
 
 <resources>
+
+    <!-- Main Activity and others -->
+
     <string name="app_name">Agenda Escolar</string>
     <string name="navigation_drawer_open">Abrir barra de navegação</string>
     <string name="navigation_drawer_close">Fechar barra de navegação</string>
@@ -26,6 +29,10 @@
     <string name="review">Por favor, não se esqueça de avaliar esse app clicando no botão abaixo:</string>
     <string name="review_button">Avalie-nos!</string>
     <string name="open_source_libraries">Bibliotecas de código aberto</string>
+    <string name="hi">Oi,</string>
+    <string name="edit_username">Editar nome</string>
+    <string name="student">Aluno</string>
+    <string name="edit">Editar</string>
 
     <!-- Strings related to Settings -->
 

@@ -20,6 +20,8 @@
             android:id="@+id/nav_grades"
             android:icon="@drawable/ic_spellcheck_black_24dp"
             android:title="@string/grades" />
+
+        <!--
         <item
             android:id="@+id/nav_events"
             android:icon="@drawable/ic_star_black_24dp"
@@ -28,6 +30,8 @@
             android:id="@+id/nav_classes"
             android:icon="@drawable/ic_access_time_black_24dp"
             android:title="@string/classes" />
+        -->
+
     </group>
 
     <item android:title="@string/drawer_secondary_title">

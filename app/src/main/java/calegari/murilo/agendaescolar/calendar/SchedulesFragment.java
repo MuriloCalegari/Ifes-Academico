@@ -68,17 +68,17 @@ public class SchedulesFragment extends BaseFragment {
 			}
 		});
 
+		// Sets the toolbar name and item checked on nav bar
+		AppCompatActivity activity = (AppCompatActivity) getContext();
+		activity.getSupportActionBar().setTitle(getString(R.string.schedule));
+		MainActivity.navigationView.setCheckedItem(R.id.nav_schedules);
+
 		setupScheduleView();
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
-
-		// Sets the toolbar name and item checked on nav bar
-		AppCompatActivity activity = (AppCompatActivity) getContext();
-		activity.getSupportActionBar().setTitle(getString(R.string.schedule));
-		MainActivity.navigationView.setCheckedItem(R.id.nav_schedules);
 	}
 
 	@Override
