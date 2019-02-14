@@ -54,9 +54,9 @@ internal class WeekBackgroundView constructor(context: Context) : View(context) 
             remove(Calendar.SUNDAY)
         }
 
-    var startTime: LocalTime = LocalTime.of(10, 0)
+    var startTime: LocalTime = LocalTime.of(12, 0)
         private set
-    private var endTime: LocalTime = LocalTime.of(13, 0)
+    private var endTime: LocalTime = LocalTime.of(12, 0)
 
     var scalingFactor = 1f
         /**
