@@ -180,15 +180,13 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getSubjectGradesData(String gradeSubjectAbbreviation) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor query = db.query(
+        return db.query(
                 tableName,
                 new String[]{columnGradeId, columnGradeDescription, columnGradeObtained, columnGradeMaximum, columnIsExtraCredit},
                 columnGradeSubjectAbbreviation + "=?",
                 new String[]{gradeSubjectAbbreviation},
                 null, null, null
         );
-        db.close();
-        return query;
     }
 
     public void updateSubjectAbbreviation(String oldSubjectAbbreviation, String newSubjectAbbreviation) {
