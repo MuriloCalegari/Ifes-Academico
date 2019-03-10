@@ -122,6 +122,7 @@ public class SubjectDatabaseHelper extends SQLiteOpenHelper {
         if(!oldSubjectAbbreviation.equals(newSubject.getAbbreviation())) {
             SubjectGradesDatabaseHelper subjectGradesDatabase = new SubjectGradesDatabaseHelper(context);
             subjectGradesDatabase.updateSubjectAbbreviation(oldSubjectAbbreviation, newSubject.getAbbreviation());
+            subjectGradesDatabase.close();
         }
     }
 

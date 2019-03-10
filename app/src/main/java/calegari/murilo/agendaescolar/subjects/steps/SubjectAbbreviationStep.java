@@ -94,6 +94,8 @@ public class SubjectAbbreviationStep extends Step<String> {
 
             boolean isAbbreviationOnDataBase = subjectDatabase.hasObject(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, stepData);
 
+            subjectDatabase.close();
+
             if (isAbbreviationOnDataBase) {
                 errorMessage = getContext().getResources().getString(R.string.abbreviation_already_on_database);
                 return new IsDataValid(false, errorMessage);

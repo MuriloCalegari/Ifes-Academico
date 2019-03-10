@@ -69,6 +69,7 @@ public class NewSubjectActivity extends AppCompatActivity implements StepperForm
                         newSubjectAbbreviation.getStepDataAsHumanReadableString()
                 )
         );
+        subjectDbHelper.close();
         finish();
     }
 

@@ -98,6 +98,7 @@ public class EditSubjectGradeActivity extends AppCompatActivity implements Stepp
 						newIsExtraCredit.getStepData()
 				)
 		);
+		subjectGradesDatabase.close();
 
 		finish();
 	}
@@ -109,13 +110,13 @@ public class EditSubjectGradeActivity extends AppCompatActivity implements Stepp
 	}
 
 	private void deleteGrade(int oldGradeId) {
-		final SubjectGradesDatabaseHelper subjectGradesDatabase = new SubjectGradesDatabaseHelper(this);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder
 				.setTitle(getString(R.string.confirm_subject_grade_delete_title))
 				.setMessage(getString(R.string.confirm_subject_grade_delete_message))
 				.setPositiveButton(getString(R.string.delete), ((dialogInterface, i) -> {
+					SubjectGradesDatabaseHelper subjectGradesDatabase = new SubjectGradesDatabaseHelper(this);
 					subjectGradesDatabase.removeGrade(oldGradeId);
 					subjectGradesDatabase.close();
 					finish();

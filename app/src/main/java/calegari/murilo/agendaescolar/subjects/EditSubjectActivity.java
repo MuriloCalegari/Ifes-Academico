@@ -96,6 +96,7 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
 						subjectAbbreviationStep.getStepDataAsHumanReadableString()
 				)
 		);
+		subjectDbHelper.close();
 
 		finish();
 	}
@@ -130,7 +131,7 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
 				.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {
-
+						subjectDbHelper.close();
 					}
 				})
 				.show();

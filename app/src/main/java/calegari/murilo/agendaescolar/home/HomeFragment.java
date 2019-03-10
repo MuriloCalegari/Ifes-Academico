@@ -208,6 +208,9 @@ public class HomeFragment extends Fragment {
 			});
 			*/
 		}
+
+		cursor.close();
+		subjectDatabaseHelper.close();
 	}
 
 	public class MyYAxisValueFormatter implements IAxisValueFormatter {

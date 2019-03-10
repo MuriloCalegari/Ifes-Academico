@@ -82,6 +82,8 @@ public class NewSubjectGradeActivity extends AppCompatActivity implements Steppe
 		);
 
 		subjectGradeDbHelper.insertGrade(subjectGrade);
+		subjectGradeDbHelper.close();
+
 		finish();
 	}
 
