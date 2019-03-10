@@ -90,6 +90,8 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
                 columnGradeId + "=?",
                 new String[] {String.valueOf(gradeID)}
         );
+
+        db.close();
     }
 
     public void deleteAllGrades(String subjectAbbreviation) {
@@ -121,6 +123,7 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
                 new String[] {String.valueOf(oldSubjectGradeID)}
         );
 
+        db.close();
         addToTotalGrade(newSubjectGrade);
     }
 
@@ -166,6 +169,8 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
 
         subjectDatabase.removeGradeData(subjectGrade);
         cursor.close();
+
+        subjectGradesDatabase.close();
         subjectDatabase.close();
     }
 
@@ -175,13 +180,15 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getSubjectGradesData(String gradeSubjectAbbreviation) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.query(
+        Cursor query = db.query(
                 tableName,
-                new String[] {columnGradeId, columnGradeDescription, columnGradeObtained, columnGradeMaximum, columnIsExtraCredit},
+                new String[]{columnGradeId, columnGradeDescription, columnGradeObtained, columnGradeMaximum, columnIsExtraCredit},
                 columnGradeSubjectAbbreviation + "=?",
-                new String[] {gradeSubjectAbbreviation},
+                new String[]{gradeSubjectAbbreviation},
                 null, null, null
         );
+        db.close();
+        return query;
     }
 
     public void updateSubjectAbbreviation(String oldSubjectAbbreviation, String newSubjectAbbreviation) {
@@ -196,6 +203,8 @@ public class SubjectGradesDatabaseHelper extends SQLiteOpenHelper {
                 columnGradeSubjectAbbreviation + "=?",
                 new String[] {oldSubjectAbbreviation}
         );
+
+        db.close();
     }
 
 }
