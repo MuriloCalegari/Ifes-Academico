@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity
         anim.setDuration(250);
 
 	    changeUsernameButton.setOnClickListener(view -> setUsernameDialog());
+	    usernameTextView.setOnClickListener(view -> setUsernameDialog());
     }
 
     private void setUsernameDialog() {
