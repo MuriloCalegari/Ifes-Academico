@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import calegari.murilo.agendaescolar.BaseFragment;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
-import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
+import calegari.murilo.agendaescolar.databases.DatabaseHelper;
 import me.saket.inboxrecyclerview.InboxRecyclerView;
 import me.saket.inboxrecyclerview.page.ExpandablePageLayout;
 import me.saket.inboxrecyclerview.page.InterceptResult;
@@ -26,7 +26,7 @@ public class GradesFragment extends BaseFragment {
 
 	public static InboxRecyclerView inboxRecyclerView;
 	private GradesLineAdapter mAdapter;
-	SubjectDatabaseHelper subjectDatabase;
+	DatabaseHelper subjectDatabase;
 
 	@Nullable
 	@Override
@@ -126,9 +126,9 @@ public class GradesFragment extends BaseFragment {
 		inboxRecyclerView.setAdapter(mAdapter);
 
 		// Populates the list:
-		subjectDatabase = new SubjectDatabaseHelper(getContext());
+		subjectDatabase = new DatabaseHelper(getContext());
 
-		mAdapter.setSubjects(subjectDatabase.getAllSubjects());
+		mAdapter.setSubjects(subjectDatabase.getAllSubjects()); // TODO: Make sure these subjects contains subjectId
 
 		subjectDatabase.close();
 	}

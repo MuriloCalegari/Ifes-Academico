@@ -31,7 +31,6 @@ public class SubjectGradesLineAdapter extends RecyclerView.Adapter<GradesBaseLin
 	@Override
 	public void onBindViewHolder(@NonNull GradesBaseLineHolder holder, int position) {
 		Integer gradeId = mSubjectGrades.get(position).getGradeId();
-		String subjectAbbreviation = mSubjectGrades.get(position).getSubjectAbbreviation();
 		String gradeDescription = mSubjectGrades.get(position).getGradeDescription();
 		float obtainedGrade = mSubjectGrades.get(position).getObtainedGrade();
 		float maximumGrade = mSubjectGrades.get(position).getMaximumGrade();
@@ -52,7 +51,6 @@ public class SubjectGradesLineAdapter extends RecyclerView.Adapter<GradesBaseLin
 
 			// Sends the data from this line
 			editGradeIntent.putExtra("oldGradeId", gradeId);
-			editGradeIntent.putExtra("subjectAbbreviation", subjectAbbreviation);
 			editGradeIntent.putExtra("oldGradeDescription", gradeDescription);
 			editGradeIntent.putExtra("oldObtainedGrade", obtainedGrade);
 			editGradeIntent.putExtra("oldMaximumGrade", maximumGrade);

@@ -7,7 +7,7 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import calegari.murilo.agendaescolar.R;
-import calegari.murilo.agendaescolar.databases.SubjectGradesDatabaseHelper;
+import calegari.murilo.agendaescolar.databases.DatabaseHelper;
 import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.DescriptionStep;
 import calegari.murilo.agendaescolar.subjectgrades.steps.GradeIsExtraCreditStep;
 import calegari.murilo.agendaescolar.subjectgrades.steps.GradeMaximumStep;
@@ -51,7 +51,7 @@ public class EditSubjectGradeActivity extends AppCompatActivity implements Stepp
 
 		// Gets information from which input the user would like to edit
 		oldGradeId = getIntent().getIntExtra("oldGradeId", 0);
-		subjectAbbreviation = getIntent().getStringExtra("subjectAbbreviation");
+		subjectAbbreviation = getIntent().getStringExtra("subjectAbbreviation"); // TODO: Remove outdated code
 		oldGradeDescription = getIntent().getStringExtra("oldGradeDescription");
 		oldObtainedGrade = getIntent().getFloatExtra("oldObtainedGrade", 0);
 		oldMaximumGrade = getIntent().getFloatExtra("oldMaximumGrade", 0);
@@ -87,18 +87,17 @@ public class EditSubjectGradeActivity extends AppCompatActivity implements Stepp
 		// form in an attempt to save or send the data.
 
 		// Updates data on database
-		SubjectGradesDatabaseHelper subjectGradesDatabase = new SubjectGradesDatabaseHelper(this);
-		subjectGradesDatabase.updateGrade(
+		DatabaseHelper db = new DatabaseHelper(this);
+		db.updateGrade(
 				oldGradeId,
 				new SubjectGrade(
-						subjectAbbreviation,
 						newGradeDescription.getStepData(),
 						newObtainedGrade.getStepData(),
 						newMaximumGrade.getStepData(),
 						newIsExtraCredit.getStepData()
 				)
 		);
-		subjectGradesDatabase.close();
+		db.close();
 
 		finish();
 	}
@@ -110,15 +109,14 @@ public class EditSubjectGradeActivity extends AppCompatActivity implements Stepp
 	}
 
 	private void deleteGrade(int oldGradeId) {
-
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder
 				.setTitle(getString(R.string.confirm_subject_grade_delete_title))
 				.setMessage(getString(R.string.confirm_subject_grade_delete_message))
 				.setPositiveButton(getString(R.string.delete), ((dialogInterface, i) -> {
-					SubjectGradesDatabaseHelper subjectGradesDatabase = new SubjectGradesDatabaseHelper(this);
-					subjectGradesDatabase.removeGrade(oldGradeId);
-					subjectGradesDatabase.close();
+					DatabaseHelper db = new DatabaseHelper(this);
+					db.removeGrade(oldGradeId);
+					db.close();
 					finish();
 				}))
 				.setNegativeButton(getString(R.string.cancel), (dialogInterface, i) -> {})

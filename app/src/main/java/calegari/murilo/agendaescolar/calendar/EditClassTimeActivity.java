@@ -8,7 +8,6 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AlertDialog;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.DatabaseHelper;
-import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.TimeStep;
 
 public class EditClassTimeActivity extends NewClassTimeActivity {
@@ -50,7 +49,7 @@ public class EditClassTimeActivity extends NewClassTimeActivity {
 	}
 
 	private void reloadSteps(ClassTime oldClassTime) {
-		SubjectDatabaseHelper databaseHelper = new SubjectDatabaseHelper(this);
+		DatabaseHelper databaseHelper = new DatabaseHelper(this);
 		this.subjectSpinnerStep.restoreStepData(databaseHelper.getSubject(oldClassTime.getSubjectId()));
 		databaseHelper.close();
 

@@ -6,7 +6,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 
-import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.R;
 import ernestoyaquello.com.verticalstepperform.Step;
 
@@ -15,23 +14,10 @@ public class SubjectAbbreviationStep extends Step<String> {
 
     private Integer MINIMUM_CHARACTERS_PARAMETER = 2;
     private Integer MAXIMUM_CHARACTERS_PARAMETER = 6;
-    private boolean checkOnDatabase = true;
-    private String ignoreStringOnDatabase;
 
 
     public SubjectAbbreviationStep(String stepTitle) {
         super(stepTitle);
-    }
-
-    public SubjectAbbreviationStep(String stepTitle, boolean checkDatabase) {
-        super(stepTitle);
-        checkOnDatabase = checkDatabase;
-    }
-
-    public SubjectAbbreviationStep(String stepTitle, boolean checkDatabase, String ignoreString) {
-        super(stepTitle);
-        checkOnDatabase = checkDatabase;
-        ignoreStringOnDatabase = ignoreString;
     }
 
     @Override
@@ -78,31 +64,9 @@ public class SubjectAbbreviationStep extends Step<String> {
         /* The step's data (i.e., the subject abbreviation) will be considered valid only if this method
          * returns a new IsDataValid(true, "") object */
         boolean isNameSizeValid = (stepData.length() >= MINIMUM_CHARACTERS_PARAMETER) && (stepData.length() <= MAXIMUM_CHARACTERS_PARAMETER);
-        String errorMessage;
+        String errorMessage= getContext().getResources().getString(R.string.min_max_character_abbreviation_error);
 
-        if(!isNameSizeValid) {
-            errorMessage = getContext().getResources().getString(R.string.min_max_character_abbreviation_error);
-            return new IsDataValid(false, errorMessage);
-        }
-
-        /* Only checks if entry is unique after consulting if name size is valid
-         * and if stepData is different of ignore param, this is important on
-         * EditSubjectActivity */
-
-        if(checkOnDatabase && !stepData.equals(ignoreStringOnDatabase)) {
-            SubjectDatabaseHelper subjectDatabase = new SubjectDatabaseHelper(getContext());
-
-            boolean isAbbreviationOnDataBase = subjectDatabase.hasObject(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_ABBREVIATION, stepData);
-
-            subjectDatabase.close();
-
-            if (isAbbreviationOnDataBase) {
-                errorMessage = getContext().getResources().getString(R.string.abbreviation_already_on_database);
-                return new IsDataValid(false, errorMessage);
-            }
-        }
-
-        return new IsDataValid(true, "");
+        return isNameSizeValid ? new IsDataValid(true, "") : new IsDataValid(false, errorMessage);
     }
 
     @Override

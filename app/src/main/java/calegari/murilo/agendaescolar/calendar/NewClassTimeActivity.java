@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.DatabaseHelper;
-import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.DayPickerStep;
 import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.SubjectSpinnerStep;
 import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.TimeStep;
@@ -40,9 +39,9 @@ public class NewClassTimeActivity extends AppCompatActivity implements StepperFo
 		toolbar.setNavigationOnClickListener((v) -> finish());
 
 		// Create the steps
-		SubjectDatabaseHelper subjectDatabaseHelper = new SubjectDatabaseHelper(this);
-		subjectSpinnerStep = new SubjectSpinnerStep(getString(R.string.subject), subjectDatabaseHelper.getAllSubjects());
-		subjectDatabaseHelper.close();
+		DatabaseHelper databaseHelper = new DatabaseHelper(this);
+		subjectSpinnerStep = new SubjectSpinnerStep(getString(R.string.subject), databaseHelper.getAllSubjects());
+		databaseHelper.close();
 
 		dayPickerStep = new DayPickerStep(getString(R.string.day_of_the_week), true);
 		startTimeStep = new TimeStep(getString(R.string.start_time), getString(R.string.which_time_start));

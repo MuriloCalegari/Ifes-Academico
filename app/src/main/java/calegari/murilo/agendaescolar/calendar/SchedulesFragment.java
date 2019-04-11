@@ -23,7 +23,6 @@ import calegari.murilo.agendaescolar.BaseFragment;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.databases.DatabaseHelper;
-import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
 import calegari.murilo.agendaescolar.utils.Tools;
 import de.tobiasschuerg.weekview.data.Event;
 import de.tobiasschuerg.weekview.data.WeekData;
@@ -129,10 +128,10 @@ public class SchedulesFragment extends BaseFragment {
 	}
 
 	private boolean isSubjectDatabaseEmpty() {
-		SubjectDatabaseHelper subjectDatabaseHelper = new SubjectDatabaseHelper(getContext());
+		DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
 
-		boolean isSubjectDatabaseEmpty = subjectDatabaseHelper.getAllSubjects().isEmpty();
-		subjectDatabaseHelper.close();
+		boolean isSubjectDatabaseEmpty = databaseHelper.getAllSubjects().isEmpty();
+		databaseHelper.close();
 
 		return isSubjectDatabaseEmpty;
 	}
@@ -175,13 +174,13 @@ public class SchedulesFragment extends BaseFragment {
 	}
 
 	private Event.Single createEvent(ClassTime classTime) {
-		SubjectDatabaseHelper subjectDatabaseHelper = new SubjectDatabaseHelper(getContext());
+		DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
 
 		Event.Single event = new Event.Single(
 				classTime.getTimeId(),
 				LocalDate.now(),
 				"",
-				subjectDatabaseHelper.getSubject(classTime.getSubjectId()).getAbbreviation(),
+				databaseHelper.getSubject(classTime.getSubjectId()).getAbbreviation(),
 				"",
 				classTime.getDayOfTheWeek(),
 				LocalTime.of(classTime.getStartTimeHour(), classTime.getStartTimeMinute()),
@@ -190,7 +189,7 @@ public class SchedulesFragment extends BaseFragment {
 				Color.WHITE,
 				Tools.getRandomColorFromArray(R.array.schedule_colors, getContext())
 		);
-		subjectDatabaseHelper.close();
+		databaseHelper.close();
 
 		return(event);
 	}

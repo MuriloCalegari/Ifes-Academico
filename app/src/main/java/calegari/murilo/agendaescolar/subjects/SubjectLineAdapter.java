@@ -1,5 +1,6 @@
 package calegari.murilo.agendaescolar.subjects;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -38,6 +39,17 @@ public class SubjectLineAdapter extends RecyclerView.Adapter<SubjectLineHolder> 
         holder.subjectName.setText(subjects.get(position).getName());
         holder.subjectProfessor.setText(subjects.get(position).getProfessor());
         holder.subjectAbbreviation.setText(subjects.get(position).getAbbreviation());
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent editSubjectIntent = new Intent(v.getContext(), EditSubjectActivity.class);
+
+            // Sends the data from this line
+            editSubjectIntent.putExtra("oldSubjectName", subjects.get(position).getName());
+            editSubjectIntent.putExtra("oldSubjectProfessor", subjects.get(position).getProfessor());
+            editSubjectIntent.putExtra("oldSubjectAbbreviation", subjects.get(position).getAbbreviation());
+            editSubjectIntent.putExtra("subjectId", subjects.get(position).getId());
+            v.getContext().startActivity(editSubjectIntent);
+        });
     }
 
     @Override

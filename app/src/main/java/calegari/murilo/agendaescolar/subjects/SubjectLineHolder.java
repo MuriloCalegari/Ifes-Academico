@@ -8,7 +8,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.R;
 
-public class SubjectLineHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class SubjectLineHolder extends RecyclerView.ViewHolder {
 
     public TextView subjectName;
     public TextView subjectProfessor;
@@ -19,19 +19,5 @@ public class SubjectLineHolder extends RecyclerView.ViewHolder implements View.O
         subjectName = itemView.findViewById(R.id.subjectName);
         subjectProfessor = itemView.findViewById(R.id.subjectProfessor);
         subjectAbbreviation = itemView.findViewById(R.id.subjectAbbreviation);
-
-        itemView.setOnClickListener(this);
     }
-
-    @Override
-    public void onClick(View v) {
-        Intent editSubjectIntent = new Intent(v.getContext(), EditSubjectActivity.class);
-
-        // Sends the data from this line
-        editSubjectIntent.putExtra("oldSubjectName", subjectName.getText());
-        editSubjectIntent.putExtra("oldSubjectProfessor", subjectProfessor.getText());
-        editSubjectIntent.putExtra("oldSubjectAbbreviation", subjectAbbreviation.getText());
-        v.getContext().startActivity(editSubjectIntent);
-    }
-
 }

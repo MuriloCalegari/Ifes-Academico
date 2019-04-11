@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.BaseFragment;
 import calegari.murilo.agendaescolar.MainActivity;
-import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
+import calegari.murilo.agendaescolar.databases.DatabaseHelper;
 import calegari.murilo.agendaescolar.R;
 
 import android.view.LayoutInflater;
@@ -26,7 +26,6 @@ public class SubjectsFragment extends BaseFragment {
     RecyclerView mRecyclerView;
     FloatingActionButton fab;
     private SubjectLineAdapter mAdapter;
-    SubjectDatabaseHelper subjectDatabase;
 
     @Nullable
     @Override
@@ -99,7 +98,7 @@ public class SubjectsFragment extends BaseFragment {
         mRecyclerView.setAdapter(mAdapter);
 
         // Populates the list:
-        subjectDatabase = new SubjectDatabaseHelper(getContext());
+        DatabaseHelper subjectDatabase = new DatabaseHelper(getContext());
 
         mAdapter.setSubjects(subjectDatabase.getAllSubjects());
 

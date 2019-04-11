@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
+import calegari.murilo.agendaescolar.databases.DatabaseHelper;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.subjects.steps.SubjectAbbreviationStep;
 import calegari.murilo.agendaescolar.subjects.steps.SubjectNameStep;
@@ -61,15 +61,15 @@ public class NewSubjectActivity extends AppCompatActivity implements StepperForm
 
         // Sends data to database
 
-        SubjectDatabaseHelper subjectDbHelper = new SubjectDatabaseHelper(this);
-        subjectDbHelper.insertData(
+        DatabaseHelper database = new DatabaseHelper(this);
+        database.insertSubject(
                 new Subject(
                 		newSubjectName.getStepDataAsHumanReadableString(),
 						newSubjectProfessor.getStepDataAsHumanReadableString(),
                         newSubjectAbbreviation.getStepDataAsHumanReadableString()
                 )
         );
-        subjectDbHelper.close();
+        database.close();
         finish();
     }
 

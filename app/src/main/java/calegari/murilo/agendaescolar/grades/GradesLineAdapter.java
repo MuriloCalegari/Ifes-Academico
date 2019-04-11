@@ -91,10 +91,10 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 
 		GradesFragment.inboxRecyclerView.expandItem(position);
 
-		// Bundles the subject abbreviation to be send to SubjectGradesFragment
-		String subjectAbbreviation = subjects.get(position).getAbbreviation();
+		// Bundles the subjectId to be send to SubjectGradesFragment
+		int subjectId = subjects.get(position).getId();
 		Bundle bundle = new Bundle();
-		bundle.putString("subjectAbbreviation", subjectAbbreviation);
+		bundle.putInt("subjectId", subjectId);
 		fragment.setArguments(bundle);
 
 		// Insert the fragment by replacing any existing fragment

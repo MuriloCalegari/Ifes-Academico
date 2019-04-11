@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -36,8 +37,10 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import calegari.murilo.agendaescolar.MainActivity;
 import calegari.murilo.agendaescolar.R;
-import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
+import calegari.murilo.agendaescolar.databases.DatabaseHelper;
 import calegari.murilo.agendaescolar.grades.GradesFragment;
+import calegari.murilo.agendaescolar.subjects.Subject;
+import calegari.murilo.agendaescolar.utils.QAcadIntegration;
 import calegari.murilo.agendaescolar.utils.Tools;
 
 public class HomeFragment extends Fragment {
@@ -72,30 +75,27 @@ public class HomeFragment extends Fragment {
 	}
 
 	private void setupGradesChart() {
-		SubjectDatabaseHelper subjectDatabaseHelper = new SubjectDatabaseHelper(getContext());
-
-		Cursor cursor = subjectDatabaseHelper.getAllDataInAverageGradeOrder();
+		DatabaseHelper dbHelper = new DatabaseHelper(getContext());
+		List<Subject> subjectList = dbHelper.getAllSubjectsInAverageGradeOrder();
+		dbHelper.close();
 
 		BarChart chart = getView().findViewById(R.id.chart);
 		chart.setNoDataText(getString(R.string.no_grades_availabe));
 
-		int subjectAbbreviationIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_ABBREVIATION);
-		int obtainedGradeIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_OBTAINED_GRADE);
-		int maximumGradeIndex = cursor.getColumnIndex(SubjectDatabaseHelper.SubjectEntry.COLUMN_SUBJECT_MAXIMUM_GRADE);
+		List<IBarDataSet> barDataSetList = new ArrayList<>();
 
 		int MAXIMUM_COLUMN_NUMBER = 5;
 		int i = 0;
 
-		List<IBarDataSet> barDataSetList = new ArrayList<>();
-
-		while(cursor.moveToNext() && i < MAXIMUM_COLUMN_NUMBER) {
-			float maximumGrade = cursor.getFloat(maximumGradeIndex);
-			float obtainedGrade = cursor.getFloat(obtainedGradeIndex);
+		for(Subject subject : subjectList) {
+			if(i == MAXIMUM_COLUMN_NUMBER) break;
+			float obtainedGrade = subject.getObtainedGrade();
+			float maximumGrade = subject.getMaximumGrade();
 
 			if(maximumGrade != 0) { // Do not include subjects that don't have a maximum grade defined
 				List<BarEntry> entries = new ArrayList<>();
 
-				String subjectAbbreviation = cursor.getString(subjectAbbreviationIndex);
+				String subjectAbbreviation = subject.getAbbreviation();
 				int averageGradePercentage = Math.round(obtainedGrade / maximumGrade * 100f);
 
 				entries.add(new BarEntry(
@@ -106,8 +106,9 @@ public class HomeFragment extends Fragment {
 				BarDataSet dataSet = new BarDataSet(entries, subjectAbbreviation);
 				dataSet.setColor(Tools.getGradeColor(obtainedGrade, maximumGrade, getContext()));
 				barDataSetList.add(dataSet);
-				i++;
 			}
+
+			i++;
 		}
 
 		data = new BarData(barDataSetList);
@@ -208,9 +209,6 @@ public class HomeFragment extends Fragment {
 			});
 			*/
 		}
-
-		cursor.close();
-		subjectDatabaseHelper.close();
 	}
 
 	public class MyYAxisValueFormatter implements IAxisValueFormatter {

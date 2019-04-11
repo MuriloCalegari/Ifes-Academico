@@ -7,7 +7,7 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import calegari.murilo.agendaescolar.databases.SubjectDatabaseHelper;
+import calegari.murilo.agendaescolar.databases.DatabaseHelper;
 import calegari.murilo.agendaescolar.R;
 import calegari.murilo.agendaescolar.subjects.steps.SubjectAbbreviationStep;
 import calegari.murilo.agendaescolar.subjects.steps.SubjectNameStep;
@@ -25,6 +25,7 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
 	String oldSubjectName;
 	String oldSubjectProfessor;
 	String oldSubjectAbbreviation;
+	int subjectId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +53,11 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
 		oldSubjectName = getIntent().getStringExtra("oldSubjectName");
 		oldSubjectProfessor = getIntent().getStringExtra("oldSubjectProfessor");
 		oldSubjectAbbreviation = getIntent().getStringExtra("oldSubjectAbbreviation");
+		subjectId = getIntent().getIntExtra("subjectId", 0);
 
 		// Create the steps
 		subjectNameStep = new SubjectNameStep(getResources().getString(R.string.name));
-		subjectAbbreviationStep = new SubjectAbbreviationStep(getResources().getString(R.string.abbreviation), true, oldSubjectAbbreviation);
+		subjectAbbreviationStep = new SubjectAbbreviationStep(getResources().getString(R.string.abbreviation));
 		subjectProfessorStep = new SubjectProfessorStep(getResources().getString(R.string.professor));
 
 		// Find the form view, set it up and initialize it.
@@ -72,12 +74,7 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
 
 		ImageButton deleteButton = findViewById(R.id.deleteButton);
 
-		deleteButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				deleteSubject(oldSubjectAbbreviation);
-			}
-		});
+		deleteButton.setOnClickListener(view -> deleteSubject(subjectId));
 
 	}
 
@@ -87,16 +84,16 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
 		// form in an attempt to save or send the data.
 
 		// Sends data to database
-		SubjectDatabaseHelper subjectDbHelper = new SubjectDatabaseHelper(this);
-		subjectDbHelper.updateData(
-				oldSubjectAbbreviation,
+		DatabaseHelper dbHelper = new DatabaseHelper(this);
+		dbHelper.updateSubject(
+				subjectId,
 				new Subject(
 						subjectNameStep.getStepDataAsHumanReadableString(),
 						subjectProfessorStep.getStepDataAsHumanReadableString(),
 						subjectAbbreviationStep.getStepDataAsHumanReadableString()
 				)
 		);
-		subjectDbHelper.close();
+		dbHelper.close();
 
 		finish();
 	}
@@ -113,27 +110,19 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
 		subjectAbbreviationStep.restoreStepData(subjectAbbreviation);
 	}
 
-	public void deleteSubject(final String subjectAbbreviation) {
-		final SubjectDatabaseHelper subjectDbHelper = new SubjectDatabaseHelper(this);
+	public void deleteSubject(final int subjectId) {
+		final DatabaseHelper dbHelper = new DatabaseHelper(this);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder
 				.setTitle(getString(R.string.confirm_subject_delete_title))
 				.setMessage(getString(R.string.confirm_subject_delete_message))
-				.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						subjectDbHelper.removeData(subjectAbbreviation);
-						subjectDbHelper.close();
-						finish();
-					}
+				.setPositiveButton(R.string.delete, (dialogInterface, i) -> {
+					dbHelper.removeSubject(subjectId);
+					dbHelper.close();
+					finish();
 				})
-				.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialogInterface, int i) {
-						subjectDbHelper.close();
-					}
-				})
+				.setNegativeButton(R.string.cancel, (dialogInterface, i) -> dbHelper.close())
 				.show();
 	}
 }

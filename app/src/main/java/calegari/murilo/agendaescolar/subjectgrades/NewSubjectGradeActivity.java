@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import calegari.murilo.agendaescolar.R;
-import calegari.murilo.agendaescolar.databases.SubjectGradesDatabaseHelper;
+import calegari.murilo.agendaescolar.databases.DatabaseHelper;
 import calegari.murilo.agendaescolar.utils.verticalstepperform.steps.DescriptionStep;
 import calegari.murilo.agendaescolar.subjectgrades.steps.GradeIsExtraCreditStep;
 import calegari.murilo.agendaescolar.subjectgrades.steps.GradeMaximumStep;
@@ -19,7 +19,7 @@ public class NewSubjectGradeActivity extends AppCompatActivity implements Steppe
 	private DescriptionStep newGradeDescription;
 	private GradeObtainedStep newObtainedGrade;
 	private GradeMaximumStep newMaximumGrade;
-	private GradeIsExtraCreditStep newIsExtraCredit;
+	private GradeIsExtraCreditStep newIsExtraGrade;
 
 	private VerticalStepperFormView verticalStepperForm;
 
@@ -51,12 +51,12 @@ public class NewSubjectGradeActivity extends AppCompatActivity implements Steppe
 		newGradeDescription = new DescriptionStep(getString(R.string.description));
 		newObtainedGrade = new GradeObtainedStep(getString(R.string.obtained_grade));
 		newMaximumGrade = new GradeMaximumStep(getString(R.string.maximum_grade));
-		newIsExtraCredit = new GradeIsExtraCreditStep(getString(R.string.is_extra_credit), getString(R.string.extra_credit_subtitle));
+		newIsExtraGrade = new GradeIsExtraCreditStep(getString(R.string.is_extra_credit), getString(R.string.extra_credit_subtitle));
 
 		// Find the form view, set it up and initialize it
 		verticalStepperForm = findViewById(R.id.stepper_form);
 		verticalStepperForm
-				.setup(this, newGradeDescription, newObtainedGrade, newMaximumGrade, newIsExtraCredit)
+				.setup(this, newGradeDescription, newObtainedGrade, newMaximumGrade, newIsExtraGrade)
 				.includeConfirmationStep(false)
 				.lastStepNextButtonText(getString(R.string.save_grade))
 				.lastStepCancelButtonText(getString(R.string.cancel))
@@ -71,18 +71,18 @@ public class NewSubjectGradeActivity extends AppCompatActivity implements Steppe
 		// form in an attempt to save or send the data.
 
 		// Sends data to database
-		SubjectGradesDatabaseHelper subjectGradeDbHelper = new SubjectGradesDatabaseHelper(this);
+		DatabaseHelper db = new DatabaseHelper(this);
 
-		SubjectGrade subjectGrade = new SubjectGrade(
-				getIntent().getStringExtra("subjectAbbreviation"),
-				newGradeDescription.getStepData(),
-				newObtainedGrade.getStepData(),
-				newMaximumGrade.getStepData(),
-				newIsExtraCredit.getStepData()
-		);
+		SubjectGrade subjectGrade = new SubjectGrade();
 
-		subjectGradeDbHelper.insertGrade(subjectGrade);
-		subjectGradeDbHelper.close();
+		subjectGrade.setSubjectId(getIntent().getIntExtra("subjectId", 0));
+		subjectGrade.setGradeDescription(newGradeDescription.getStepData());
+		subjectGrade.setObtainedGrade(newObtainedGrade.getStepData());
+		subjectGrade.setMaximumGrade(newMaximumGrade.getStepData());
+		subjectGrade.setIsExtraGrade(newIsExtraGrade.getStepData());
+
+		db.insertGrade(subjectGrade);
+		db.close();
 
 		finish();
 	}

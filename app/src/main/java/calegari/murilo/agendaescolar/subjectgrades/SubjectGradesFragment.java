@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.agendaescolar.R;
-import calegari.murilo.agendaescolar.databases.SubjectGradesDatabaseHelper;
+import calegari.murilo.agendaescolar.databases.DatabaseHelper;
 import calegari.murilo.agendaescolar.grades.GradesFragment;
 
 public class SubjectGradesFragment extends Fragment {
@@ -26,8 +26,7 @@ public class SubjectGradesFragment extends Fragment {
 	RecyclerView mRecyclerView;
 	FloatingActionButton fab;
 	private SubjectGradesLineAdapter mAdapter;
-	SubjectGradesDatabaseHelper subjectGradesDatabase;
-	String gradeSubjectAbbreviation;
+	private int subjectId;
 
 	@Nullable
 	@Override
@@ -43,12 +42,12 @@ public class SubjectGradesFragment extends Fragment {
 		mRecyclerView = view.findViewById(R.id.recyclerView);
 
 		Bundle bundle = this.getArguments();
-		gradeSubjectAbbreviation = bundle.getString("subjectAbbreviation");
+		subjectId = bundle.getInt("subjectId");
 
 		fab.setOnClickListener(v -> {
 			Intent newSubjectIntent = new Intent(view.getContext(), NewSubjectGradeActivity.class);
 
-			newSubjectIntent.putExtra("subjectAbbreviation", gradeSubjectAbbreviation);
+			newSubjectIntent.putExtra("subjectId", subjectId);
 			v.getContext().startActivity(newSubjectIntent);
 		});
 
@@ -97,30 +96,11 @@ public class SubjectGradesFragment extends Fragment {
 		mRecyclerView.setAdapter(mAdapter);
 
 		// Populates the list
-		subjectGradesDatabase = new SubjectGradesDatabaseHelper(getContext());
 
-		Cursor cursor = subjectGradesDatabase.getSubjectGradesData(gradeSubjectAbbreviation);
+		DatabaseHelper db = new DatabaseHelper(getContext());
 
-		Integer gradeIdIndex = cursor.getColumnIndex(SubjectGradesDatabaseHelper.SubjectGradesEntry.COLUMN_GRADE_ID);
-		Integer gradeDescriptionIndex = cursor.getColumnIndex(SubjectGradesDatabaseHelper.SubjectGradesEntry.COLUMN_GRADE_DESCRIPTION);
-		Integer obtainedGradeIndex = cursor.getColumnIndex(SubjectGradesDatabaseHelper.SubjectGradesEntry.COLUMN_GRADE_OBTAINED);
-		Integer maximumGradeIndex = cursor.getColumnIndex(SubjectGradesDatabaseHelper.SubjectGradesEntry.COLUMN_GRADE_MAXIMUM);
-		Integer isExtraCreditIndex = cursor.getColumnIndex(SubjectGradesDatabaseHelper.SubjectGradesEntry.COLUMN_GRADE_IS_EXTRA_CREDIT);
-
-		while(cursor.moveToNext()) {
-			Integer gradeId = cursor.getInt(gradeIdIndex);
-			String gradeDescription = cursor.getString(gradeDescriptionIndex);
-			float obtainedGrade = cursor.getFloat(obtainedGradeIndex);
-			float maximumGrade = cursor.getFloat(maximumGradeIndex);
-			boolean isExtraCredit = (cursor.getInt(isExtraCreditIndex) == 1);
-
-			SubjectGrade subjectGrade = new SubjectGrade(gradeId, gradeDescription, obtainedGrade, maximumGrade, isExtraCredit);
-			subjectGrade.setSubjectAbbreviation(gradeSubjectAbbreviation);
-
+		for(SubjectGrade subjectGrade : db.getAllGrades(subjectId)) {
 			mAdapter.updateList(subjectGrade);
 		}
-
-		cursor.close();
-		subjectGradesDatabase.close();
 	}
 }

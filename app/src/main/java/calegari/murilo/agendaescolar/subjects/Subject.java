@@ -6,8 +6,8 @@ public class Subject {
     private String name;
     private String professor;
     private String abbreviation;
-    private Float obtainedGrade;
-    private Float maximumGrade;
+    private Float obtainedGrade = 0f;
+    private Float maximumGrade = 0f;
 
     public Subject() {}
 

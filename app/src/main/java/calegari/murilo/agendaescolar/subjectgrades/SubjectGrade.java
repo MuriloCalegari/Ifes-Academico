@@ -1,14 +1,12 @@
 package calegari.murilo.agendaescolar.subjectgrades;
 
-import calegari.murilo.agendaescolar.subjects.Subject;
-
 public class SubjectGrade {
 
-    private String subjectAbbreviation;
     private String gradeDescription;
     private float obtainedGrade;
     private float maximumGrade;
 	private Integer gradeId;
+	private int subjectId;
 
 	/*
 	By default grades are set as not extra,
@@ -16,6 +14,12 @@ public class SubjectGrade {
 	in the database is handled at SubjectDatabase Helper
 	*/
 	private boolean isExtraGrade = false;
+
+	public void setIsExtraGrade(boolean isExtraGrade) {
+		this.isExtraGrade = isExtraGrade;
+	}
+
+	public SubjectGrade() {}
 
 	public SubjectGrade(Integer gradeId, String gradeDescription, float obtainedGrade, float maximumGrade, boolean isExtraGrade) {
 		this.gradeId = gradeId;
@@ -25,8 +29,7 @@ public class SubjectGrade {
 		this.isExtraGrade = isExtraGrade;
 	}
 
-	public SubjectGrade(String subjectAbbreviation, String gradeDescription, float obtainedGrade, float maximumGrade, boolean isExtraGrade) {
-		this.subjectAbbreviation = subjectAbbreviation;
+	public SubjectGrade(String gradeDescription, float obtainedGrade, float maximumGrade, boolean isExtraGrade) {
 		this.gradeDescription = gradeDescription;
 		this.obtainedGrade = obtainedGrade;
 		this.maximumGrade = maximumGrade;
@@ -38,14 +41,6 @@ public class SubjectGrade {
 		this.maximumGrade = maximumGrade;
 		this.isExtraGrade = isExtraGrade;
 	}
-
-	public String getSubjectAbbreviation() {
-        return subjectAbbreviation;
-    }
-
-    public void setSubjectAbbreviation(String subjectAbbreviation) {
-        this.subjectAbbreviation = subjectAbbreviation;
-    }
 
     public String getGradeDescription() {
         return gradeDescription;
@@ -85,5 +80,13 @@ public class SubjectGrade {
 
 	public void setGradeId(Integer gradeId) {
 		this.gradeId = gradeId;
+	}
+
+	public int getSubjectId() {
+		return subjectId;
+	}
+
+	public void setSubjectId(int subjectId) {
+		this.subjectId = subjectId;
 	}
 }
