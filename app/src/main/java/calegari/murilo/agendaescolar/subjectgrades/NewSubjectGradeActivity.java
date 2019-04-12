@@ -35,12 +35,7 @@ public class NewSubjectGradeActivity extends AppCompatActivity implements Steppe
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Finishes the activity
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
+		toolbar.setNavigationOnClickListener(v -> finish());
 
 		 /*
         Used library: VerticalStepperForm, available at:

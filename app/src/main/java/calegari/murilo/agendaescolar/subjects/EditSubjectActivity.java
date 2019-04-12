@@ -37,12 +37,7 @@ public class EditSubjectActivity extends AppCompatActivity implements StepperFor
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Finishes the Activity
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
+		toolbar.setNavigationOnClickListener(v -> finish());
 
         /*
         Used library: VerticalStepperForm, available at:

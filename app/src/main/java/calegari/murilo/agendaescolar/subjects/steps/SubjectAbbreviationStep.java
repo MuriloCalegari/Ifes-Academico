@@ -43,17 +43,15 @@ public class SubjectAbbreviationStep extends Step<String> {
             public void afterTextChanged(Editable s) {}
         });
 
-        subjectAbbreviationView.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Perform action on key press
-                    getFormView().goToNextStep(true);
-                    return true;
-                }
-                return false;
+        subjectAbbreviationView.setOnKeyListener((v, keyCode, event) -> {
+            // If the event is a key-down event on the "enter" button
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                // Perform action on key press
+                getFormView().goToNextStep(true);
+                return true;
             }
+            return false;
         });
 
         return subjectAbbreviationView;

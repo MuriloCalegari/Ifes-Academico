@@ -580,7 +580,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public void updateGrade(Integer gradeId, SubjectGrade newSubjectGrade){
-		removeFromTotalGrade(getGrade(gradeId));
+		SubjectGrade oldGrade = getGrade(gradeId);
+		removeFromTotalGrade(oldGrade);
 
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -598,6 +599,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		);
 
 		db.close();
+
+		newSubjectGrade.setSubjectId(oldGrade.getSubjectId());
 		addToTotalGrade(newSubjectGrade);
 	}
 

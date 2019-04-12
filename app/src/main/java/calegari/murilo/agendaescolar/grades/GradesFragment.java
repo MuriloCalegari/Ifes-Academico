@@ -70,7 +70,7 @@ public class GradesFragment extends BaseFragment {
 		// Trigger pull-to-collapse only if the page cannot be scrolled any further in the direction of scroll.
 		// Code from https://github.com/saket/InboxRecyclerView/wiki/Pull-to-collapse
 		expandablePageLayout.setPullToCollapseInterceptor((downX, downY, upwardPull) -> {
-			Integer directionInt = upwardPull ? 1 : -1;
+			int directionInt = upwardPull ? 1 : -1;
 			boolean canScrollFurther = expandablePageLayout.findViewById(R.id.recyclerView).canScrollVertically(directionInt);
 			return canScrollFurther ? InterceptResult.INTERCEPTED : InterceptResult.IGNORED;
 		});
@@ -89,12 +89,7 @@ public class GradesFragment extends BaseFragment {
 
 				// The following lines makes the user able to open the drawer after coming from a
 				// subject grade fragment
-				MainActivity.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						MainActivity.drawer.openDrawer(GravityCompat.START);
-					}
-				});
+				MainActivity.toolbar.setNavigationOnClickListener(v -> MainActivity.drawer.openDrawer(GravityCompat.START));
 				MainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 			}
 
@@ -128,7 +123,7 @@ public class GradesFragment extends BaseFragment {
 		// Populates the list:
 		subjectDatabase = new DatabaseHelper(getContext());
 
-		mAdapter.setSubjects(subjectDatabase.getAllSubjects()); // TODO: Make sure these subjects contains subjectId
+		mAdapter.setSubjects(subjectDatabase.getAllSubjects());
 
 		subjectDatabase.close();
 	}

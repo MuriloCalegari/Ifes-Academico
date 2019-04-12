@@ -41,12 +41,7 @@ public class SubjectsFragment extends BaseFragment {
         fab = getView().findViewById(R.id.floatingActionButton);
         mRecyclerView = getView().findViewById(R.id.recyclerView);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newSubject();
-            }
-        });
+        fab.setOnClickListener(v -> newSubject());
 
         // Hides floating action button on scroll down
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

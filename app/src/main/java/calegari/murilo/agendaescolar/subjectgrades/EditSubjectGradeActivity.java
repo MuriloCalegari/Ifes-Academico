@@ -23,7 +23,6 @@ public class EditSubjectGradeActivity extends AppCompatActivity implements Stepp
 	private GradeIsExtraCreditStep newIsExtraCredit;
 
 	Integer oldGradeId;
-	String subjectAbbreviation;
 	String oldGradeDescription;
 	Float oldObtainedGrade;
 	Float oldMaximumGrade;
@@ -51,7 +50,6 @@ public class EditSubjectGradeActivity extends AppCompatActivity implements Stepp
 
 		// Gets information from which input the user would like to edit
 		oldGradeId = getIntent().getIntExtra("oldGradeId", 0);
-		subjectAbbreviation = getIntent().getStringExtra("subjectAbbreviation"); // TODO: Remove outdated code
 		oldGradeDescription = getIntent().getStringExtra("oldGradeDescription");
 		oldObtainedGrade = getIntent().getFloatExtra("oldObtainedGrade", 0);
 		oldMaximumGrade = getIntent().getFloatExtra("oldMaximumGrade", 0);

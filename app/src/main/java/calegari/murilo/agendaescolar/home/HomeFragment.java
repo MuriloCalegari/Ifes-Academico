@@ -215,7 +215,7 @@ public class HomeFragment extends Fragment {
 
 		@Override
 		public String getFormattedValue(float value, AxisBase axis) {
-			return String.valueOf(Math.round(value)) + "%";
+			return Math.round(value) + "%";
 		}
 
 	}
@@ -237,7 +237,7 @@ public class HomeFragment extends Fragment {
 
 		@Override
 		public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-			return String.valueOf(Math.round(value)) + "%"; // + "\n" + data.getDataSetForEntry(entry).getLabel(); // Unfortunately line breaking doesn't work
+			return Math.round(value) + "%"; // + "\n" + data.getDataSetForEntry(entry).getLabel(); // Unfortunately line breaking doesn't work
 		}
 	}
 }
