@@ -112,7 +112,7 @@
     <string name="title_activity_edit_class_time">Edit class</string>
     <string name="confirm_class_event_delete_message" />
     <string name="confirm_class_event_delete_title">Delete class?</string>
-    <string name="no_grades_availabe">You still haven\'t added any grade!</string>
+    <string name="no_grades_availabe">You still haven\'t synchronized any grade!</string>
     <string name="title_activity_login">LoginActivity</string>
     <string-array name="week_days">
         <item>S</item>
