@@ -123,6 +123,9 @@ public class LoginActivity extends AppCompatActivity {
                                     .putString(Constants.PASSWORD_PREFERENCE, password)
                                     .commit();
 
+                            // If login is successful, send cookieMap to be used in MainActivity
+                            MainActivity.qAcadCookieMap = cookieMap;
+
                             Intent intent = new Intent(context, MainActivity.class);
                             startActivity(intent);
 

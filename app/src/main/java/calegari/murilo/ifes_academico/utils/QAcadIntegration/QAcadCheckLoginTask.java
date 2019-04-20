@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import java.net.ConnectException;
+import java.util.Map;
 
 import javax.security.auth.login.LoginException;
 
@@ -15,6 +16,7 @@ public class QAcadCheckLoginTask extends AsyncTask<Integer, Integer, Integer> {
 
     private final User user;
     private final String TAG = getClass().getSimpleName();
+    protected Map<String, String> cookieMap;
 
     private int result;
 
@@ -34,7 +36,7 @@ public class QAcadCheckLoginTask extends AsyncTask<Integer, Integer, Integer> {
         QAcadScrapper qAcadScrapper = new QAcadScrapper(Constants.ACADEMIC_URL);
 
         try {
-            qAcadScrapper.loginToQAcad(user);
+            cookieMap = qAcadScrapper.loginToQAcad(user);
             result = RESULT_SUCCESS;
         } catch (LoginException e) {
             result = RESULT_LOGIN_INVALID;
