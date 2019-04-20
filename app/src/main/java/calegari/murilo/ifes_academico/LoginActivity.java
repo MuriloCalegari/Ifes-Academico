@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
@@ -76,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 // TODO Wait for an update of LoadingButtonAndroid library that will fix calling doneLoadingAnimation more than once with different bitmaps
 
-                if(result == RESULT_LOGIN_INVALID) {
+                if(result == Constants.RESULT_LOGIN_INVALID) {
 
                     Bitmap errorIcon = drawableToBitmap(getDrawable(R.drawable.ic_error_white_24dp));
                     loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_error));
@@ -90,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                         });
                     }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
 
-                } else if (result == RESULT_CONNECTION_FAILURE) {
+                } else if (result == Constants.RESULT_CONNECTION_FAILURE) {
 
                     Bitmap errorIcon = drawableToBitmap(getDrawable(R.drawable.ic_error_white_24dp));
                     loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_error));
@@ -105,14 +104,12 @@ public class LoginActivity extends AppCompatActivity {
                         });
                     }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
 
-                } else if (result == RESULT_SUCCESS) {
+                } else if (result == Constants.RESULT_SUCCESS) {
 
-                    Log.d(TAG, "onPostExecute: Result success");
                     Bitmap checkIcon = drawableToBitmap(getDrawable(R.drawable.ic_check_white_24dp));
                     loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_idle));
                     loginButton.doneLoadingAnimation(getResources().getColor(R.color.ok_color), checkIcon); // Displays success icon
                     new Handler().postDelayed(() -> {
-                        Log.d(TAG, "onPostExecute: Reverting button animation");
                         loginButton.revertAnimation(() -> {
                             loginButtonText.setText(getString(R.string.success)); // Tells user that their login is valid
                             loginButtonText.setVisibility(View.VISIBLE);
@@ -128,12 +125,12 @@ public class LoginActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(context, MainActivity.class);
                             startActivity(intent);
-
+                            finish();
                             return null;
                         });
                     }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
 
-                } else if (result == RESULT_UNKNOWN_ERROR) {
+                } else if (result == Constants.RESULT_UNKNOWN_ERROR) {
 
                     Bitmap errorIcon = drawableToBitmap(getDrawable(R.drawable.ic_error_white_24dp));
                     loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_error));

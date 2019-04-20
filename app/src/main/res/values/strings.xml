@@ -143,5 +143,6 @@
 
     <string name="connection_failure">Connection failure</string>
     <string name="success">Success</string>
-    <string name="unknown_error">An unknown error occurred...</string>
+    <string name="unknown_error">An unknown error occurred…</string>
+    <string name="logout">Logout</string>
 </resources>

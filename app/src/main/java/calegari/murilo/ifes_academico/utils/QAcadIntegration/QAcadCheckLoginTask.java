@@ -20,11 +20,6 @@ public class QAcadCheckLoginTask extends AsyncTask<Integer, Integer, Integer> {
 
     private int result;
 
-    public static final int RESULT_LOGIN_INVALID = 0;
-    public static final int RESULT_CONNECTION_FAILURE = 1;
-    public static final int RESULT_UNKNOWN_ERROR = 2;
-    public static final int RESULT_SUCCESS = 3;
-
     public QAcadCheckLoginTask(User user) {
        this.user = user;
     }
@@ -37,13 +32,13 @@ public class QAcadCheckLoginTask extends AsyncTask<Integer, Integer, Integer> {
 
         try {
             cookieMap = qAcadScrapper.loginToQAcad(user);
-            result = RESULT_SUCCESS;
+            result = Constants.RESULT_SUCCESS;
         } catch (LoginException e) {
-            result = RESULT_LOGIN_INVALID;
+            result = Constants.RESULT_LOGIN_INVALID;
         } catch (ConnectException e) {
-            result =  RESULT_CONNECTION_FAILURE;
+            result =  Constants.RESULT_CONNECTION_FAILURE;
         } catch (Exception e) {
-            result = RESULT_UNKNOWN_ERROR;
+            result = Constants.RESULT_UNKNOWN_ERROR;
         }
 
         return result;

@@ -1,13 +1,21 @@
 package calegari.murilo.ifes_academico.utils.QAcadIntegration;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import java.net.ConnectException;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.LoginException;
+
+import calegari.murilo.ifes_academico.R;
 import calegari.murilo.ifes_academico.databases.DatabaseHelper;
 import calegari.murilo.ifes_academico.subjectgrades.SubjectGrade;
 import calegari.murilo.ifes_academico.utils.Constants;
@@ -21,6 +29,8 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Void>{
 	private final String TAG = "QAcadFetchDataTask";
 	private Context context;
 	private QAcadScrapper qAcadScrapper;
+
+	private int result;
 
 	private Map<String, String> cookieMap;
 
@@ -48,11 +58,13 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Void>{
 
 		try {
 			qAcadScrapper.setCookieMap(cookieMap);
-			if(!qAcadScrapper.isLogged()) {
+			if (!qAcadScrapper.isLogged()) {
 				Log.d(TAG, "Status is not logged");
 				cookieMap = qAcadScrapper.loginToQAcad(user);
 				Log.d(TAG, "Finished logging into QAcad");
-			} else { Log.d(TAG, "We've already logged"); }
+			} else {
+				Log.d(TAG, "We've already logged");
+			}
 
 			Log.d(TAG, "Getting all subjects and grades from QAcad");
 			List<Subject> subjectList = qAcadScrapper.getAllSubjectsAndGrades();
@@ -60,7 +72,7 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Void>{
 
 			databaseHelper.recreateDatabases();
 
-			for(Subject subject: subjectList) {
+			for (Subject subject : subjectList) {
 
 				int subjectId = databaseHelper.insertSubject(
 						new Subject(
@@ -70,22 +82,34 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Void>{
 						)
 				);
 
-				for(Grade grade : subject.getGradeList()) {
+				for (Grade grade : subject.getGradeList()) {
 					databaseHelper.insertGrade(
 							new SubjectGrade(
-								subjectId,
-								grade.getGradeDescription(),
-								grade.getObtainedGrade(),
-								grade.getMaximumGrade(),
-								false,
-								grade.isObtainedGradeNull()
+									subjectId,
+									grade.getGradeDescription(),
+									grade.getObtainedGrade(),
+									grade.getMaximumGrade(),
+									false,
+									grade.isObtainedGradeNull()
 							)
 					);
 				}
 			}
+
+			result = Constants.RESULT_SUCCESS;
+			LoginManager.logout(context); // Logout if calling loginToQACad() failed
+		} catch (LoginException e) {
+			result = Constants.RESULT_LOGIN_INVALID;
+		} catch (ConnectException e) {
+			result = Constants.RESULT_CONNECTION_FAILURE;
+			View rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
+			Snackbar snackbar = Snackbar.make(rootView, context.getString(R.string.connection_failure) ,Snackbar.LENGTH_LONG);
+			snackbar.show();
 		} catch (Exception e) {
-			// TODO Catch connection and login exceptions
-			e.printStackTrace();
+			result = Constants.RESULT_UNKNOWN_ERROR;
+			View rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
+			Snackbar snackbar = Snackbar.make(rootView, context.getString(R.string.unknown_error) ,Snackbar.LENGTH_LONG);
+			snackbar.show();
 		} finally {
 			databaseHelper.close();
 		}

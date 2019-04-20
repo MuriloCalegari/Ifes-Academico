@@ -27,6 +27,7 @@ import calegari.murilo.ifes_academico.grades.GradesFragment;
 import calegari.murilo.ifes_academico.home.HomeFragment;
 import calegari.murilo.ifes_academico.settings.SettingsActivity;
 import calegari.murilo.ifes_academico.subjects.SubjectsFragment;
+import calegari.murilo.ifes_academico.utils.QAcadIntegration.LoginManager;
 
 import android.view.MenuItem;
 import android.view.View;
@@ -220,6 +221,9 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.nav_schedules:
                     startFragment(SchedulesFragment.class, useAnimations);
+                    break;
+                case R.id.nav_logout:
+                    LoginManager.logout(this);
                 default:
                     break;
             }

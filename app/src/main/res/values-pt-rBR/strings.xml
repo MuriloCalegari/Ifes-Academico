@@ -135,5 +135,6 @@
     <string name="success">Sucesso!</string>
     <string name="title_activity_login">Login</string>
     <string name="unknown_error">Um erro desconhecido ocorreu</string>
+    <string name="logout">Logout</string>
 
 </resources>

@@ -44,6 +44,10 @@
                 android:id="@+id/nav_about"
                 android:icon="@drawable/ic_info_outline_black_24dp"
                 android:title="@string/about" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_exit_to_app_black_24dp"
+                android:title="@string/logout" />
         </menu>
     </item>
 
