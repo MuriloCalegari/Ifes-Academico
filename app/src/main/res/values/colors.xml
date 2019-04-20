@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#512da8</color>
-    <color name="colorPrimarySemiTransparent">#26512da8</color>
-    <color name="colorPrimaryDark">#5322ab</color>
-    <color name="primaryLightColor">#673ab7</color>
+    <color name="colorPrimary">#2f9e41</color>
+    <color name="colorPrimarySemiTransparent">#262f9e41</color>
+    <color name="colorPrimaryDark">#006e13</color>
+    <color name="primaryLightColor">#66d06e</color>
     <color name="textColorLight">#ffffff</color>
     <color name="textColorDark">#212121</color>
-    <color name="colorAccent">#d32f2f</color>
+    <color name="colorAccent">#cd191e</color>
 
-    <color name="slimchart_danger_color">#F74444</color>
-    <color name="slimchart_warning_color">#FDAD00</color>
-    <color name="slimchart_ok_color">#A8CA27</color>
+    <color name="danger_color">#F74444</color>
+    <color name="warning_color">#FDAD00</color>
+    <color name="ok_color">#A8CA27</color>
 
     <string-array name="schedule_colors">
         <item>#F80C01</item>
@@ -20,4 +20,8 @@
         <item>#422E69</item>
     </string-array>
 
+    <color name="ifes_logo_main_color">#2f9e41</color>
+    <color name="ifes_logo_secondary_color">#cd191e</color>
+    
+    <color name="light_grey">#efefef</color>
 </resources>

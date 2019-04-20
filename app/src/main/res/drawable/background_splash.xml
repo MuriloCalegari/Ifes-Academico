@@ -4,6 +4,6 @@
     <item
         android:drawable="@color/colorPrimaryDark"/>
 
-    <item android:drawable="@drawable/ic_school_white_128dp" android:gravity="center"/>
+    <item android:drawable="@drawable/ic_ifes_logo_white" android:gravity="center"/>
 
 </layer-list>

@@ -1,7 +1,7 @@
 <!DOCTYPE resources [<!ENTITY appname "School tools"><!ENTITY author "Murilo Calegari de Souza">]>
 
 <resources>
-    <string name="app_name">School tools</string>
+    <string name="app_name">Ifes Academic</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title" translatable="false">Android Studio</string>
@@ -99,28 +99,10 @@
     <string name="title_activity_new_subject_schedule">NewSubjectSchedule</string>
     <string name="error_alarm_days_min_days">A day should be marked</string>
 
-    <string-array name="week_days">
-        <item>S</item>
-        <item>M</item>
-        <item>T</item>
-        <item>W</item>
-        <item>T</item>
-        <item>F</item>
-        <item>S</item>
-    </string-array>
-
-    <string-array name="week_days_extended">
-        <item>Sunday</item>
-        <item>Monday</item>
-        <item>Tuesday</item>
-        <item>Wednesday</item>
-        <item>Thursday</item>
-        <item>Friday</item>
-        <item>Saturday</item>
-    </string-array>
-
     <string name="class_event_save_button">Save class</string>
+
     <string name="day_of_the_week">Day of the week</string>
+
     <string name="start_time">Start time</string>
     <string name="which_time_start">At which time does the class start?</string>
     <string name="end_time">End time</string>
@@ -131,4 +113,35 @@
     <string name="confirm_class_event_delete_message" />
     <string name="confirm_class_event_delete_title">Delete class?</string>
     <string name="no_grades_availabe">You still haven\'t added any grade!</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string-array name="week_days">
+        <item>S</item>
+        <item>M</item>
+        <item>T</item>
+        <item>W</item>
+        <item>T</item>
+        <item>F</item>
+        <item>S</item>
+    </string-array>
+    <string-array name="week_days_extended">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
+    // Login Activity
+
+    <string name="academic_login">Ifes Academic</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="login">Login</string>
+    <string name="invalid_login">Invalid login</string>
+
+    <string name="connection_failure">Connection failure</string>
+    <string name="success">Success</string>
+    <string name="unknown_error">An unknown error occurred...</string>
 </resources>

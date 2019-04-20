@@ -3,4 +3,8 @@
     <integer name="anim_duration_medium">250</integer>
     <integer name="navigation_bar_close_delay">300</integer>
     <integer name="anim_graph_home_page">1000</integer>
+
+    <!-- Login button -->
+    <integer name="login_button_delay_x_to_error">1000</integer>
+    <integer name="login_button_delay_error_to_idle">2000</integer>
 </resources>

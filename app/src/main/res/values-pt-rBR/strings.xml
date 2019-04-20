@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE resources [
-    <!ENTITY appname "Agenda Escolar">
+    <!ENTITY appname "Ifes Acadêmico">
     <!ENTITY author "Murilo Calegari de Souza">
     ]>
 
@@ -8,7 +8,7 @@
 
     <!-- Main Activity and others -->
 
-    <string name="app_name">Agenda Escolar</string>
+    <string name="app_name">Ifes Acadêmico</string>
     <string name="navigation_drawer_open">Abrir barra de navegação</string>
     <string name="navigation_drawer_close">Fechar barra de navegação</string>
     <string name="action_settings">Configurações</string>
@@ -126,5 +126,14 @@
     <string name="confirm_class_event_delete_message">Isto irá permanentemente deletar esta aula</string>
     <string name="title_activity_edit_class_time">Editar aula</string>
     <string name="no_grades_availabe">Você ainda não adicionou nenhuma nota!</string>
+    <string name="academic_login">Ifes Acadêmico</string>
+    <string name="login">Login</string>
+    <string name="password">Senha</string>
+    <string name="username">Usuário</string>
+    <string name="connection_failure">Falha na conexão</string>
+    <string name="invalid_login">Login inválido</string>
+    <string name="success">Sucesso!</string>
+    <string name="title_activity_login">Login</string>
+    <string name="unknown_error">Um erro desconhecido ocorreu</string>
 
 </resources>
