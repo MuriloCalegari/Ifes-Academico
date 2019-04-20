@@ -87,8 +87,8 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Void>{
 							new SubjectGrade(
 									subjectId,
 									grade.getGradeDescription(),
-									grade.getObtainedGrade(),
-									grade.getMaximumGrade(),
+									grade.getObtainedGrade()*grade.getWeight(),
+									grade.getMaximumGrade()*grade.getWeight(),
 									false,
 									grade.isObtainedGradeNull()
 							)
@@ -97,8 +97,8 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Void>{
 			}
 
 			result = Constants.RESULT_SUCCESS;
-			LoginManager.logout(context); // Logout if calling loginToQACad() failed
 		} catch (LoginException e) {
+			LoginManager.logout(context); // Logout if calling loginToQACad() failed
 			result = Constants.RESULT_LOGIN_INVALID;
 		} catch (ConnectException e) {
 			result = Constants.RESULT_CONNECTION_FAILURE;
