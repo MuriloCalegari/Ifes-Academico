@@ -1,6 +1,7 @@
 package calegari.murilo.ifes_academico;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,15 +23,16 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import calegari.murilo.ifes_academico.calendar.SchedulesFragment;
 import calegari.murilo.ifes_academico.grades.GradesFragment;
 import calegari.murilo.ifes_academico.home.HomeFragment;
 import calegari.murilo.ifes_academico.settings.SettingsActivity;
 import calegari.murilo.ifes_academico.subjects.SubjectsFragment;
-import calegari.murilo.ifes_academico.utils.Constants.BundleKeys;
 import calegari.murilo.ifes_academico.utils.QAcadIntegration.LoginManager;
+import calegari.murilo.ifes_academico.utils.QAcadIntegration.QAcadFetchDataTask;
 
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity
     public static Toolbar toolbar;
     public static FragmentManager fragmentManager;
     public static NavigationView navigationView;
+    public SwipeRefreshLayout pullToRefresh;
+
     public static Map<String, String> qAcadCookieMap = null;
 
     private ActionBarDrawerToggle drawerToggle;
@@ -73,7 +77,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
-
         NAVBAR_CLOSE_DELAY = getResources().getInteger(R.integer.navigation_bar_close_delay);
 
         navigationView = findViewById(R.id.nav_view);
@@ -91,12 +94,33 @@ public class MainActivity extends AppCompatActivity
 
 	    updateUsername();
 
+	    pullToRefresh = findViewById(R.id.swiperefresh);
+	    pullToRefresh.setOnRefreshListener(this::syncDataFromQAcad);
+	    syncDataFromQAcad();
+
         setupListeners();
 
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(BundleKeys.SHOULD_SYNC_GRADES, true);
-        startFragment(HomeFragment.class, false, bundle);
+        startFragment(HomeFragment.class, false);
     }
+
+	private void syncDataFromQAcad() {
+		if(!pullToRefresh.isRefreshing()) {
+			pullToRefresh.setRefreshing(true);
+		}
+
+		@SuppressLint("StaticFieldLeak")
+		QAcadFetchDataTask qAcadFetchDataTask = new QAcadFetchDataTask(this, MainActivity.qAcadCookieMap) {
+			@Override
+			protected void onPostExecute(Void aVoid) {
+				super.onPostExecute(aVoid);
+				pullToRefresh.setRefreshing(false);
+				reloadCurrentFragment();
+				qAcadCookieMap = getCookieMap(); // update cookies to the last one generated
+			}
+		};
+
+		qAcadFetchDataTask.execute();
+	}
 
 	@Override
     protected void onRestart() {
@@ -261,6 +285,20 @@ public class MainActivity extends AppCompatActivity
     public static void startFragment(Class fragmentClass, boolean useAnimations) {
 		startFragment(fragmentClass, useAnimations, null);
     }
+
+    public void reloadCurrentFragment() {
+		Fragment currentFragment = null;
+
+		try {
+			currentFragment = fragmentManager.findFragmentById(R.id.flContent);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if(currentFragment != null) {
+			startFragment(currentFragment.getClass(), false);
+		}
+	}
 
 	public static void setDrawerIdleMode() {
 		// The following lines makes the user able to open the drawer after coming from a

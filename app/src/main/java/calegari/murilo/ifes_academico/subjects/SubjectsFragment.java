@@ -1,6 +1,5 @@
 package calegari.murilo.ifes_academico.subjects;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -10,13 +9,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import calegari.murilo.ifes_academico.BaseFragment;
 import calegari.murilo.ifes_academico.MainActivity;
 import calegari.murilo.ifes_academico.databases.DatabaseHelper;
 import calegari.murilo.ifes_academico.R;
-import calegari.murilo.ifes_academico.utils.QAcadIntegration.QAcadFetchDataTask;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,22 +59,6 @@ public class SubjectsFragment extends BaseFragment {
         AppCompatActivity activity = (AppCompatActivity) getContext();
         activity.getSupportActionBar().setTitle(getString(R.string.subjects));
         MainActivity.navigationView.setCheckedItem(R.id.nav_subjects);
-
-        SwipeRefreshLayout pullToRefresh = view.findViewById(R.id.swiperefresh);
-        pullToRefresh.setOnRefreshListener(() -> {
-
-            @SuppressLint("StaticFieldLeak")
-            QAcadFetchDataTask qAcadFetchDataTask = new QAcadFetchDataTask(getContext(), MainActivity.qAcadCookieMap) {
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    super.onPostExecute(aVoid);
-                    pullToRefresh.setRefreshing(false);
-                    MainActivity.startFragment(SubjectsFragment.class, false);
-                    MainActivity.qAcadCookieMap = getCookieMap(); // update cookies to the last ones generated
-                }
-            };
-            qAcadFetchDataTask.execute();
-        });
     }
 
     @Override

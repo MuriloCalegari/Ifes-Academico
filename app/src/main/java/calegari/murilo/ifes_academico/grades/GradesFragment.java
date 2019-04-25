@@ -1,6 +1,5 @@
 package calegari.murilo.ifes_academico.grades;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +10,12 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import calegari.murilo.ifes_academico.BaseFragment;
 import calegari.murilo.ifes_academico.MainActivity;
 import calegari.murilo.ifes_academico.R;
 import calegari.murilo.ifes_academico.databases.DatabaseHelper;
-import calegari.murilo.ifes_academico.utils.QAcadIntegration.QAcadFetchDataTask;
 import me.saket.inboxrecyclerview.InboxRecyclerView;
 import me.saket.inboxrecyclerview.page.ExpandablePageLayout;
 import me.saket.inboxrecyclerview.page.InterceptResult;
@@ -31,7 +26,6 @@ public class GradesFragment extends BaseFragment {
 	public static InboxRecyclerView inboxRecyclerView;
 	private GradesLineAdapter mAdapter;
 	DatabaseHelper subjectDatabase;
-	private SwipeRefreshLayout pullToRefresh;
 
 	@Nullable
 	@Override
@@ -50,21 +44,6 @@ public class GradesFragment extends BaseFragment {
 		AppCompatActivity activity = (AppCompatActivity) getContext();
 		activity.getSupportActionBar().setTitle(getString(R.string.grades));
 		MainActivity.navigationView.setCheckedItem(R.id.nav_grades);
-
-		pullToRefresh = view.findViewById(R.id.swiperefresh);
-		pullToRefresh.setOnRefreshListener(() -> {
-			@SuppressLint("StaticFieldLeak")
-            QAcadFetchDataTask qAcadFetchDataTask = new QAcadFetchDataTask(getContext(), MainActivity.qAcadCookieMap) {
-				@Override
-				protected void onPostExecute(Void aVoid) {
-					super.onPostExecute(aVoid);
-					pullToRefresh.setRefreshing(false);
-					MainActivity.startFragment(GradesFragment.class, false);
-					MainActivity.qAcadCookieMap = getCookieMap(); // update cookies to the last one generated
-				}
-			};
-			qAcadFetchDataTask.execute();
-		});
 
 		setupInboxRecyclerView();
 		initInboxRecyclerView();
@@ -113,14 +92,16 @@ public class GradesFragment extends BaseFragment {
 			public void onPageAboutToExpand(long expandAnimDuration) {
 				super.onPageAboutToExpand(expandAnimDuration);
 				MainActivity.anim.start();
-				pullToRefresh.setEnabled(false);
+
+				((MainActivity) activity).pullToRefresh.setEnabled(false);
 			}
 
 			@Override
 			public void onPageCollapsed() {
 				super.onPageCollapsed();
 				activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-				pullToRefresh.setEnabled(true);
+
+				((MainActivity) activity).pullToRefresh.setEnabled(true);
 			}
 
 			@Override

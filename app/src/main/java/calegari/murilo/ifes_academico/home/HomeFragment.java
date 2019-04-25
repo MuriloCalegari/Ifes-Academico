@@ -1,10 +1,8 @@
 package calegari.murilo.ifes_academico.home;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,21 +33,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import calegari.murilo.ifes_academico.MainActivity;
 import calegari.murilo.ifes_academico.R;
 import calegari.murilo.ifes_academico.databases.DatabaseHelper;
 import calegari.murilo.ifes_academico.grades.GradesFragment;
-import calegari.murilo.ifes_academico.utils.Constants.BundleKeys;
-import calegari.murilo.ifes_academico.utils.QAcadIntegration.QAcadFetchDataTask;
 import calegari.murilo.qacadscrapper.utils.Subject;
 import calegari.murilo.ifes_academico.utils.Tools;
 
 public class HomeFragment extends Fragment {
 
 	private BarData data;
-	private SwipeRefreshLayout pullToRefresh;
 
 	@Nullable
 	@Override
@@ -73,33 +67,6 @@ public class HomeFragment extends Fragment {
 
 		gradesChartCardView.setOnClickListener(v -> MainActivity.startFragment(GradesFragment.class, true));
 
-		pullToRefresh = view.findViewById(R.id.swiperefresh);
-
-		pullToRefresh.setOnRefreshListener(this::syncDataFromQAcad);
-
-		Bundle bundle = this.getArguments();
-		if(bundle != null) {
-			if(bundle.getBoolean(BundleKeys.SHOULD_SYNC_GRADES)) {
-				pullToRefresh.setRefreshing(true);
-				syncDataFromQAcad();
-			}
-		}
-
-	}
-
-	private void syncDataFromQAcad() {
-		@SuppressLint("StaticFieldLeak")
-		QAcadFetchDataTask qAcadFetchDataTask = new QAcadFetchDataTask(getContext(), MainActivity.qAcadCookieMap) {
-			@Override
-			protected void onPostExecute(Void aVoid) {
-				super.onPostExecute(aVoid);
-				pullToRefresh.setRefreshing(false);
-				MainActivity.startFragment(HomeFragment.class, false);
-				MainActivity.qAcadCookieMap = getCookieMap(); // update cookies to the last one generated
-			}
-		};
-
-		qAcadFetchDataTask.execute();
 	}
 
 	@Override

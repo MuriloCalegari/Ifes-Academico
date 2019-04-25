@@ -1,39 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:id="@+id/swiperefresh"
+<FrameLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    tools:context=".grades.GradesFragment">
 
-    <FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <me.saket.inboxrecyclerview.InboxRecyclerView
+        android:id="@+id/inbox_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".grades.GradesFragment">
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layoutAnimation="@anim/layout_animation_fall_down"/>
 
-        <me.saket.inboxrecyclerview.InboxRecyclerView
-            android:id="@+id/inbox_recyclerview"
+    <me.saket.inboxrecyclerview.page.ExpandablePageLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/expandablePageLayout"
+        android:background="@android:color/white">
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layoutAnimation="@anim/layout_animation_fall_down"/>
+            android:id="@+id/frameLayoutContent">
+        </FrameLayout>
 
-        <me.saket.inboxrecyclerview.page.ExpandablePageLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/expandablePageLayout"
-            android:background="@android:color/white">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/frameLayoutContent">
-            </FrameLayout>
-
-        </me.saket.inboxrecyclerview.page.ExpandablePageLayout>
-    </FrameLayout>
-
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </me.saket.inboxrecyclerview.page.ExpandablePageLayout>
+</FrameLayout>
