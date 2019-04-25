@@ -106,10 +106,7 @@ public class GradesFragment extends BaseFragment {
 				MainActivity.anim.reverse();
 				activity.getSupportActionBar().setTitle(getString(R.string.grades));
 
-				// The following lines makes the user able to open the drawer after coming from a
-				// subject grade fragment
-				MainActivity.toolbar.setNavigationOnClickListener(v -> MainActivity.drawer.openDrawer(GravityCompat.START));
-				MainActivity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+				MainActivity.setDrawerIdleMode();
 			}
 
 			@Override

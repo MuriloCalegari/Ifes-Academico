@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,10 +65,6 @@ public class HomeFragment extends Fragment {
 		TextView gradesChartSubtitle = view.findViewById(R.id.subtitleTextView);
 		gradesChartSubtitle.setText(R.string.to_keep_an_eye);
 
-		MainActivity.navigationView.setCheckedItem(R.id.nav_home);
-		AppCompatActivity activity = (AppCompatActivity) getContext();
-		activity.getSupportActionBar().setTitle(R.string.app_name);
-
 		setupGradesChart();
 
 		CardView gradesChartCardView = view.findViewById(R.id.cardView);
@@ -90,6 +87,16 @@ public class HomeFragment extends Fragment {
 
 			qAcadFetchDataTask.execute();
 		});
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		AppCompatActivity activity = (AppCompatActivity) getContext();
+		activity.getSupportActionBar().setTitle(R.string.app_name);
+		MainActivity.navigationView.setCheckedItem(R.id.nav_home);
+		MainActivity.setDrawerIdleMode();
 	}
 
 	private void setupGradesChart() {

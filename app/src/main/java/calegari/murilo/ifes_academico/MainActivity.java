@@ -29,6 +29,7 @@ import calegari.murilo.ifes_academico.settings.SettingsActivity;
 import calegari.murilo.ifes_academico.subjects.SubjectsFragment;
 import calegari.murilo.ifes_academico.utils.QAcadIntegration.LoginManager;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity
     public static NavigationView navigationView;
     public static Map<String, String> qAcadCookieMap = null;
 
-
     private ActionBarDrawerToggle drawerToggle;
 
     private ImageButton changeUsernameButton;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity
 
 	int NAVBAR_CLOSE_DELAY;
 
-    @Override
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -95,15 +95,10 @@ public class MainActivity extends AppCompatActivity
         startFragment(HomeFragment.class, false);
     }
 
-    @Override
+	@Override
     protected void onRestart() {
         super.onRestart();
         setupListeners();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     private void setupListeners() {
@@ -255,4 +250,11 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
+	public static void setDrawerIdleMode() {
+		// The following lines makes the user able to open the drawer after coming from a
+		// subject grade fragment
+		toolbar.setNavigationOnClickListener(v -> drawer.openDrawer(GravityCompat.START));
+		drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+	}
 }
