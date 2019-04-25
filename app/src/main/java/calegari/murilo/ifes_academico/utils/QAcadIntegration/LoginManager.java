@@ -13,9 +13,9 @@ import calegari.murilo.ifes_academico.utils.Constants;
 public class LoginManager {
 
     public static void logout(Context context) {
-        SharedPreferences.Editor sharedPreferences = context.getSharedPreferences(Constants.SharedPreferencesKeys.USER_INFO_PREFERENCES, Context.MODE_PRIVATE).edit();
-        sharedPreferences.remove(Constants.SharedPreferencesKeys.USERNAME_PREFERENCE);
-        sharedPreferences.remove(Constants.SharedPreferencesKeys.PASSWORD_PREFERENCE);
+        SharedPreferences.Editor sharedPreferences = context.getSharedPreferences(Constants.Keys.USER_INFO_PREFERENCES, Context.MODE_PRIVATE).edit();
+        sharedPreferences.remove(Constants.Keys.USERNAME_PREFERENCE);
+        sharedPreferences.remove(Constants.Keys.PASSWORD_PREFERENCE);
         sharedPreferences.apply();
 
         DatabaseHelper databaseHelper = new DatabaseHelper(context);

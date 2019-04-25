@@ -30,6 +30,7 @@ import calegari.murilo.ifes_academico.grades.GradesFragment;
 import calegari.murilo.ifes_academico.home.HomeFragment;
 import calegari.murilo.ifes_academico.settings.SettingsActivity;
 import calegari.murilo.ifes_academico.subjects.SubjectsFragment;
+import calegari.murilo.ifes_academico.utils.Constants;
 import calegari.murilo.ifes_academico.utils.QAcadIntegration.LoginManager;
 import calegari.murilo.ifes_academico.utils.QAcadIntegration.QAcadFetchDataTask;
 
@@ -95,13 +96,17 @@ public class MainActivity extends AppCompatActivity
 	    updateUsername();
 
 	    pullToRefresh = findViewById(R.id.swiperefresh);
-	    pullToRefresh.setOnRefreshListener(this::syncDataFromQAcad);
-	    syncDataFromQAcad();
-
         setupListeners();
 
         startFragment(HomeFragment.class, false);
-    }
+
+        Intent intent = getIntent();
+
+        if(intent.getBooleanExtra(Constants.Keys.SHOULD_SYNC_GRADES, false)) {
+			syncDataFromQAcad();
+			intent.removeExtra(Constants.Keys.SHOULD_SYNC_GRADES);
+		}
+	}
 
 	private void syncDataFromQAcad() {
 		if(!pullToRefresh.isRefreshing()) {
@@ -143,7 +148,9 @@ public class MainActivity extends AppCompatActivity
 
 	    changeUsernameButton.setOnClickListener(view -> setUsernameDialog());
 	    usernameTextView.setOnClickListener(view -> setUsernameDialog());
-    }
+
+		pullToRefresh.setOnRefreshListener(this::syncDataFromQAcad);
+	}
 
     private void setUsernameDialog() {
 	    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);

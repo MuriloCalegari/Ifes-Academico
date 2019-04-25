@@ -13,8 +13,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SharedPreferencesKeys.USER_INFO_PREFERENCES, MODE_PRIVATE);
-        boolean isLoginNull = !sharedPreferences.contains(Constants.SharedPreferencesKeys.USERNAME_PREFERENCE) && !sharedPreferences.contains(Constants.SharedPreferencesKeys.PASSWORD_PREFERENCE);
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.Keys.USER_INFO_PREFERENCES, MODE_PRIVATE);
+        boolean isLoginNull = !sharedPreferences.contains(Constants.Keys.USERNAME_PREFERENCE) && !sharedPreferences.contains(Constants.Keys.PASSWORD_PREFERENCE);
 
         Intent intent;
 
@@ -22,6 +22,7 @@ public class SplashActivity extends AppCompatActivity {
             intent = new Intent(this, LoginActivity.class);
         } else {
             intent = new Intent(this, MainActivity.class);
+            intent.putExtra(Constants.Keys.SHOULD_SYNC_GRADES, true);
         }
 
         startActivity(intent);

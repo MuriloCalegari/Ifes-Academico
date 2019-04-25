@@ -13,7 +13,6 @@ import android.os.Bundle;
 import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.os.Handler;
 import android.view.View;
@@ -110,16 +109,17 @@ public class LoginActivity extends AppCompatActivity {
                             loginButtonText.setText(getString(R.string.success)); // Tells user that their login is valid
                             loginButtonText.setVisibility(View.VISIBLE);
 
-                            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SharedPreferencesKeys.USER_INFO_PREFERENCES, MODE_PRIVATE);
+                            SharedPreferences sharedPreferences = getSharedPreferences(Constants.Keys.USER_INFO_PREFERENCES, MODE_PRIVATE);
                             sharedPreferences.edit()
-                                    .putString(Constants.SharedPreferencesKeys.USERNAME_PREFERENCE, username)
-                                    .putString(Constants.SharedPreferencesKeys.PASSWORD_PREFERENCE, password)
+                                    .putString(Constants.Keys.USERNAME_PREFERENCE, username)
+                                    .putString(Constants.Keys.PASSWORD_PREFERENCE, password)
                                     .commit();
 
                             // If login is successful, send cookieMap to be used in MainActivity
                             MainActivity.qAcadCookieMap = cookieMap;
 
                             Intent intent = new Intent(context, MainActivity.class);
+                            intent.putExtra(Constants.Keys.SHOULD_SYNC_GRADES, true);
                             startActivity(intent);
                             finish();
                             return null;

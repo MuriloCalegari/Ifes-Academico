@@ -2,14 +2,11 @@ package calegari.murilo.ifes_academico.utils;
 
 public class Constants {
 
-	public class BundleKeys {
-		public static final String SHOULD_SYNC_GRADES = "shouldsyncgrades";
-	}
-
-	public class SharedPreferencesKeys {
+	public class Keys {
 		public static final String USER_INFO_PREFERENCES = "userinfopreferences";
 		public static final String USERNAME_PREFERENCE = "usernamepreference";
 		public static final String PASSWORD_PREFERENCE = "passwordpreference";
+		public static final String SHOULD_SYNC_GRADES = "shouldsyncgrades";
 	}
 
 	public class QAcad {

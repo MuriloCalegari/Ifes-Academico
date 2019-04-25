@@ -48,10 +48,10 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Void>{
 	protected Void doInBackground(Integer... integers) {
 		Log.d(TAG, "Called QAcadFetchDataTask doInBackground");
 
-		SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SharedPreferencesKeys.USER_INFO_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.Keys.USER_INFO_PREFERENCES, Context.MODE_PRIVATE);
 
-		String username = sharedPreferences.getString(Constants.SharedPreferencesKeys.USERNAME_PREFERENCE, "");
-		String password = sharedPreferences.getString(Constants.SharedPreferencesKeys.PASSWORD_PREFERENCE, "");
+		String username = sharedPreferences.getString(Constants.Keys.USERNAME_PREFERENCE, "");
+		String password = sharedPreferences.getString(Constants.Keys.PASSWORD_PREFERENCE, "");
 
 		User user = new User(username, password);
 		DatabaseHelper databaseHelper = new DatabaseHelper(context);
