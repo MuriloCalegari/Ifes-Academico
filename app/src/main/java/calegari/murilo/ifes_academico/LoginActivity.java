@@ -27,8 +27,6 @@ import calegari.murilo.qacadscrapper.utils.User;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private final String TAG = getClass().getSimpleName();
-    private CoordinatorLayout coordinatorLayout;
     private CircularProgressImageButton loginButton;
     private TextView loginButtonText;
     private final Context context = this;
@@ -37,8 +35,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        coordinatorLayout = findViewById(R.id.rootCoordinatorLayout);
 
         TextInputEditText usernameText = findViewById(R.id.usernameEditText);
         TextInputEditText passwordText = findViewById(R.id.passwordEditText);
@@ -75,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 // TODO Wait for an update of LoadingButtonAndroid library that will fix calling doneLoadingAnimation more than once with different bitmaps
 
-                if(result == Constants.RESULT_LOGIN_INVALID) {
+                if(result == Constants.QAcad.RESULT_LOGIN_INVALID) {
 
                     Bitmap errorIcon = drawableToBitmap(getDrawable(R.drawable.ic_error_white_24dp));
                     loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_error));
@@ -89,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                         });
                     }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
 
-                } else if (result == Constants.RESULT_CONNECTION_FAILURE) {
+                } else if (result == Constants.QAcad.RESULT_CONNECTION_FAILURE) {
 
                     Bitmap errorIcon = drawableToBitmap(getDrawable(R.drawable.ic_error_white_24dp));
                     loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_error));
@@ -104,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                         });
                     }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
 
-                } else if (result == Constants.RESULT_SUCCESS) {
+                } else if (result == Constants.QAcad.RESULT_SUCCESS) {
 
                     Bitmap checkIcon = drawableToBitmap(getDrawable(R.drawable.ic_check_white_24dp));
                     loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_idle));
@@ -114,10 +110,10 @@ public class LoginActivity extends AppCompatActivity {
                             loginButtonText.setText(getString(R.string.success)); // Tells user that their login is valid
                             loginButtonText.setVisibility(View.VISIBLE);
 
-                            SharedPreferences sharedPreferences = getSharedPreferences(Constants.USER_INFO_PREFERENCES, MODE_PRIVATE);
+                            SharedPreferences sharedPreferences = getSharedPreferences(Constants.SharedPreferencesKeys.USER_INFO_PREFERENCES, MODE_PRIVATE);
                             sharedPreferences.edit()
-                                    .putString(Constants.USERNAME_PREFERENCE, username)
-                                    .putString(Constants.PASSWORD_PREFERENCE, password)
+                                    .putString(Constants.SharedPreferencesKeys.USERNAME_PREFERENCE, username)
+                                    .putString(Constants.SharedPreferencesKeys.PASSWORD_PREFERENCE, password)
                                     .commit();
 
                             // If login is successful, send cookieMap to be used in MainActivity
@@ -130,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                         });
                     }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
 
-                } else if (result == Constants.RESULT_UNKNOWN_ERROR) {
+                } else if (result == Constants.QAcad.RESULT_UNKNOWN_ERROR) {
 
                     Bitmap errorIcon = drawableToBitmap(getDrawable(R.drawable.ic_error_white_24dp));
                     loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_error));

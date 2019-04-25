@@ -41,17 +41,17 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Void>{
 
 	public QAcadFetchDataTask(Context context) {
 		this.context = context;
-		qAcadScrapper = new QAcadScrapper(Constants.ACADEMIC_URL);
+		qAcadScrapper = new QAcadScrapper(Constants.QAcad.ACADEMIC_URL);
 	}
 
 	@Override
 	protected Void doInBackground(Integer... integers) {
 		Log.d(TAG, "Called QAcadFetchDataTask doInBackground");
 
-		SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.USER_INFO_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SharedPreferencesKeys.USER_INFO_PREFERENCES, Context.MODE_PRIVATE);
 
-		String username = sharedPreferences.getString(Constants.USERNAME_PREFERENCE, "");
-		String password = sharedPreferences.getString(Constants.PASSWORD_PREFERENCE, "");
+		String username = sharedPreferences.getString(Constants.SharedPreferencesKeys.USERNAME_PREFERENCE, "");
+		String password = sharedPreferences.getString(Constants.SharedPreferencesKeys.PASSWORD_PREFERENCE, "");
 
 		User user = new User(username, password);
 		DatabaseHelper databaseHelper = new DatabaseHelper(context);
@@ -96,17 +96,17 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Void>{
 				}
 			}
 
-			result = Constants.RESULT_SUCCESS;
+			result = Constants.QAcad.RESULT_SUCCESS;
 		} catch (LoginException e) {
 			LoginManager.logout(context); // Logout if calling loginToQACad() failed
-			result = Constants.RESULT_LOGIN_INVALID;
+			result = Constants.QAcad.RESULT_LOGIN_INVALID;
 		} catch (ConnectException e) {
-			result = Constants.RESULT_CONNECTION_FAILURE;
+			result = Constants.QAcad.RESULT_CONNECTION_FAILURE;
 			View rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
 			Snackbar snackbar = Snackbar.make(rootView, context.getString(R.string.connection_failure) ,Snackbar.LENGTH_LONG);
 			snackbar.show();
 		} catch (Exception e) {
-			result = Constants.RESULT_UNKNOWN_ERROR;
+			result = Constants.QAcad.RESULT_UNKNOWN_ERROR;
 			View rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
 			Snackbar snackbar = Snackbar.make(rootView, context.getString(R.string.unknown_error) ,Snackbar.LENGTH_LONG);
 			snackbar.show();

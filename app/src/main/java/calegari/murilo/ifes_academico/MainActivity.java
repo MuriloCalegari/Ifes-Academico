@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity
 		}
 
 		@SuppressLint("StaticFieldLeak")
-		QAcadFetchDataTask qAcadFetchDataTask = new QAcadFetchDataTask(this, MainActivity.qAcadCookieMap) {
+		QAcadFetchDataTask qAcadFetchDataTask = new QAcadFetchDataTask(this, qAcadCookieMap) {
 			@Override
 			protected void onPostExecute(Void aVoid) {
 				super.onPostExecute(aVoid);

@@ -28,17 +28,17 @@ public class QAcadCheckLoginTask extends AsyncTask<Integer, Integer, Integer> {
     protected Integer doInBackground(Integer... integers) {
         Log.d(TAG, "Called QACadChechLoginTask");
 
-        QAcadScrapper qAcadScrapper = new QAcadScrapper(Constants.ACADEMIC_URL);
+        QAcadScrapper qAcadScrapper = new QAcadScrapper(Constants.QAcad.ACADEMIC_URL);
 
         try {
             cookieMap = qAcadScrapper.loginToQAcad(user);
-            result = Constants.RESULT_SUCCESS;
+            result = Constants.QAcad.RESULT_SUCCESS;
         } catch (LoginException e) {
-            result = Constants.RESULT_LOGIN_INVALID;
+            result = Constants.QAcad.RESULT_LOGIN_INVALID;
         } catch (ConnectException e) {
-            result =  Constants.RESULT_CONNECTION_FAILURE;
+            result =  Constants.QAcad.RESULT_CONNECTION_FAILURE;
         } catch (Exception e) {
-            result = Constants.RESULT_UNKNOWN_ERROR;
+            result = Constants.QAcad.RESULT_UNKNOWN_ERROR;
         }
 
         return result;
