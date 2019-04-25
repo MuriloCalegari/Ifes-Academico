@@ -27,6 +27,7 @@ import calegari.murilo.ifes_academico.grades.GradesFragment;
 import calegari.murilo.ifes_academico.home.HomeFragment;
 import calegari.murilo.ifes_academico.settings.SettingsActivity;
 import calegari.murilo.ifes_academico.subjects.SubjectsFragment;
+import calegari.murilo.ifes_academico.utils.Constants.BundleKeys;
 import calegari.murilo.ifes_academico.utils.QAcadIntegration.LoginManager;
 
 import android.util.Log;
@@ -92,7 +93,9 @@ public class MainActivity extends AppCompatActivity
 
         setupListeners();
 
-        startFragment(HomeFragment.class, false);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(BundleKeys.SHOULD_SYNC_GRADES, true);
+        startFragment(HomeFragment.class, false, bundle);
     }
 
 	@Override
@@ -229,26 +232,34 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    public static void startFragment(Class fragmentClass, boolean useAnimations, Bundle bundle) {
+
+		Fragment fragment = null;
+		try {
+			fragment = (Fragment) fragmentClass.newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// Insert the fragment by replacing any existing fragment
+		if (fragment != null) {
+
+			if(bundle != null) {
+				fragment.setArguments(bundle);
+			}
+
+			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+			if(useAnimations) {
+				fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+			}
+
+			fragmentTransaction.replace(R.id.flContent, fragment).commit();
+		}
+	}
+
     public static void startFragment(Class fragmentClass, boolean useAnimations) {
-
-        Fragment fragment = null;
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Insert the fragment by replacing any existing fragment
-        if (fragment != null) {
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            if(useAnimations) {
-                fragmentTransaction.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-            }
-
-            fragmentTransaction.replace(R.id.flContent, fragment).commit();
-        }
-
+		startFragment(fragmentClass, useAnimations, null);
     }
 
 	public static void setDrawerIdleMode() {

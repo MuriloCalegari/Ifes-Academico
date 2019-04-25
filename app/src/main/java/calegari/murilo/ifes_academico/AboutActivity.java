@@ -33,7 +33,7 @@ public class AboutActivity extends AppCompatActivity {
                 .addItem(new Element().setTitle(getString(R.string.code_version) + " " + BuildConfig.VERSION_NAME))
                 .addPlayStore(getApplicationContext().getPackageName())
                 .addEmail("murilo.calegari.souza@gmail.com")
-                .addGitHub("MuriloCalegari/Agenda-Escolar")
+                .addGitHub("MuriloCalegari/Ifes-Academico")
                 .addItem(openSourceElement)
                 .create();
 
@@ -85,6 +85,12 @@ public class AboutActivity extends AppCompatActivity {
 				.setWebsite("https://github.com/tobiasschuerg/android-week-view"))
 				.build();
 
+		Attribution LOADING_BUTTON_ANDROID = (new Attribution.Builder("Progress Button Android")
+				.addCopyrightNotice("Copyright 2019 Leandro Borges Ferreira")
+				.addLicense(License.MIT)
+				.setWebsite("https://github.com/leandroBorgesFerreira/LoadingButtonAndroid"))
+				.build();
+
         AttributionPresenter attributionPresenter = new AttributionPresenter.Builder(this)
 		        .addAttributions(new Attribution.Builder("AttributionPresenter")
 				        .addCopyrightNotice("Copyright 2017 Francisco José Montiel Navarro")
@@ -98,7 +104,8 @@ public class AboutActivity extends AppCompatActivity {
 		                INBOX_RECYCLER_VIEW,
 		                SLIM_CHART,
 		                MPANDROIDCHART,
-		                ANDROID_WEEK_VIEW)
+		                ANDROID_WEEK_VIEW,
+						LOADING_BUTTON_ANDROID)
                 .build();
 
         attributionPresenter.showDialog(getString(R.string.open_source_libraries));

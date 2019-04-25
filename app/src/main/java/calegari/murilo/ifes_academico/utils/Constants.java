@@ -10,4 +10,8 @@ public class Constants {
     public static final int RESULT_CONNECTION_FAILURE = 1;
     public static final int RESULT_UNKNOWN_ERROR = 2;
     public static final int RESULT_SUCCESS = 3;
+
+	public class BundleKeys {
+		public static final String SHOULD_SYNC_GRADES = "shouldsyncgrades";
+	}
 }

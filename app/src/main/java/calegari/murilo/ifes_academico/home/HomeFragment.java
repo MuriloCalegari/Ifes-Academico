@@ -41,6 +41,7 @@ import calegari.murilo.ifes_academico.MainActivity;
 import calegari.murilo.ifes_academico.R;
 import calegari.murilo.ifes_academico.databases.DatabaseHelper;
 import calegari.murilo.ifes_academico.grades.GradesFragment;
+import calegari.murilo.ifes_academico.utils.Constants.BundleKeys;
 import calegari.murilo.ifes_academico.utils.QAcadIntegration.QAcadFetchDataTask;
 import calegari.murilo.qacadscrapper.utils.Subject;
 import calegari.murilo.ifes_academico.utils.Tools;
@@ -48,6 +49,7 @@ import calegari.murilo.ifes_academico.utils.Tools;
 public class HomeFragment extends Fragment {
 
 	private BarData data;
+	private SwipeRefreshLayout pullToRefresh;
 
 	@Nullable
 	@Override
@@ -71,22 +73,33 @@ public class HomeFragment extends Fragment {
 
 		gradesChartCardView.setOnClickListener(v -> MainActivity.startFragment(GradesFragment.class, true));
 
-		SwipeRefreshLayout pullToRefresh = view.findViewById(R.id.swiperefresh);
+		pullToRefresh = view.findViewById(R.id.swiperefresh);
 
-		pullToRefresh.setOnRefreshListener(() -> {
-			@SuppressLint("StaticFieldLeak")
-            QAcadFetchDataTask qAcadFetchDataTask = new QAcadFetchDataTask(getContext(), MainActivity.qAcadCookieMap) {
-				@Override
-				protected void onPostExecute(Void aVoid) {
-					super.onPostExecute(aVoid);
-					pullToRefresh.setRefreshing(false);
-					MainActivity.startFragment(HomeFragment.class, false);
-					MainActivity.qAcadCookieMap = getCookieMap(); // update cookies to the last one generated
-				}
-			};
+		pullToRefresh.setOnRefreshListener(this::syncDataFromQAcad);
 
-			qAcadFetchDataTask.execute();
-		});
+		Bundle bundle = this.getArguments();
+		if(bundle != null) {
+			if(bundle.getBoolean(BundleKeys.SHOULD_SYNC_GRADES)) {
+				pullToRefresh.setRefreshing(true);
+				syncDataFromQAcad();
+			}
+		}
+
+	}
+
+	private void syncDataFromQAcad() {
+		@SuppressLint("StaticFieldLeak")
+		QAcadFetchDataTask qAcadFetchDataTask = new QAcadFetchDataTask(getContext(), MainActivity.qAcadCookieMap) {
+			@Override
+			protected void onPostExecute(Void aVoid) {
+				super.onPostExecute(aVoid);
+				pullToRefresh.setRefreshing(false);
+				MainActivity.startFragment(HomeFragment.class, false);
+				MainActivity.qAcadCookieMap = getCookieMap(); // update cookies to the last one generated
+			}
+		};
+
+		qAcadFetchDataTask.execute();
 	}
 
 	@Override
