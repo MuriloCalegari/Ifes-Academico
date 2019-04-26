@@ -320,6 +320,7 @@ public class MainActivity extends AppCompatActivity
 
 						fragmentManager
 								.beginTransaction()
+								.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
 								.replace(R.id.frameLayoutContent, fragment)
 								.commit();
 					}
