@@ -37,11 +37,11 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 
 	private View view;
 
-	public GradesLineAdapter(ArrayList subjects) {
+	public GradesLineAdapter(List<Subject> subjects) {
 		this.subjects = subjects;
 	}
 
-	public GradesLineAdapter(ArrayList subjects, Context context, View view) {
+	public GradesLineAdapter(List<Subject> subjects, Context context, View view) {
 		this.subjects = subjects;
 		this.context = context;
 		this.view = view;
@@ -133,5 +133,9 @@ public class GradesLineAdapter extends RecyclerView.Adapter<GradesBaseLineHolder
 	@Override
 	public long getItemId(int position) {
 		return position;
+	}
+
+	public Subject getItem(int position) {
+		return subjects.get(position);
 	}
 }

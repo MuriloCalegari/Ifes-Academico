@@ -14,6 +14,7 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import calegari.murilo.ifes_academico.calendar.ClassTime;
 import calegari.murilo.ifes_academico.subjectgrades.SubjectGrade;
+import calegari.murilo.qacadscrapper.utils.Grade;
 import calegari.murilo.qacadscrapper.utils.Subject;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -255,7 +256,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// Related to subjects table
 
 	public int insertSubject(Subject subject) {
-		Log.d(TAG, "Inserting subject " + subject.getName());
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues contentValues = new ContentValues();
@@ -569,7 +569,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public void insertGrade(SubjectGrade subjectGrade) {
-		Log.d(TAG, "Inserting grade: " + subjectGrade.getGradeDescription() + " with subject id: " + subjectGrade.getSubjectId());
 
 		addToTotalGrade(subjectGrade);
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -641,4 +640,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return intBoolean == 1;
 	}
 
+	// Exclusive to Ifes-Academico
+
+	public void insertQAcadSubjectList(List<Subject> subjectList) {
+		Log.d(TAG, "insertQAcadSubjectList: inserting subjectList with " + subjectList.size() + " items");
+
+		for(Subject subject : subjectList) {
+
+			int subjectId = insertSubject(
+					new Subject(
+							subject.getName(),
+							subject.getProfessor(),
+							subject.getName().substring(0, 3)
+					)
+			);
+
+			for(Grade grade : subject.getGradeList()) {
+				insertGrade(
+						new SubjectGrade(
+								subjectId,
+								grade.getGradeDescription(),
+								grade.getObtainedGrade() * grade.getWeight(),
+								grade.getMaximumGrade() * grade.getWeight(),
+								false,
+								grade.isObtainedGradeNull()
+						)
+				);
+			}
+		}
+	}
 }

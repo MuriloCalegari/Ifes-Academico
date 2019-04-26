@@ -84,8 +84,6 @@ public class GradesFragment extends BaseFragment {
 				super.onPageAboutToCollapse(collapseAnimDuration);
 				MainActivity.anim.reverse();
 				activity.getSupportActionBar().setTitle(getString(R.string.grades));
-
-				MainActivity.setDrawerIdleMode();
 			}
 
 			@Override
@@ -93,7 +91,9 @@ public class GradesFragment extends BaseFragment {
 				super.onPageAboutToExpand(expandAnimDuration);
 				MainActivity.anim.start();
 
-				((MainActivity) activity).pullToRefresh.setEnabled(false);
+				if(!MainActivity.pullToRefresh.isRefreshing()) {
+					MainActivity.pullToRefresh.setEnabled(false);
+				}
 			}
 
 			@Override
@@ -101,7 +101,8 @@ public class GradesFragment extends BaseFragment {
 				super.onPageCollapsed();
 				activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-				((MainActivity) activity).pullToRefresh.setEnabled(true);
+				MainActivity.pullToRefresh.setEnabled(true);
+				MainActivity.setDrawerIdleMode();
 			}
 
 			@Override

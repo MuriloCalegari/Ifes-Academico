@@ -17,14 +17,12 @@ import javax.security.auth.login.LoginException;
 
 import calegari.murilo.ifes_academico.R;
 import calegari.murilo.ifes_academico.databases.DatabaseHelper;
-import calegari.murilo.ifes_academico.subjectgrades.SubjectGrade;
 import calegari.murilo.ifes_academico.utils.Constants;
 import calegari.murilo.qacadscrapper.QAcadScrapper;
-import calegari.murilo.qacadscrapper.utils.Grade;
 import calegari.murilo.qacadscrapper.utils.Subject;
 import calegari.murilo.qacadscrapper.utils.User;
 
-public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Void>{
+public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Integer>{
 
 	private final String TAG = "QAcadFetchDataTask";
 	private Context context;
@@ -45,7 +43,7 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Void>{
 	}
 
 	@Override
-	protected Void doInBackground(Integer... integers) {
+	protected Integer doInBackground(Integer... integers) {
 		Log.d(TAG, "Called QAcadFetchDataTask doInBackground");
 
 		SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.Keys.USER_INFO_PREFERENCES, Context.MODE_PRIVATE);
@@ -70,33 +68,15 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Void>{
 			List<Subject> subjectList = qAcadScrapper.getAllSubjectsAndGrades();
 			Log.d(TAG, "All subjects and grades from QAcad were obtained!");
 
-			databaseHelper.recreateDatabases();
+			if(!isCancelled()) {
+				databaseHelper.recreateDatabases();
 
-			for (Subject subject : subjectList) {
+				databaseHelper.insertQAcadSubjectList(subjectList);
 
-				int subjectId = databaseHelper.insertSubject(
-						new Subject(
-								subject.getName(),
-								subject.getProfessor(),
-								subject.getName().substring(0, 3)
-						)
-				);
-
-				for (Grade grade : subject.getGradeList()) {
-					databaseHelper.insertGrade(
-							new SubjectGrade(
-									subjectId,
-									grade.getGradeDescription(),
-									grade.getObtainedGrade()*grade.getWeight(),
-									grade.getMaximumGrade()*grade.getWeight(),
-									false,
-									grade.isObtainedGradeNull()
-							)
-					);
-				}
+				result = Constants.QAcad.RESULT_SUCCESS;
+			} else {
+				result = Constants.QAcad.RESULT_CANCELLED;
 			}
-
-			result = Constants.QAcad.RESULT_SUCCESS;
 		} catch (LoginException e) {
 			LoginManager.logout(context); // Logout if calling loginToQACad() failed
 			result = Constants.QAcad.RESULT_LOGIN_INVALID;
@@ -113,7 +93,7 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Void>{
 		} finally {
 			databaseHelper.close();
 		}
-		return null;
+		return result;
 	}
 
 	public Map<String, String> getCookieMap() {
