@@ -17,6 +17,7 @@ import calegari.murilo.ifes_academico.subjectgrades.SubjectGrade;
 import calegari.murilo.qacadscrapper.utils.Grade;
 import calegari.murilo.qacadscrapper.utils.Subject;
 
+@SuppressWarnings("WeakerAccess")
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public static class GlobalEntry implements BaseColumns {
@@ -93,7 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + GradesEntry.TABLE_NAME;
 	}
 
-	String TAG = getClass().getSimpleName();
+	final String TAG = getClass().getSimpleName();
 
 	public DatabaseHelper(@Nullable Context context) {
 		super(context, GlobalEntry.DATABASE_NAME, null, GlobalEntry.DATABASE_VERSION);
