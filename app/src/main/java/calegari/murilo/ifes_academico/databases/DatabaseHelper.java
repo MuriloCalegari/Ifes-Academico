@@ -111,8 +111,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	}
 
-	public void recreateDatabases() {
-		Log.d(TAG, "Recreating database");
+	public void recreateDatabase() {
+		Log.d(TAG, "Recreating databases");
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		db.execSQL(GradesEntry.SQL_DELETE_ENTRIES);
@@ -122,6 +122,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(SubjectsEntry.SQL_CREATE_ENTRIES);
 		db.execSQL(ScheduleEntry.SQL_CREATE_ENTRIES);
 		db.execSQL(GradesEntry.SQL_CREATE_ENTRIES);
+
+		db.close();
+	}
+
+	public void recreateSubjectsAndGradesTables() {
+		Log.d(TAG, "Recreating subject and grades tables");
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		db.execSQL(GradesEntry.SQL_DELETE_ENTRIES);
+		db.execSQL(SubjectsEntry.SQL_DELETE_ENTRIES);
+
+		db.execSQL(SubjectsEntry.SQL_CREATE_ENTRIES);
+		db.execSQL(GradesEntry.SQL_CREATE_ENTRIES);
+
+		db.close();
 	}
 
 	// Related to classTime table

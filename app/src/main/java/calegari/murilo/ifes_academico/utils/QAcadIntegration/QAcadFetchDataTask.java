@@ -69,7 +69,7 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Integer>{
 			Log.d(TAG, "All subjects and grades from QAcad were obtained!");
 
 			if(!isCancelled()) {
-				databaseHelper.recreateDatabases();
+				databaseHelper.recreateSubjectsAndGradesTables();
 
 				databaseHelper.insertQAcadSubjectList(subjectList);
 

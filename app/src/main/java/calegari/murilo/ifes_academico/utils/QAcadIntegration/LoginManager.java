@@ -36,7 +36,7 @@ public class LoginManager {
         sharedPreferences.apply();
 
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
-        databaseHelper.recreateDatabases(); // Clear databases
+        databaseHelper.recreateDatabase(); // Clear databases
         databaseHelper.close();
 
         MainActivity.qAcadCookieMap = null; // Clear cookies

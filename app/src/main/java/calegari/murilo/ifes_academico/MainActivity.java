@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity
 				*/
 
 				DatabaseHelper databaseHelper = new DatabaseHelper(context);
-				databaseHelper.recreateDatabases();
+				databaseHelper.recreateDatabase();
 				databaseHelper.close();
 			}
 		};
