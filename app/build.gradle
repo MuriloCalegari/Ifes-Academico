@@ -67,7 +67,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
     implementation 'com.github.franmontiel:AttributionPresenter:1.0.1'
     implementation project(path: ':lib:AndroidWeekView')
-    implementation 'br.com.simplepass:loading-button-android:2.1.0'
+    implementation 'br.com.simplepass:loading-button-android:2.1.1'
 
     implementation files('src/libs/QAcadScrapper.jar')
     implementation 'io.apisense:rhino-android:1.0'

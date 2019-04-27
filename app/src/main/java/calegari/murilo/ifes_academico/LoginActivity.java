@@ -68,8 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                 super.onPostExecute(result);
                 loginButton.setClickable(false);
 
-                // TODO Wait for an update of LoadingButtonAndroid library that will fix calling doneLoadingAnimation more than once with different bitmaps
-
                 if(result == Constants.QAcad.RESULT_LOGIN_INVALID) {
 
                     Bitmap errorIcon = drawableToBitmap(getDrawable(R.drawable.ic_error_white_24dp));
