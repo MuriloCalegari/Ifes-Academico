@@ -168,7 +168,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public List<ClassTime> getSchedule() {
-		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor cursor = db.query(ScheduleEntry.TABLE_NAME,
 				new String[] {ScheduleEntry.COLUMN_CLASS_SUBJECT_ID, ScheduleEntry.COLUMN_CLASS_TIME_ID, ScheduleEntry.COLUMN_CLASS_DAY, ScheduleEntry.COLUMN_CLASS_START_TIME, ScheduleEntry.COLUMN_CLASS_END_TIME},
@@ -201,7 +201,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public ClassTime getClassTime(int timeId) {
-		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor cursor = db.query(
 				ScheduleEntry.TABLE_NAME,
@@ -402,7 +402,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public List<Subject> getAllSubjects() {
-		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getReadableDatabase();
 		List<Subject> subjectList = new ArrayList<>();
 
 		Cursor subjectsCursor = db.query(
@@ -440,7 +440,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public List<Subject> getAllSubjectsInAverageGradeOrder(){
-		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getReadableDatabase();
 		List<Subject> subjectList = new ArrayList<>();
 
 		// I'll have to do this in a raw query since the db.query using orderBy wasn't working
@@ -487,7 +487,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public Subject getSubject(int subjectId) {
-		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor subjectsCursor = db.query(
 				SubjectsEntry.TABLE_NAME, // Table name
@@ -522,7 +522,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// Related to subject grades
 
 	public SubjectGrade getGrade(int gradeId) {
-		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor cursor = db.query(
 				GradesEntry.TABLE_NAME,
