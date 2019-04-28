@@ -16,9 +16,9 @@ public class LoginManager {
     private static String TAG = "LoginManager";
 
     public static boolean isLogged(Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.Keys.USER_INFO_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.Keys.QACAD_USER_INFO_PREFERENCES, Context.MODE_PRIVATE);
 
-        return !sharedPreferences.contains(Constants.Keys.USERNAME_PREFERENCE) && !sharedPreferences.contains(Constants.Keys.PASSWORD_PREFERENCE);
+        return !sharedPreferences.contains(Constants.Keys.QACAD_USERNAME_PREFERENCE) && !sharedPreferences.contains(Constants.Keys.QACAD_PASSWORD_PREFERENCE);
     }
 
     public static void logout(Context context) {
@@ -30,9 +30,10 @@ public class LoginManager {
             }
         }
 
-        SharedPreferences.Editor sharedPreferences = context.getSharedPreferences(Constants.Keys.USER_INFO_PREFERENCES, Context.MODE_PRIVATE).edit();
-        sharedPreferences.remove(Constants.Keys.USERNAME_PREFERENCE);
-        sharedPreferences.remove(Constants.Keys.PASSWORD_PREFERENCE);
+        SharedPreferences.Editor sharedPreferences = context.getSharedPreferences(Constants.Keys.QACAD_USER_INFO_PREFERENCES, Context.MODE_PRIVATE).edit();
+        sharedPreferences.remove(Constants.Keys.QACAD_USERNAME_PREFERENCE);
+        sharedPreferences.remove(Constants.Keys.QACAD_PASSWORD_PREFERENCE);
+        sharedPreferences.remove(Constants.Keys.APP_USERNAME_PREFERENCE);
         sharedPreferences.apply();
 
         DatabaseHelper databaseHelper = new DatabaseHelper(context);

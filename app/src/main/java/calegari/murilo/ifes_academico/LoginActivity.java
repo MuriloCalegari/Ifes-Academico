@@ -107,10 +107,10 @@ public class LoginActivity extends AppCompatActivity {
                             loginButtonText.setText(getString(R.string.success)); // Tells user that their login is valid
                             loginButtonText.setVisibility(View.VISIBLE);
 
-                            SharedPreferences sharedPreferences = getSharedPreferences(Constants.Keys.USER_INFO_PREFERENCES, MODE_PRIVATE);
+                            SharedPreferences sharedPreferences = getSharedPreferences(Constants.Keys.QACAD_USER_INFO_PREFERENCES, MODE_PRIVATE);
                             sharedPreferences.edit()
-                                    .putString(Constants.Keys.USERNAME_PREFERENCE, username)
-                                    .putString(Constants.Keys.PASSWORD_PREFERENCE, password)
+                                    .putString(Constants.Keys.QACAD_USERNAME_PREFERENCE, username)
+                                    .putString(Constants.Keys.QACAD_PASSWORD_PREFERENCE, password)
                                     .commit();
 
                             // If login is successful, send cookieMap to be used in MainActivity

@@ -3,11 +3,12 @@ package calegari.murilo.ifes_academico.utils;
 public class Constants {
 
 	public class Keys {
-		public static final String USER_INFO_PREFERENCES = "userinfopreferences";
-		public static final String USERNAME_PREFERENCE = "usernamepreference";
-		public static final String PASSWORD_PREFERENCE = "passwordpreference";
+		public static final String QACAD_USER_INFO_PREFERENCES = "userinfopreferences";
+		public static final String QACAD_USERNAME_PREFERENCE = "usernamepreference";
+		public static final String QACAD_PASSWORD_PREFERENCE = "passwordpreference";
 		public static final String SHOULD_SYNC_GRADES = "shouldsyncgrades";
 		public static final String SUBJECT_ID = "subjectId";
+		public static final String APP_USERNAME_PREFERENCE = "username";
 	}
 
 	public class QAcad {

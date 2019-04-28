@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity
 
 	private void updateUsername() {
 		SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-		String username = sharedPreferences.getString("username", getString(R.string.student));
+		String username = sharedPreferences.getString(Constants.Keys.APP_USERNAME_PREFERENCE, getString(R.string.student));
 
 		usernameTextView.setText(username);
 	}

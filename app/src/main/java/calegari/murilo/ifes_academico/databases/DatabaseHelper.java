@@ -26,7 +26,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public static class SubjectsEntry implements BaseColumns {
+
 		public static final String TABLE_NAME = "subjects";
+		public static final String TRANSITIONAL_TABLE_NAME = TABLE_NAME + "_transitional";
+
 		public static final String COLUMN_SUBJECT_NAME = "name";
 		public static final String COLUMN_SUBJECT_ABBREVIATION = "abbreviation";
 		public static final String COLUMN_SUBJECT_PROFESSOR = "professor";
@@ -43,12 +46,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				COLUMN_SUBJECT_OBTAINED_GRADE + " REAL," +
 				COLUMN_SUBJECT_MAXIMUM_GRADE + " REAL)";
 
+		protected static final String SQL_CREATE_TRANSITIONAL_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
+				TRANSITIONAL_TABLE_NAME + " (" + COLUMN_SUBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+				COLUMN_SUBJECT_NAME + " TEXT," +
+				COLUMN_SUBJECT_ABBREVIATION + " TEXT," +
+				COLUMN_SUBJECT_PROFESSOR + " TEXT," +
+				COLUMN_SUBJECT_OBTAINED_GRADE + " REAL," +
+				COLUMN_SUBJECT_MAXIMUM_GRADE + " REAL)";
+
 		protected static final String SQL_DELETE_ENTRIES =
 				"DROP TABLE IF EXISTS " + TABLE_NAME;
 	}
 
 	public static class ScheduleEntry implements BaseColumns {
+
 		public static final String TABLE_NAME = "schedule";
+
 		public static final String COLUMN_CLASS_TIME_ID = "classtimeid";
 		public static final String COLUMN_CLASS_SUBJECT_ID = "subjectid";
 		public static final String COLUMN_CLASS_DAY = "classday";
@@ -67,13 +80,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public static class GradesEntry implements BaseColumns {
-		/*
-        I know I should have put all tables inside a single database, but by the time I realized
-        this I had already written too many code that relies on this class and now it's just not
-        worth it. Please good practice people, do not kill me.
-         */
 
 		public static final String TABLE_NAME = "grades";
+		public static final String TRANSITIONAL_TABLE_NAME = TABLE_NAME + "_transitional";
+
 		public static final String COLUMN_GRADE_ID = "gradeid";
 		public static final String COLUMN_GRADE_DESCRIPTION = "gradedescription";
 		public static final String COLUMN_GRADE_OBTAINED = "obtainedgrade";
@@ -82,14 +92,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		public static final String COLUMN_GRADE_SUBJECT_ID = "subjectid";
 
 		private static final String SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
-				GradesEntry.TABLE_NAME + "( " +
-				GradesEntry.COLUMN_GRADE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-				GradesEntry.COLUMN_GRADE_DESCRIPTION + " TEXT," +
-				GradesEntry.COLUMN_GRADE_OBTAINED + " REAL," +
-				GradesEntry.COLUMN_GRADE_MAXIMUM + " REAL," +
-				GradesEntry.COLUMN_GRADE_IS_EXTRA_CREDIT + " INTEGER," +
-				GradesEntry.COLUMN_GRADE_SUBJECT_ID + " INTEGER," +
-				"FOREIGN KEY(" + GradesEntry.COLUMN_GRADE_SUBJECT_ID + ") REFERENCES " + SubjectsEntry.TABLE_NAME + "(" + SubjectsEntry.COLUMN_SUBJECT_ID + "))";
+				TABLE_NAME + "( " +
+				COLUMN_GRADE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+				COLUMN_GRADE_DESCRIPTION + " TEXT," +
+				COLUMN_GRADE_OBTAINED + " REAL," +
+				COLUMN_GRADE_MAXIMUM + " REAL," +
+				COLUMN_GRADE_IS_EXTRA_CREDIT + " INTEGER," +
+				COLUMN_GRADE_SUBJECT_ID + " INTEGER," +
+				"FOREIGN KEY(" + COLUMN_GRADE_SUBJECT_ID + ") REFERENCES " + SubjectsEntry.TABLE_NAME + "(" + SubjectsEntry.COLUMN_SUBJECT_ID + "))";
+
+		private static final String SQL_CREATE_TRANSITIONAL_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
+				TRANSITIONAL_TABLE_NAME + "( " +
+				COLUMN_GRADE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+				COLUMN_GRADE_DESCRIPTION + " TEXT," +
+				COLUMN_GRADE_OBTAINED + " REAL," +
+				COLUMN_GRADE_MAXIMUM + " REAL," +
+				COLUMN_GRADE_IS_EXTRA_CREDIT + " INTEGER," +
+				COLUMN_GRADE_SUBJECT_ID + " INTEGER," +
+				"FOREIGN KEY(" + COLUMN_GRADE_SUBJECT_ID + ") REFERENCES " + SubjectsEntry.TRANSITIONAL_TABLE_NAME + "(" + SubjectsEntry.COLUMN_SUBJECT_ID + "))";
 
 		private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + GradesEntry.TABLE_NAME;
 	}
@@ -121,19 +141,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		db.execSQL(SubjectsEntry.SQL_CREATE_ENTRIES);
 		db.execSQL(ScheduleEntry.SQL_CREATE_ENTRIES);
-		db.execSQL(GradesEntry.SQL_CREATE_ENTRIES);
-
-		db.close();
-	}
-
-	public void recreateSubjectsAndGradesTables() {
-		Log.d(TAG, "Recreating subject and grades tables");
-		SQLiteDatabase db = this.getWritableDatabase();
-
-		db.execSQL(GradesEntry.SQL_DELETE_ENTRIES);
-		db.execSQL(SubjectsEntry.SQL_DELETE_ENTRIES);
-
-		db.execSQL(SubjectsEntry.SQL_CREATE_ENTRIES);
 		db.execSQL(GradesEntry.SQL_CREATE_ENTRIES);
 
 		db.close();
@@ -585,7 +592,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public void insertGrade(SubjectGrade subjectGrade) {
-
 		addToTotalGrade(subjectGrade);
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -684,5 +690,94 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				);
 			}
 		}
+	}
+
+	public void updateSubjectsDatabase(List<Subject> subjects) {
+		/*
+		In this method, I insert the subjects list into a transitional table,
+		then I switch the old and the original tables so the user can't see
+		for a long time that the data is missing from the database (if switching
+		fragments during update, for example)
+
+		This solution was suggested by MikeT in
+		https://stackoverflow.com/questions/55857902/how-to-drop-previous-records-on-android-sqlite-database-only-after-inserting-som/
+		 */
+
+		Log.d(TAG, "Updating entire database");
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		boolean inTransaction = db.inTransaction();
+
+		if(!inTransaction) {
+			Log.v(TAG, "updateSubjectsDatabase: beginning transaction");
+			db.beginTransaction();
+		}
+
+		Log.v(TAG, "updateSubjectsDatabase: creating transitional tables");
+
+		db.execSQL(SubjectsEntry.SQL_CREATE_TRANSITIONAL_ENTRIES);
+		db.execSQL(GradesEntry.SQL_CREATE_TRANSITIONAL_ENTRIES);
+
+		for(Subject subject: subjects) {
+			ContentValues subjectContentValue = new ContentValues();
+			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_NAME, subject.getName());
+			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_ABBREVIATION, subject.getName().substring(0, 3));
+			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_PROFESSOR, subject.getProfessor());
+			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_OBTAINED_GRADE, subject.getObtainedGrade());
+			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_MAXIMUM_GRADE, subject.getMaximumGrade());
+
+			long subjectId = db.insert(SubjectsEntry.TRANSITIONAL_TABLE_NAME, null, subjectContentValue);
+
+			for(Grade grade: subject.getGradeList()) {
+				SubjectGrade subjectGrade = new SubjectGrade(
+						(int) subjectId,
+						grade.getGradeDescription(),
+						grade.getObtainedGrade() * grade.getWeight(),
+						grade.getMaximumGrade() * grade.getWeight(),
+						false,
+						grade.isObtainedGradeNull()
+				);
+
+				ContentValues gradeContentValue = new ContentValues();
+				gradeContentValue.put(GradesEntry.COLUMN_GRADE_SUBJECT_ID, subjectGrade.getSubjectId());
+				gradeContentValue.put(GradesEntry.COLUMN_GRADE_DESCRIPTION, subjectGrade.getGradeDescription());
+				gradeContentValue.put(GradesEntry.COLUMN_GRADE_OBTAINED, subjectGrade.getObtainedGrade());
+				gradeContentValue.put(GradesEntry.COLUMN_GRADE_MAXIMUM, subjectGrade.getMaximumGrade());
+				gradeContentValue.put(GradesEntry.COLUMN_GRADE_IS_EXTRA_CREDIT, subjectGrade.isExtraGrade());
+
+				db.insert(GradesEntry.TRANSITIONAL_TABLE_NAME, null, gradeContentValue);
+			}
+		}
+
+		String renameOldGradeTable = String.format("ALTER TABLE %s RENAME TO %s_old", GradesEntry.TABLE_NAME, GradesEntry.TABLE_NAME);
+		String renameOldSubjectTable = String.format("ALTER TABLE %s RENAME TO %s_old", SubjectsEntry.TABLE_NAME, SubjectsEntry.TABLE_NAME);
+
+		// SQLite automatically handles the renaming of foreign keys parent tables, since the transitional grades table references
+		// the transitional subjects table, when this last one is renamed the reference is also updated.
+
+		String renameNewSubjectTable = String.format("ALTER TABLE %s RENAME TO %s", SubjectsEntry.TRANSITIONAL_TABLE_NAME, SubjectsEntry.TABLE_NAME);
+		String renameNewGradeTable = String.format("ALTER TABLE %s RENAME TO %s", GradesEntry.TRANSITIONAL_TABLE_NAME, GradesEntry.TABLE_NAME);
+
+		Log.v(TAG, "updateSubjectsDatabase: switching tables");
+
+		db.execSQL(renameOldGradeTable);
+		db.execSQL(renameOldSubjectTable);
+
+		db.execSQL(renameNewGradeTable);
+		db.execSQL(renameNewSubjectTable);
+
+		Log.v(TAG, "updateSubjectsDatabase: dropping old tables");
+
+		db.execSQL(String.format("DROP TABLE IF EXISTS %s", GradesEntry.TABLE_NAME + "_old"));
+		db.execSQL(String.format("DROP TABLE IF EXISTS %s", SubjectsEntry.TABLE_NAME + "_old"));
+
+		if(!inTransaction) {
+			Log.v(TAG, "updateSubjectsDatabase: ending transaction");
+			db.setTransactionSuccessful();
+			db.endTransaction();
+		}
+
+		Log.v(TAG, "updateSubjectsDatabase: writing data to disk");
+		db.close();
 	}
 }

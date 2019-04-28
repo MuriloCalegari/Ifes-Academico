@@ -46,10 +46,10 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Integer>{
 	protected Integer doInBackground(Integer... integers) {
 		Log.d(TAG, "Called QAcadFetchDataTask doInBackground");
 
-		SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.Keys.USER_INFO_PREFERENCES, Context.MODE_PRIVATE);
+		SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.Keys.QACAD_USER_INFO_PREFERENCES, Context.MODE_PRIVATE);
 
-		String username = sharedPreferences.getString(Constants.Keys.USERNAME_PREFERENCE, "");
-		String password = sharedPreferences.getString(Constants.Keys.PASSWORD_PREFERENCE, "");
+		String username = sharedPreferences.getString(Constants.Keys.QACAD_USERNAME_PREFERENCE, "");
+		String password = sharedPreferences.getString(Constants.Keys.QACAD_PASSWORD_PREFERENCE, "");
 
 		User user = new User(username, password);
 		DatabaseHelper databaseHelper = new DatabaseHelper(context);
@@ -69,9 +69,8 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Integer>{
 			Log.d(TAG, "All subjects and grades from QAcad were obtained!");
 
 			if(!isCancelled()) {
-				databaseHelper.recreateSubjectsAndGradesTables();
 
-				databaseHelper.insertQAcadSubjectList(subjectList);
+				databaseHelper.updateSubjectsDatabase(subjectList);
 
 				result = Constants.QAcad.RESULT_SUCCESS;
 			} else {
@@ -86,6 +85,7 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Integer>{
 			Snackbar snackbar = Snackbar.make(rootView, context.getString(R.string.connection_failure) ,Snackbar.LENGTH_LONG);
 			snackbar.show();
 		} catch (Exception e) {
+			e.printStackTrace();
 			result = Constants.QAcad.RESULT_UNKNOWN_ERROR;
 			View rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
 			Snackbar snackbar = Snackbar.make(rootView, context.getString(R.string.unknown_error) ,Snackbar.LENGTH_LONG);
