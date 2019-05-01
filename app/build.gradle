@@ -69,7 +69,9 @@ dependencies {
     implementation project(path: ':lib:AndroidWeekView')
     implementation 'br.com.simplepass:loading-button-android:2.1.1'
 
-    implementation files('src/libs/QAcadScrapper.jar')
-    implementation 'io.apisense:rhino-android:1.0'
+    implementation 'com.github.MuriloCalegari:QAcadScrapper:v0.0.22'
+
+    //implementation files('src/libs/QAcadScrapper.jar')
+    //implementation 'io.apisense:rhino-android:1.0'
     // Make QAcadScrapper.jar compatible with this project.
 }
