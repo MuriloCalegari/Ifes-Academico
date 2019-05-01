@@ -721,6 +721,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		for(Subject subject: subjects) {
 			ContentValues subjectContentValue = new ContentValues();
 			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_NAME, subject.getName());
+
+			// I'm really considering that all subjects id in the QAcad webpage are unique,
+			// if it isn't, this is certainly going to fail.
+
+			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_ID, subject.getId());
+
 			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_ABBREVIATION, subject.getName().substring(0, 3));
 			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_PROFESSOR, subject.getProfessor());
 			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_OBTAINED_GRADE, subject.getObtainedGrade());
@@ -729,14 +735,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			long subjectId = db.insert(SubjectsEntry.TRANSITIONAL_TABLE_NAME, null, subjectContentValue);
 
 			for(Grade grade: subject.getGradeList()) {
-				SubjectGrade subjectGrade = new SubjectGrade(
-						(int) subjectId,
-						grade.getGradeDescription(),
-						grade.getObtainedGrade() * grade.getWeight(),
-						grade.getMaximumGrade() * grade.getWeight(),
-						false,
-						grade.isObtainedGradeNull()
-				);
+				SubjectGrade subjectGrade = new SubjectGrade(grade);
 
 				ContentValues gradeContentValue = new ContentValues();
 				gradeContentValue.put(GradesEntry.COLUMN_GRADE_SUBJECT_ID, subjectGrade.getSubjectId());
