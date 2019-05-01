@@ -26,13 +26,13 @@
     <!-- Strings related to About -->
 
     <string name="app_about_1">
-        This app was born as a remake of the original Scholar tools application developed by Mayke Santos.
+        This app is a fork of my original School Tools application.
     </string>
     <string name="app_about_2">
-        "The idea was to create a simple app that can help you keep track of your grades in a nice and clean way; displaying them as percentages hence giving you the opportunity of anticipating you final grades."
+        When you login, your username and password are encrypted using the same algorithm as Q-Acadêmico. All data is retrieved exactly like you were browsing in the institution website.
     </string>
     <string name="developer_info">
-        "This app was developed by &author; and it's hosted on GitHub at https://github.com/MuriloCalegari/Agenda-Escolar. \n"
+        "This app was developed by &author; and it's hosted on GitHub at https://github.com/MuriloCalegari/Ifes-Academico. \n"
         "Please, fell free to contribute to this project; you can always contact me at murilo.calegari.souza@gmail.com
     </string>
     <string name="aboutActivityName">About</string>
