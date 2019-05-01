@@ -25,13 +25,18 @@ plugins {
 }
 
 allprojects {
+    // Load keystore
+    def keystorePropertiesFile = rootProject.file(".gradle/keystore.properties")
+    def keystoreProperties = new Properties()
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
     repositories {
         google()
         jcenter()
 
         maven {
             url "https://jitpack.io"
-            credentials { username authToken }
+            credentials { username keystoreProperties['jitPackAuthToken'] }
         }
     }
 }
