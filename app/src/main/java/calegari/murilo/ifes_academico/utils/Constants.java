@@ -8,6 +8,7 @@ public class Constants {
 		public static final String QACAD_PASSWORD_PREFERENCE = "passwordpreference";
 		public static final String SHOULD_SYNC_GRADES = "shouldsyncgrades";
 		public static final String SUBJECT_ID = "subjectId";
+		public static final String APP_GLOBALS_PREFERENCES = "globalpreferences";
 		public static final String APP_USERNAME_PREFERENCE = "username";
 	}
 

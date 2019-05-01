@@ -30,9 +30,14 @@ public class LoginManager {
             }
         }
 
-        SharedPreferences.Editor sharedPreferences = context.getSharedPreferences(Constants.Keys.QACAD_USER_INFO_PREFERENCES, Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor sharedPreferences;
+
+        sharedPreferences = context.getSharedPreferences(Constants.Keys.QACAD_USER_INFO_PREFERENCES, Context.MODE_PRIVATE).edit();
         sharedPreferences.remove(Constants.Keys.QACAD_USERNAME_PREFERENCE);
         sharedPreferences.remove(Constants.Keys.QACAD_PASSWORD_PREFERENCE);
+        sharedPreferences.apply();
+
+        sharedPreferences = context.getSharedPreferences(Constants.Keys.APP_GLOBALS_PREFERENCES, Context.MODE_PRIVATE).edit();
         sharedPreferences.remove(Constants.Keys.APP_USERNAME_PREFERENCE);
         sharedPreferences.apply();
 

@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity
 				.setView(editTextContainer)
 				//.setMessage(getString(R.string.confirm_subject_grade_delete_message))
 				.setPositiveButton(getString(R.string.edit), ((dialogInterface, i) -> {
-					SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+					SharedPreferences sharedPreferences = getSharedPreferences(Constants.Keys.APP_GLOBALS_PREFERENCES, Context.MODE_PRIVATE);
 					SharedPreferences.Editor editor = sharedPreferences.edit();
 					editor.putString("username", String.valueOf(editText.getText()));
 					editor.apply();
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	private void updateUsername() {
-		SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences sharedPreferences = getSharedPreferences(Constants.Keys.APP_GLOBALS_PREFERENCES, Context.MODE_PRIVATE);
 		String username = sharedPreferences.getString(Constants.Keys.APP_USERNAME_PREFERENCE, getString(R.string.student));
 
 		usernameTextView.setText(username);
