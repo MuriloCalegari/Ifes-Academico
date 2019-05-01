@@ -19,8 +19,10 @@ public class SubjectGrade extends Grade {
 
 	public SubjectGrade(Grade grade) {
 		this.subjectId = grade.getAcadSubjectId();
-		super.setObtainedGrade(grade.getObtainedGrade() * grade.getWeight());
-		super.setMaximumGrade(grade.getMaximumGrade() * grade.getWeight());
+		this.setObtainedGrade(grade.getObtainedGrade() * grade.getWeight());
+		this.setMaximumGrade(grade.getMaximumGrade() * grade.getWeight());
+		this.setGradeDescription(grade.getGradeDescription());
+		this.setDate(grade.getDate());
 	}
 
 	public SubjectGrade() {}
