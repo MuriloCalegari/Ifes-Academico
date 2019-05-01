@@ -17,6 +17,12 @@ public class SubjectGrade extends Grade {
 		this.isExtraGrade = isExtraGrade;
 	}
 
+	public SubjectGrade(Grade grade) {
+		this.subjectId = grade.getAcadSubjectId();
+		super.setObtainedGrade(grade.getObtainedGrade() * grade.getWeight());
+		super.setMaximumGrade(grade.getMaximumGrade() * grade.getWeight());
+	}
+
 	public SubjectGrade() {}
 
 	public SubjectGrade(Integer gradeId, String gradeDescription, float obtainedGrade, float maximumGrade, boolean isExtraGrade) {
