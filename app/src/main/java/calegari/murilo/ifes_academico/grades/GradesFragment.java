@@ -1,6 +1,8 @@
 package calegari.murilo.ifes_academico.grades;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import calegari.murilo.ifes_academico.BaseFragment;
@@ -103,6 +106,16 @@ public class GradesFragment extends BaseFragment {
 
 				MainActivity.pullToRefresh.setEnabled(true);
 				MainActivity.setDrawerIdleMode();
+
+				/*
+				If power saving mode is enabled, the InboxRecyclerView library won't handle collapsing properly
+				So we need to reload the entire GradesFragment
+				 */
+
+				PowerManager powerManager = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
+				if (activity instanceof MainActivity && powerManager.isPowerSaveMode()) {
+					((MainActivity) activity).refreshCurrentFragment();
+				}
 			}
 
 			@Override

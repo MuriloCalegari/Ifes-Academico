@@ -61,21 +61,6 @@ public class SubjectGradesFragment extends Fragment {
 				}
 			}
 		});
-
-		// Handles back button pressed
-		boolean shouldCollapse = bundle.getBoolean("shouldCollapse", true);
-		if(shouldCollapse) {
-			view.setFocusableInTouchMode(true);
-			view.requestFocus();
-			view.setOnKeyListener((View v, int keyCode, KeyEvent event) -> {
-				if (keyCode == KeyEvent.KEYCODE_BACK) {
-					GradesFragment.inboxRecyclerView.collapse();
-					return true;
-				}
-				return false;
-			});
-		}
-
 	}
 
 	@Override

@@ -38,6 +38,7 @@ import calegari.murilo.ifes_academico.subjects.SubjectsFragment;
 import calegari.murilo.ifes_academico.utils.Constants;
 import calegari.murilo.ifes_academico.utils.QAcadIntegration.LoginManager;
 import calegari.murilo.ifes_academico.utils.QAcadIntegration.QAcadFetchDataTask;
+import calegari.murilo.qacadscrapper.utils.Grade;
 
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +55,9 @@ public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
 
 	private final String TAG = getClass().getSimpleName();
+
+	public static Fragment currentFragment;
+
 	public static DrawerLayout drawer;
 	public static ValueAnimator anim;
 	public static Toolbar toolbar;
@@ -184,6 +188,10 @@ public class MainActivity extends AppCompatActivity
 		drawer = findViewById(R.id.drawer_layout);
 		if (drawer.isDrawerOpen(GravityCompat.START)) {
 			drawer.closeDrawer(GravityCompat.START);
+		} else if(currentFragment instanceof GradesFragment && GradesFragment.inboxRecyclerView.getPage().isExpandedOrExpanding()){
+			GradesFragment.inboxRecyclerView.collapse();
+		} else if(!(currentFragment instanceof HomeFragment)) {
+			startFragment(HomeFragment.class, true);
 		} else {
 			super.onBackPressed();
 		}
@@ -289,6 +297,7 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	public void refreshCurrentFragment(boolean stopPullToRefreshAnimation) {
+		/*
 		Fragment currentFragment = null;
 
 		try {
@@ -296,7 +305,7 @@ public class MainActivity extends AppCompatActivity
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		*/
 		if(currentFragment != null) {
 
 			// Refresh SubjectGradesFragment if it is expanded
@@ -339,7 +348,6 @@ public class MainActivity extends AppCompatActivity
 				if(stopPullToRefreshAnimation) {
 					pullToRefresh.setRefreshing(false);
 				}
-
 				startFragment(currentFragment.getClass(), false);
 
 				// Every time a fragment is refreshed, drawer should be in idle mode
@@ -375,6 +383,7 @@ public class MainActivity extends AppCompatActivity
 			}
 
 			fragmentTransaction.replace(R.id.flContent, fragment).commitAllowingStateLoss();
+			currentFragment = fragment;
 		}
 	}
 
