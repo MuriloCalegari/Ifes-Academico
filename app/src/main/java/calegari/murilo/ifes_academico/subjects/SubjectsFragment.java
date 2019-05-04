@@ -37,10 +37,10 @@ public class SubjectsFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        fab = getView().findViewById(R.id.floatingActionButton);
         mRecyclerView = getView().findViewById(R.id.recyclerView);
 
+        /*
+        fab = getView().findViewById(R.id.floatingActionButton);
         fab.setOnClickListener(v -> newSubject());
 
         // Hides floating action button on scroll down
@@ -54,6 +54,7 @@ public class SubjectsFragment extends BaseFragment {
                 }
             }
         });
+        */
 
         // Sets the toolbar name and item checked on nav bar
         AppCompatActivity activity = (AppCompatActivity) getContext();

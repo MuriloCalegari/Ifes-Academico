@@ -36,13 +36,13 @@ public class SubjectGradesFragment extends Fragment {
 	@Override
 	public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
-		fab = view.findViewById(R.id.floatingActionButton);
 		mRecyclerView = view.findViewById(R.id.recyclerView);
 
 		Bundle bundle = this.getArguments();
 		subjectId = bundle.getInt("subjectId");
 
+		/*
+		fab = view.findViewById(R.id.floatingActionButton);
 		fab.setOnClickListener(v -> {
 			Intent newSubjectIntent = new Intent(view.getContext(), NewSubjectGradeActivity.class);
 
@@ -61,6 +61,7 @@ public class SubjectGradesFragment extends Fragment {
 				}
 			}
 		});
+		*/
 	}
 
 	@Override
@@ -68,8 +69,6 @@ public class SubjectGradesFragment extends Fragment {
 		super.onStart();
 		setupRecycler();
 	}
-
-
 
 	private void setupRecycler() {
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

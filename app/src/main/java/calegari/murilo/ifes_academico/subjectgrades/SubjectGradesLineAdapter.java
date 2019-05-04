@@ -46,6 +46,7 @@ public class SubjectGradesLineAdapter extends RecyclerView.Adapter<GradesBaseLin
 
 		GradeChart.setupGradeChart(holder, obtainedGrade, maximumGrade);
 
+		/*
 		holder.itemView.setOnClickListener((v) -> {
 			Intent editGradeIntent = new Intent(v.getContext(), EditSubjectGradeActivity.class);
 
@@ -58,6 +59,7 @@ public class SubjectGradesLineAdapter extends RecyclerView.Adapter<GradesBaseLin
 
 			v.getContext().startActivity(editGradeIntent);
 		});
+		*/
 
 	}
 
