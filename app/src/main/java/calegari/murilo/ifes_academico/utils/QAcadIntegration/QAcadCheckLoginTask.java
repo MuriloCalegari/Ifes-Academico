@@ -19,6 +19,7 @@ public class QAcadCheckLoginTask extends AsyncTask<Integer, Integer, Integer> {
     protected Map<String, String> cookieMap;
 
     private int result;
+    protected QAcadScrapper qAcadScrapper;
 
     public QAcadCheckLoginTask(User user) {
        this.user = user;
@@ -28,7 +29,7 @@ public class QAcadCheckLoginTask extends AsyncTask<Integer, Integer, Integer> {
     protected Integer doInBackground(Integer... integers) {
         Log.d(TAG, "Called QACadChechLoginTask");
 
-        QAcadScrapper qAcadScrapper = new QAcadScrapper(Constants.QAcad.ACADEMIC_URL, user);
+        qAcadScrapper = new QAcadScrapper(Constants.QAcad.ACADEMIC_URL, user);
 
         try {
             user.setMultiThreadEnabled(true);

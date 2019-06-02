@@ -113,6 +113,15 @@ public class LoginActivity extends AppCompatActivity {
                                     .putString(Constants.Keys.QACAD_PASSWORD_PREFERENCE, password)
                                     .commit();
 
+                            String userFullName = this.qAcadScrapper.getUser().getFullName();
+
+                            if(userFullName != null) {
+                                sharedPreferences = getSharedPreferences(Constants.Keys.APP_GLOBALS_PREFERENCES, MODE_PRIVATE);
+                                sharedPreferences.edit()
+                                        .putString(Constants.Keys.APP_USERNAME_PREFERENCE, userFullName.split(" ")[0])
+                                        .apply();
+                            }
+
                             // If login is successful, send cookieMap to be used in MainActivity
                             MainActivity.qAcadCookieMap = cookieMap;
 

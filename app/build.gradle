@@ -51,7 +51,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
-    implementation 'com.google.android.material:material:1.1.0-alpha06'
+    implementation 'com.google.android.material:material:1.1.0-alpha07'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0-beta01'
@@ -72,7 +72,7 @@ dependencies {
     implementation 'com.github.vipulasri:timelineview:1.1.0'
     implementation 'org.threeten:threetenbp:1.4.0'
 
-    implementation 'com.github.MuriloCalegari:QAcadScrapper:v0.0.36'
+    implementation 'com.github.MuriloCalegari:QAcadScrapper:v0.0.38'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
     //implementation 'com.facebook.stetho:stetho:1.5.1'

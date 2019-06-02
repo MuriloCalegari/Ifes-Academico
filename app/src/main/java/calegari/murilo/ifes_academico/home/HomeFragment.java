@@ -81,17 +81,6 @@ public class HomeFragment extends Fragment {
 
 	}
 
-	private void setupTimeLine() {
-		DatabaseHelper db = new DatabaseHelper(getContext());
-		List<SubjectGrade> grades = db.getUpcomingGrades();
-		db.close();
-
-		RecyclerView timeLine = getView().findViewById(R.id.timelineRecyclerView);
-		timeLine.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-
-		timeLine.setAdapter(new GradesDateAdapter(grades, context));
-	}
-
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -101,43 +90,6 @@ public class HomeFragment extends Fragment {
 		MainActivity.navigationView.setCheckedItem(R.id.nav_home);
 		MainActivity.setDrawerIdleMode();
 	}
-
-	/*
-
-	private void setupTimeLine() {
-		TimeLineRecyclerView timeLine = Objects.requireNonNull(getView()).findViewById(R.id.timelineRecyclerView);
-
-		timeLine.setLayoutManager(new LinearLayoutManager(getContext(),
-				RecyclerView.VERTICAL,
-				false));
-
-		DatabaseHelper db = new DatabaseHelper(getContext());
-		List<SubjectGrade> grades = db.getUpcomingGrades();
-		db.close();
-
-		timeLine.addItemDecoration(getSectionCallback(grades));
-		timeLine.setAdapter(new GradesDateAdapter(grades, context));
-	}
-	
-	private RecyclerSectionItemDecoration.SectionCallback getSectionCallback(final List<SubjectGrade> grades) {
-		return new RecyclerSectionItemDecoration.SectionCallback() {
-
-			@Nullable
-			@Override
-			public SectionInfo getSectionHeader(int position) {
-				Drawable dot = context.getDrawable(R.drawable.ic_circle_24dp);
-
-				return new SectionInfo(grades.get(position).getDate().toString(), "", dot);
-			}
-
-			@Override
-			public boolean isSection(int position) {
-				return grades.get(position).getDate().equals(grades.get(position - 1).getDate());
-			}
-		};
-	}
-
-	*/
 
 	private void setupGradesChart() {
 		DatabaseHelper dbHelper = new DatabaseHelper(getContext());
@@ -195,6 +147,7 @@ public class HomeFragment extends Fragment {
 			chart.setScaleEnabled(false);
 			chart.setDoubleTapToZoomEnabled(false);
 			chart.setPinchZoom(false);
+			chart.setNestedScrollingEnabled(true);
 
 			// Defines behavior for description
 
@@ -274,6 +227,22 @@ public class HomeFragment extends Fragment {
 				public void onNothingSelected() {}
 			});
 			*/
+		}
+	}
+
+	private void setupTimeLine() {
+		DatabaseHelper db = new DatabaseHelper(getContext());
+		List<SubjectGrade> grades = db.getUpcomingGrades();
+		db.close();
+
+		if(grades.size() != 0) {
+			RecyclerView timeLine = getView().findViewById(R.id.timelineRecyclerView);
+			timeLine.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+
+			timeLine.setAdapter(new GradesDateAdapter(grades, context));
+			timeLine.setNestedScrollingEnabled(true);
+		} else {
+			// TODO Add empty state image
 		}
 	}
 

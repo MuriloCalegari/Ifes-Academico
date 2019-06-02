@@ -108,15 +108,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		public static final String COLUMN_GRADE_SUBJECT_ID = "subjectid";
 		public static final String COLUMN_GRADE_DATE = "date";
 
-		private static final String SQL_CREATE_ENTRIES = getCreateEntriesForTableName(TABLE_NAME);
+		private static final String SQL_CREATE_ENTRIES = getCreateEntriesForTableName(TABLE_NAME, SubjectsEntry.TABLE_NAME);
 
-		private static final String SQL_CREATE_TRANSITIONAL_ENTRIES = getCreateEntriesForTableName(TRANSITIONAL_TABLE_NAME);
+		private static final String SQL_CREATE_TRANSITIONAL_ENTRIES = getCreateEntriesForTableName(TRANSITIONAL_TABLE_NAME, SubjectsEntry.TRANSITIONAL_TABLE_NAME);
 
 		private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + GradesEntry.TABLE_NAME;
 
 		private static final String ASCENDING_DATE = COLUMN_GRADE_DATE + " ASC";
 
-		private static String getCreateEntriesForTableName(String tableName) {
+		private static String getCreateEntriesForTableName(String tableName, String foreignParentTableName) {
 			return String.format(
 					"CREATE TABLE IF NOT EXISTS %s( %s INTEGER PRIMARY KEY AUTOINCREMENT,%s TEXT,%s REAL,%s REAL,%s INTEGER,%s INTEGER,%s DATETIME, FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE)",
 					tableName,
@@ -128,7 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 					COLUMN_GRADE_SUBJECT_ID,
 					COLUMN_GRADE_DATE,
 					COLUMN_GRADE_SUBJECT_ID,
-					SubjectsEntry.TABLE_NAME,
+					foreignParentTableName,
 					SubjectsEntry.COLUMN_SUBJECT_ID
 			);
 		}
@@ -150,6 +150,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	}
+
+	@Override
+	public void onOpen(SQLiteDatabase db) {
+		super.onOpen(db);
+		db.execSQL("PRAGMA foreign_keys = ON;");
 	}
 
 	public void recreateDatabase() {
