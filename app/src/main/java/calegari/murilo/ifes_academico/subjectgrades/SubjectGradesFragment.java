@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -71,16 +69,8 @@ public class SubjectGradesFragment extends Fragment {
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 		mRecyclerView.setLayoutManager(layoutManager);
 
-		mAdapter = new SubjectGradesLineAdapter(new ArrayList<>(0));
-
-		mRecyclerView.setAdapter(mAdapter);
-
-		// Populates the list
-
 		DatabaseHelper db = new DatabaseHelper(getContext());
-
-		for(SubjectGrade subjectGrade : db.getSubjectGrades(subjectId)) {
-			mAdapter.updateList(subjectGrade);
-		}
+		mAdapter = new SubjectGradesLineAdapter(db.getAllGrades(subjectId));
+		mRecyclerView.setAdapter(mAdapter);
 	}
 }

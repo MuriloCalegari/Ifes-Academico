@@ -17,7 +17,7 @@ public class SubjectGradesLineAdapter extends RecyclerView.Adapter<GradesBaseLin
 
 	private final List<SubjectGrade> mSubjectGrades;
 
-	public SubjectGradesLineAdapter(ArrayList subjectGrades) {
+	public SubjectGradesLineAdapter(List<SubjectGrade> subjectGrades) {
 		this.mSubjectGrades = subjectGrades;
 	}
 

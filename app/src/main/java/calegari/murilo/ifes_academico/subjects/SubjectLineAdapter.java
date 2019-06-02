@@ -24,7 +24,7 @@ public class SubjectLineAdapter extends RecyclerView.Adapter<SubjectLineHolder> 
 
     private List<Subject> subjects;
 
-    public SubjectLineAdapter(ArrayList subjects) {
+    public SubjectLineAdapter(List<Subject> subjects) {
         this.subjects = subjects;
     }
 
@@ -41,6 +41,7 @@ public class SubjectLineAdapter extends RecyclerView.Adapter<SubjectLineHolder> 
         holder.subjectProfessor.setText(subjects.get(position).getProfessor());
         holder.subjectAbbreviation.setText(subjects.get(position).getAbbreviation());
 
+        /*
         holder.itemView.setOnClickListener(v -> {
             Intent editSubjectIntent = new Intent(v.getContext(), EditSubjectActivity.class);
 
@@ -51,6 +52,7 @@ public class SubjectLineAdapter extends RecyclerView.Adapter<SubjectLineHolder> 
             editSubjectIntent.putExtra("subjectId", subjects.get(position).getId());
             v.getContext().startActivity(editSubjectIntent);
         });
+        */
     }
 
     @Override

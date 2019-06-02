@@ -87,17 +87,11 @@ public class SubjectsFragment extends BaseFragment {
     private void setupRecycler() {
 
         // Configures the layout manager so it becomes a list
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mAdapter = new SubjectLineAdapter(new ArrayList<>(0));
+        DatabaseHelper database = new DatabaseHelper(getContext());
+        mAdapter = new SubjectLineAdapter(database.getAllSubjects());
+        database.close();
         mRecyclerView.setAdapter(mAdapter);
-
-        // Populates the list:
-        DatabaseHelper subjectDatabase = new DatabaseHelper(getContext());
-
-        mAdapter.setSubjects(subjectDatabase.getAllSubjects());
-
-        subjectDatabase.close();
     }
 }
