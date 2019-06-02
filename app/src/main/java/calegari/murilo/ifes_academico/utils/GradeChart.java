@@ -17,9 +17,8 @@ public abstract class GradeChart {
 		int warningColor = holder.itemView.getResources().getColor(R.color.warning_color);
 		int okColor = holder.itemView.getResources().getColor(R.color.ok_color);
 
-		// TODO Decide if this is going to be rounded
 		float averageGradePercentage = Math.round(obtainedGrade / maximumGrade * 100);
-		final float[] stats = new float[4];
+		final float[] stats = new float[1];
 
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(holder.itemView.getContext());
 		Integer dangerGradePercentage = sharedPreferences.getInt("minimumPercentage",60);
@@ -29,7 +28,7 @@ public abstract class GradeChart {
 		String gradeChartText;
 		if(maximumGrade != 0) {
 			// TODO Decide if this is going to be rounded
-			gradeChartText = String.valueOf(Math.round(averageGradePercentage)) + "%";
+			gradeChartText = Math.round(averageGradePercentage) + "%";
 		} else if (obtainedGrade != 0){
 			gradeChartText = "100%";
 		} else {
@@ -37,48 +36,23 @@ public abstract class GradeChart {
 		}
 		gradeChart.setText(gradeChartText);
 
-		// Create color array for slimChart
-		int[] graphColors = new int[4]; // For some reason this must be 4 and not 3
-
 		if (averageGradePercentage >= 100){ // Static behavior for percentage >= 100
-			graphColors[0] = okColor;
-			graphColors[1] = warningColor;
-			graphColors[2] = dangerColor;
-
 			stats[0] = 100;
-			stats[1] = warningGradePercentage;
-			stats[2] = dangerGradePercentage;
-
 			gradeChart.setTextColor(R.color.ok_color);
 		} else if(averageGradePercentage >= warningGradePercentage) { // If grade is in "safe zone"
-			graphColors[0] = okColor;
-			graphColors[1] = warningColor;
-			graphColors[2] = dangerColor;
-
 			stats[0] = averageGradePercentage;
-			stats[1] = warningGradePercentage;
-			stats[2] = dangerGradePercentage;
-
 			gradeChart.setTextColor(R.color.ok_color);
-
 		} else if (averageGradePercentage >= dangerGradePercentage && averageGradePercentage < warningGradePercentage) {
-			graphColors[0] = warningColor;
-			graphColors[1] = dangerColor;
-
-			gradeChart.setColors(graphColors);
 			stats[0] = averageGradePercentage;
-			stats[1] = dangerGradePercentage;
-
 			gradeChart.setTextColor(R.color.warning_color);
-
 		} else {
-			graphColors[0] = dangerColor;
 			stats[0] = averageGradePercentage;
-
 			gradeChart.setTextColor(R.color.danger_color);
 		}
 
-		gradeChart.setColors(graphColors);
+		int[] colors = new int[]{Tools.getGradeColor(obtainedGrade, maximumGrade, holder.itemView.getContext())};
+
+		gradeChart.setColors(colors); // setColor() was producing some inaccurate colors
 		gradeChart.setStats(stats);
 
 		//Play animation

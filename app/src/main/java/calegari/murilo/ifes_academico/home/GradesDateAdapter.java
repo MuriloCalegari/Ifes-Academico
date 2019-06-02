@@ -18,6 +18,7 @@ import java.util.List;
 import calegari.murilo.ifes_academico.R;
 import calegari.murilo.ifes_academico.databases.DatabaseHelper;
 import calegari.murilo.ifes_academico.subjectgrades.SubjectGrade;
+import calegari.murilo.ifes_academico.utils.Tools;
 import calegari.murilo.qacadscrapper.utils.Subject;
 
 public class GradesDateAdapter extends RecyclerView.Adapter<GradesDateAdapter.GradesDateViewHolder>{
@@ -43,15 +44,19 @@ public class GradesDateAdapter extends RecyclerView.Adapter<GradesDateAdapter.Gr
 
 	@Override
 	public void onBindViewHolder(@NonNull GradesDateViewHolder holder, int position) {
+		SubjectGrade grade = grades.get(position);
+
 		DatabaseHelper db = new DatabaseHelper(context);
-		Subject subject = db.getSubject(grades.get(position).getSubjectId());
+		Subject subject = db.getSubject(grade.getSubjectId());
 		db.close();
 
-		String gradeDescriptionText = String.format("%s: %s", subject.getAbbreviation(), grades.get(position).getGradeDescription(), MAXIMUM_CHARACTERS_DATE_DESCRIPTION, true);
+		String gradeDescriptionText = String.format("%s: %s", subject.getAbbreviation(), grade.getGradeDescription());
 		holder.gradeDescription.setText(gradeDescriptionText);
 
-		String dateText = grades.get(position).getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		String dateText = grade.getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		holder.gradeDateText.setText(dateText);
+
+		holder.timelineView.setMarkerColor(Tools.getGradeColor(subject.getObtainedGrade(), subject.getMaximumGrade(), holder.itemView.getContext()));
 	}
 
 	@Override

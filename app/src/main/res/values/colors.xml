@@ -10,7 +10,7 @@
 
     <color name="danger_color">#F74444</color>
     <color name="warning_color">#FDAD00</color>
-    <color name="ok_color">#A8CA27</color>
+    <color name="ok_color">#88C425</color>
 
     <string-array name="schedule_colors">
         <item>#F80C01</item>
@@ -24,4 +24,7 @@
     <color name="ifes_logo_secondary_color">#cd191e</color>
     
     <color name="light_grey">#efefef</color>
+
+    <color name="dream_magnet_gray">#404749</color>
+
 </resources>
