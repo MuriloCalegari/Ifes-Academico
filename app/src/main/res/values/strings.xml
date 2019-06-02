@@ -145,4 +145,9 @@
     <string name="success">Success</string>
     <string name="unknown_error">An unknown error occurred…</string>
     <string name="logout">Logout</string>
+
+    <string name="date">Date</string>
+    <string name="calendar">Calendar</string>
+    <string name="upcoming_events">Tests are coming, be prepared!</string>
+
 </resources>

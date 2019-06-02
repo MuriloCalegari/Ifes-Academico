@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import java.net.ConnectException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,9 +26,6 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Integer>{
 
 	private final String TAG = "QAcadFetchDataTask";
 	private Context context;
-	private QAcadScrapper qAcadScrapper;
-
-	private int result;
 
 	private Map<String, String> cookieMap;
 
@@ -39,7 +36,6 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Integer>{
 
 	public QAcadFetchDataTask(Context context) {
 		this.context = context;
-		qAcadScrapper = new QAcadScrapper(Constants.QAcad.ACADEMIC_URL);
 	}
 
 	@Override
@@ -50,28 +46,24 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Integer>{
 
 		String username = sharedPreferences.getString(Constants.Keys.QACAD_USERNAME_PREFERENCE, "");
 		String password = sharedPreferences.getString(Constants.Keys.QACAD_PASSWORD_PREFERENCE, "");
-
 		User user = new User(username, password);
+		user.setMultiThreadEnabled(true);
+
+		QAcadScrapper qAcadScrapper = new QAcadScrapper(Constants.QAcad.ACADEMIC_URL, user);
+
 		DatabaseHelper databaseHelper = new DatabaseHelper(context);
 
+		int result;
 		try {
 			qAcadScrapper.setCookieMap(cookieMap);
-			if (!qAcadScrapper.isLogged()) {
-				Log.d(TAG, "Status is not logged");
-				cookieMap = qAcadScrapper.loginToQAcad(user);
-				Log.d(TAG, "Finished logging into QAcad");
-			} else {
-				Log.d(TAG, "We've already logged");
-			}
 
 			Log.d(TAG, "Getting all subjects and grades from QAcad");
 			List<Subject> subjectList = qAcadScrapper.getAllSubjectsAndGrades();
 			Log.d(TAG, "All subjects and grades from QAcad were obtained!");
 
 			if(!isCancelled()) {
-
 				databaseHelper.updateSubjectsDatabase(subjectList);
-
+				cookieMap = qAcadScrapper.getCookieMap();
 				result = Constants.QAcad.RESULT_SUCCESS;
 			} else {
 				result = Constants.QAcad.RESULT_CANCELLED;
@@ -79,17 +71,25 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Integer>{
 		} catch (LoginException e) {
 			LoginManager.logout(context); // Logout if calling loginToQACad() failed
 			result = Constants.QAcad.RESULT_LOGIN_INVALID;
-		} catch (ConnectException e) {
+		} catch (IOException e) {
 			result = Constants.QAcad.RESULT_CONNECTION_FAILURE;
-			View rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
-			Snackbar snackbar = Snackbar.make(rootView, context.getString(R.string.connection_failure) ,Snackbar.LENGTH_LONG);
-			snackbar.show();
+			if(context instanceof Activity) {
+				try {
+					View rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
+					Snackbar snackbar = Snackbar.make(rootView, context.getString(R.string.connection_failure), Snackbar.LENGTH_LONG);
+					snackbar.show();
+				} catch (Exception ignored) {} // Just in case something bad happens when trying to show things on the activity
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = Constants.QAcad.RESULT_UNKNOWN_ERROR;
-			View rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
-			Snackbar snackbar = Snackbar.make(rootView, context.getString(R.string.unknown_error) ,Snackbar.LENGTH_LONG);
-			snackbar.show();
+			if(context instanceof Activity) {
+				try {
+					View rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
+					Snackbar snackbar = Snackbar.make(rootView, context.getString(R.string.unknown_error), Snackbar.LENGTH_LONG);
+					snackbar.show();
+				} catch (Exception ignored) {}
+			}
 		} finally {
 			databaseHelper.close();
 		}

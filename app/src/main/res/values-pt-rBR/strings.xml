@@ -135,6 +135,10 @@
     <string name="success">Sucesso!</string>
     <string name="title_activity_login">Login</string>
     <string name="unknown_error">Um erro desconhecido ocorreu</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Sair</string>
+
+    <string name="date">Data</string>
+    <string name="calendar">Calendário</string>
+    <string name="upcoming_events">As avaliações estão chegando!</string>
 
 </resources>

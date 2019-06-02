@@ -1,7 +1,9 @@
 package calegari.murilo.ifes_academico.home;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,26 +26,33 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.github.vipulasri.timelineview.TimelineView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import calegari.murilo.ifes_academico.MainActivity;
 import calegari.murilo.ifes_academico.R;
 import calegari.murilo.ifes_academico.databases.DatabaseHelper;
 import calegari.murilo.ifes_academico.grades.GradesFragment;
+import calegari.murilo.ifes_academico.subjectgrades.SubjectGrade;
 import calegari.murilo.qacadscrapper.utils.Subject;
 import calegari.murilo.ifes_academico.utils.Tools;
 
+@SuppressWarnings("ConstantConditions")
 public class HomeFragment extends Fragment {
 
 	private BarData data;
+	private Context context;
 
 	@Nullable
 	@Override
@@ -55,18 +64,32 @@ public class HomeFragment extends Fragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		TextView gradesChartTitle = view.findViewById(R.id.ifesLogo);
+		context = Objects.requireNonNull(getContext());
+
+		TextView gradesChartTitle = view.findViewById(R.id.cardTitle);
 		gradesChartTitle.setText(R.string.your_grades);
 
 		TextView gradesChartSubtitle = view.findViewById(R.id.subtitleTextView);
 		gradesChartSubtitle.setText(R.string.to_keep_an_eye);
 
 		setupGradesChart();
+		setupTimeLine();
 
 		CardView gradesChartCardView = view.findViewById(R.id.cardView);
 
 		gradesChartCardView.setOnClickListener(v -> MainActivity.startFragment(GradesFragment.class, true));
 
+	}
+
+	private void setupTimeLine() {
+		DatabaseHelper db = new DatabaseHelper(getContext());
+		List<SubjectGrade> grades = db.getUpcomingGrades();
+		db.close();
+
+		RecyclerView timeLine = getView().findViewById(R.id.timelineRecyclerView);
+		timeLine.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+
+		timeLine.setAdapter(new GradesDateAdapter(grades, context));
 	}
 
 	@Override
@@ -78,6 +101,43 @@ public class HomeFragment extends Fragment {
 		MainActivity.navigationView.setCheckedItem(R.id.nav_home);
 		MainActivity.setDrawerIdleMode();
 	}
+
+	/*
+
+	private void setupTimeLine() {
+		TimeLineRecyclerView timeLine = Objects.requireNonNull(getView()).findViewById(R.id.timelineRecyclerView);
+
+		timeLine.setLayoutManager(new LinearLayoutManager(getContext(),
+				RecyclerView.VERTICAL,
+				false));
+
+		DatabaseHelper db = new DatabaseHelper(getContext());
+		List<SubjectGrade> grades = db.getUpcomingGrades();
+		db.close();
+
+		timeLine.addItemDecoration(getSectionCallback(grades));
+		timeLine.setAdapter(new GradesDateAdapter(grades, context));
+	}
+	
+	private RecyclerSectionItemDecoration.SectionCallback getSectionCallback(final List<SubjectGrade> grades) {
+		return new RecyclerSectionItemDecoration.SectionCallback() {
+
+			@Nullable
+			@Override
+			public SectionInfo getSectionHeader(int position) {
+				Drawable dot = context.getDrawable(R.drawable.ic_circle_24dp);
+
+				return new SectionInfo(grades.get(position).getDate().toString(), "", dot);
+			}
+
+			@Override
+			public boolean isSection(int position) {
+				return grades.get(position).getDate().equals(grades.get(position - 1).getDate());
+			}
+		};
+	}
+
+	*/
 
 	private void setupGradesChart() {
 		DatabaseHelper dbHelper = new DatabaseHelper(getContext());

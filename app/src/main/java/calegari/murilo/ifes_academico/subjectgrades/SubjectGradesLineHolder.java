@@ -17,7 +17,7 @@ public class SubjectGradesLineHolder extends RecyclerView.ViewHolder {
 	public SubjectGradesLineHolder(View itemView) {
 		super(itemView);
 
-		gradeText = itemView.findViewById(R.id.grade);
+		gradeText = itemView.findViewById(R.id.gradeDate);
 		subjectName = itemView.findViewById(R.id.subjectName);
 		gradeChart = itemView.findViewById(R.id.slimChart);
 	}

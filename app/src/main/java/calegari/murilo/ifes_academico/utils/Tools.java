@@ -36,4 +36,17 @@ public abstract class Tools {
 		return Color.parseColor(colorArray[(int) Math.round(Math.random() * (colorArray.length - 1))]);
 	}
 
+	public static String shortenString(String originalString, int maximumCharacters, boolean displayEllipsisCharacters) {
+		if(originalString.length() <= maximumCharacters) {
+			return originalString;
+		}
+
+		String finalString = originalString.substring(0, maximumCharacters - 1);
+
+		if(displayEllipsisCharacters) {
+			finalString = finalString.concat("...");
+		}
+
+		return finalString;
+	}
 }

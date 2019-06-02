@@ -3,7 +3,7 @@ package calegari.murilo.ifes_academico.utils.QAcadIntegration;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.net.ConnectException;
+import java.io.IOException;
 import java.util.Map;
 
 import javax.security.auth.login.LoginException;
@@ -28,14 +28,15 @@ public class QAcadCheckLoginTask extends AsyncTask<Integer, Integer, Integer> {
     protected Integer doInBackground(Integer... integers) {
         Log.d(TAG, "Called QACadChechLoginTask");
 
-        QAcadScrapper qAcadScrapper = new QAcadScrapper(Constants.QAcad.ACADEMIC_URL);
+        QAcadScrapper qAcadScrapper = new QAcadScrapper(Constants.QAcad.ACADEMIC_URL, user);
 
         try {
-            cookieMap = qAcadScrapper.loginToQAcad(user);
+            user.setMultiThreadEnabled(true);
+            cookieMap = qAcadScrapper.loginToQAcad();
             result = Constants.QAcad.RESULT_SUCCESS;
         } catch (LoginException e) {
             result = Constants.QAcad.RESULT_LOGIN_INVALID;
-        } catch (ConnectException e) {
+        } catch (IOException e) {
             result =  Constants.QAcad.RESULT_CONNECTION_FAILURE;
         } catch (Exception e) {
             result = Constants.QAcad.RESULT_UNKNOWN_ERROR;

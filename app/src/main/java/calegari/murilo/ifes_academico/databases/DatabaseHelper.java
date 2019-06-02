@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+
+import org.threeten.bp.LocalDate;
+
 import calegari.murilo.ifes_academico.calendar.ClassTime;
 import calegari.murilo.ifes_academico.subjectgrades.SubjectGrade;
 import calegari.murilo.qacadscrapper.utils.Grade;
@@ -19,6 +22,8 @@ import calegari.murilo.qacadscrapper.utils.Subject;
 
 @SuppressWarnings("WeakerAccess")
 public class DatabaseHelper extends SQLiteOpenHelper {
+
+	private Context context;
 
 	public static class GlobalEntry implements BaseColumns {
 		public static final String DATABASE_NAME = "schooltoolsdatabase.db";
@@ -38,21 +43,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		public static final String COLUMN_SUBJECT_MAXIMUM_GRADE = "maximumgrade";
 		public static final String COLUMN_SUBJECT_ID = "ID";
 
-		protected static final String SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
-				TABLE_NAME + " (" + COLUMN_SUBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-				COLUMN_SUBJECT_NAME + " TEXT," +
-				COLUMN_SUBJECT_ABBREVIATION + " TEXT," +
-				COLUMN_SUBJECT_PROFESSOR + " TEXT," +
-				COLUMN_SUBJECT_OBTAINED_GRADE + " REAL," +
-				COLUMN_SUBJECT_MAXIMUM_GRADE + " REAL)";
+		protected static final String SQL_CREATE_ENTRIES = String.format(
+				"CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT,%s TEXT,%s TEXT,%s TEXT,%s REAL,%s REAL)",
+				TABLE_NAME,
+				COLUMN_SUBJECT_ID,
+				COLUMN_SUBJECT_NAME,
+				COLUMN_SUBJECT_ABBREVIATION,
+				COLUMN_SUBJECT_PROFESSOR,
+				COLUMN_SUBJECT_OBTAINED_GRADE,
+				COLUMN_SUBJECT_MAXIMUM_GRADE
+		);
 
-		protected static final String SQL_CREATE_TRANSITIONAL_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
-				TRANSITIONAL_TABLE_NAME + " (" + COLUMN_SUBJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-				COLUMN_SUBJECT_NAME + " TEXT," +
-				COLUMN_SUBJECT_ABBREVIATION + " TEXT," +
-				COLUMN_SUBJECT_PROFESSOR + " TEXT," +
-				COLUMN_SUBJECT_OBTAINED_GRADE + " REAL," +
-				COLUMN_SUBJECT_MAXIMUM_GRADE + " REAL)";
+		protected static final String SQL_CREATE_TRANSITIONAL_ENTRIES = String.format(
+				"CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT,%s TEXT,%s TEXT,%s TEXT,%s REAL,%s REAL)",
+				TRANSITIONAL_TABLE_NAME,
+				COLUMN_SUBJECT_ID,
+				COLUMN_SUBJECT_NAME,
+				COLUMN_SUBJECT_ABBREVIATION,
+				COLUMN_SUBJECT_PROFESSOR,
+				COLUMN_SUBJECT_OBTAINED_GRADE,
+				COLUMN_SUBJECT_MAXIMUM_GRADE
+		);
 
 		protected static final String SQL_DELETE_ENTRIES =
 				"DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -68,13 +79,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		public static final String COLUMN_CLASS_START_TIME = "startime";
 		public static final String COLUMN_CLASS_END_TIME = "endtime";
 
-		public static final String SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
-				TABLE_NAME + "( " +
-				COLUMN_CLASS_TIME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-				COLUMN_CLASS_SUBJECT_ID + " INTEGER," +
-				COLUMN_CLASS_DAY + " INTEGER," +
-				COLUMN_CLASS_START_TIME + " TEXT," +
-				COLUMN_CLASS_END_TIME + " TEXT)";
+		public static final String SQL_CREATE_ENTRIES = String.format(
+				"CREATE TABLE IF NOT EXISTS %s(%s INTEGER PRIMARY KEY AUTOINCREMENT,%s INTEGER,%s INTEGER,%s TEXT,%s TEXT, FOREIGN KEY (%s) REFERENCES %s(%s) ON DELETE CASCADE)",
+				TABLE_NAME,
+				COLUMN_CLASS_TIME_ID,
+				COLUMN_CLASS_SUBJECT_ID,
+				COLUMN_CLASS_DAY,
+				COLUMN_CLASS_START_TIME,
+				COLUMN_CLASS_END_TIME,
+				COLUMN_CLASS_SUBJECT_ID,
+				SubjectsEntry.TABLE_NAME,
+				SubjectsEntry.COLUMN_SUBJECT_ID
+		);
 
 		public static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
 	}
@@ -90,34 +106,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		public static final String COLUMN_GRADE_MAXIMUM = "maximumgrade";
 		public static final String COLUMN_GRADE_IS_EXTRA_CREDIT = "isextracredit";
 		public static final String COLUMN_GRADE_SUBJECT_ID = "subjectid";
+		public static final String COLUMN_GRADE_DATE = "date";
 
-		private static final String SQL_CREATE_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
-				TABLE_NAME + "( " +
-				COLUMN_GRADE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-				COLUMN_GRADE_DESCRIPTION + " TEXT," +
-				COLUMN_GRADE_OBTAINED + " REAL," +
-				COLUMN_GRADE_MAXIMUM + " REAL," +
-				COLUMN_GRADE_IS_EXTRA_CREDIT + " INTEGER," +
-				COLUMN_GRADE_SUBJECT_ID + " INTEGER," +
-				"FOREIGN KEY(" + COLUMN_GRADE_SUBJECT_ID + ") REFERENCES " + SubjectsEntry.TABLE_NAME + "(" + SubjectsEntry.COLUMN_SUBJECT_ID + "))";
+		private static final String SQL_CREATE_ENTRIES = getCreateEntriesForTableName(TABLE_NAME);
 
-		private static final String SQL_CREATE_TRANSITIONAL_ENTRIES = "CREATE TABLE IF NOT EXISTS " +
-				TRANSITIONAL_TABLE_NAME + "( " +
-				COLUMN_GRADE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-				COLUMN_GRADE_DESCRIPTION + " TEXT," +
-				COLUMN_GRADE_OBTAINED + " REAL," +
-				COLUMN_GRADE_MAXIMUM + " REAL," +
-				COLUMN_GRADE_IS_EXTRA_CREDIT + " INTEGER," +
-				COLUMN_GRADE_SUBJECT_ID + " INTEGER," +
-				"FOREIGN KEY(" + COLUMN_GRADE_SUBJECT_ID + ") REFERENCES " + SubjectsEntry.TRANSITIONAL_TABLE_NAME + "(" + SubjectsEntry.COLUMN_SUBJECT_ID + "))";
+		private static final String SQL_CREATE_TRANSITIONAL_ENTRIES = getCreateEntriesForTableName(TRANSITIONAL_TABLE_NAME);
 
 		private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + GradesEntry.TABLE_NAME;
+
+		private static final String ASCENDING_DATE = COLUMN_GRADE_DATE + " ASC";
+
+		private static String getCreateEntriesForTableName(String tableName) {
+			return String.format(
+					"CREATE TABLE IF NOT EXISTS %s( %s INTEGER PRIMARY KEY AUTOINCREMENT,%s TEXT,%s REAL,%s REAL,%s INTEGER,%s INTEGER,%s DATETIME, FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE)",
+					tableName,
+					COLUMN_GRADE_ID,
+					COLUMN_GRADE_DESCRIPTION,
+					COLUMN_GRADE_OBTAINED,
+					COLUMN_GRADE_MAXIMUM,
+					COLUMN_GRADE_IS_EXTRA_CREDIT,
+					COLUMN_GRADE_SUBJECT_ID,
+					COLUMN_GRADE_DATE,
+					COLUMN_GRADE_SUBJECT_ID,
+					SubjectsEntry.TABLE_NAME,
+					SubjectsEntry.COLUMN_SUBJECT_ID
+			);
+		}
 	}
 
 	final String TAG = getClass().getSimpleName();
 
 	public DatabaseHelper(@Nullable Context context) {
 		super(context, GlobalEntry.DATABASE_NAME, null, GlobalEntry.DATABASE_VERSION);
+		this.context = context;
 	}
 
 	@Override
@@ -135,8 +156,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		Log.d(TAG, "Recreating databases");
 		SQLiteDatabase db = this.getWritableDatabase();
 
-		db.execSQL(GradesEntry.SQL_DELETE_ENTRIES);
-		db.execSQL(ScheduleEntry.SQL_DELETE_ENTRIES);
 		db.execSQL(SubjectsEntry.SQL_DELETE_ENTRIES);
 
 		db.execSQL(SubjectsEntry.SQL_CREATE_ENTRIES);
@@ -295,9 +314,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public void removeSubject(int subjectId) {
-		removeAllGrades(subjectId);
-		deleteClasses(subjectId);
-
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		db.delete(
@@ -519,6 +535,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 
+	private ContentValues getSubjectContentValue(Subject subject) {
+		ContentValues subjectContentValue = new ContentValues();
+		subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_NAME, subject.getName());
+
+		// I'm really considering that all subjects id in the QAcad webpage are unique,
+		// if it isn't, this is certainly going to fail.
+
+		subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_ID, subject.getId());
+
+		subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_ABBREVIATION, subject.getName().substring(0, 3));
+		subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_PROFESSOR, subject.getProfessor());
+		subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_OBTAINED_GRADE, subject.getObtainedGrade());
+		subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_MAXIMUM_GRADE, subject.getMaximumGrade());
+		return subjectContentValue;
+	}
+
 	// Related to subject grades
 
 	public SubjectGrade getGrade(int gradeId) {
@@ -554,7 +586,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return subjectGrade;
 	}
 
-	public List<SubjectGrade> getAllGrades(int subjectId) {
+	public List<SubjectGrade> getSubjectGrades(int subjectId) {
+		return getSubjectGrades(subjectId, GradesEntry.ASCENDING_DATE);
+	}
+
+	public List<SubjectGrade> getSubjectGrades(int subjectId, String order) {
+
 		SQLiteDatabase db = this.getReadableDatabase();
 		List<SubjectGrade> gradesList = new ArrayList<>();
 
@@ -563,7 +600,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				null,
 				GradesEntry.COLUMN_GRADE_SUBJECT_ID + "=?",
 				new String[]{String.valueOf(subjectId)},
-				null, null, null
+				null, null, order
 		);
 
 		int gradeIdIndex = cursor.getColumnIndex(GradesEntry.COLUMN_GRADE_ID);
@@ -571,6 +608,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		int obtainedGradeIndex = cursor.getColumnIndex(GradesEntry.COLUMN_GRADE_OBTAINED);
 		int maximumGradeIndex = cursor.getColumnIndex(GradesEntry.COLUMN_GRADE_MAXIMUM);
 		int isExtraCreditIndex = cursor.getColumnIndex(GradesEntry.COLUMN_GRADE_IS_EXTRA_CREDIT);
+		int gradeDateIndex = cursor.getColumnIndex(GradesEntry.COLUMN_GRADE_DATE);
 
 		while(cursor.moveToNext()) {
 			Integer gradeId = cursor.getInt(gradeIdIndex);
@@ -578,9 +616,69 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			float obtainedGrade = cursor.getFloat(obtainedGradeIndex);
 			float maximumGrade = cursor.getFloat(maximumGradeIndex);
 			boolean isExtraCredit = (cursor.getInt(isExtraCreditIndex) == 1);
+			String[] dateStringArray = cursor.getString(gradeDateIndex).split("-");
+			LocalDate gradeDate = LocalDate.of(Integer.valueOf(dateStringArray[0]), Integer.valueOf(dateStringArray[1]), Integer.valueOf(dateStringArray[2]));
 
 			SubjectGrade subjectGrade = new SubjectGrade(gradeId, gradeDescription, obtainedGrade, maximumGrade, isExtraCredit);
 			subjectGrade.setSubjectId(subjectId);
+			subjectGrade.setDate(gradeDate);
+
+			gradesList.add(subjectGrade);
+		}
+
+		cursor.close();
+		db.close();
+
+		return gradesList;
+	}
+
+	public List<SubjectGrade> getAllGrades(int subjectId) {
+
+		String whereClause = GradesEntry.COLUMN_GRADE_SUBJECT_ID + "=" + subjectId;
+
+		return getAllGrades(whereClause, GradesEntry.ASCENDING_DATE);
+	}
+
+	public List<SubjectGrade> getUpcomingGrades() {
+		String whereClause = String.format("%s >= date('now')", GradesEntry.COLUMN_GRADE_DATE);
+
+		return getAllGrades(whereClause, GradesEntry.ASCENDING_DATE);
+	}
+
+	public List<SubjectGrade> getAllGrades(String whereClause, String order) {
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		List<SubjectGrade> gradesList = new ArrayList<>();
+
+		Cursor cursor = db.query(
+				GradesEntry.TABLE_NAME,
+				null,
+				whereClause,
+				null,
+				null, null, order
+		);
+
+		int subjectIdIndex = cursor.getColumnIndex(GradesEntry.COLUMN_GRADE_SUBJECT_ID);
+		int gradeIdIndex = cursor.getColumnIndex(GradesEntry.COLUMN_GRADE_ID);
+		int gradeDescriptionIndex = cursor.getColumnIndex(GradesEntry.COLUMN_GRADE_DESCRIPTION);
+		int obtainedGradeIndex = cursor.getColumnIndex(GradesEntry.COLUMN_GRADE_OBTAINED);
+		int maximumGradeIndex = cursor.getColumnIndex(GradesEntry.COLUMN_GRADE_MAXIMUM);
+		int isExtraCreditIndex = cursor.getColumnIndex(GradesEntry.COLUMN_GRADE_IS_EXTRA_CREDIT);
+		int gradeDateIndex = cursor.getColumnIndex(GradesEntry.COLUMN_GRADE_DATE);
+
+		while(cursor.moveToNext()) {
+			int subjectId = cursor.getInt(subjectIdIndex);
+			Integer gradeId = cursor.getInt(gradeIdIndex);
+			String gradeDescription = cursor.getString(gradeDescriptionIndex);
+			float obtainedGrade = cursor.getFloat(obtainedGradeIndex);
+			float maximumGrade = cursor.getFloat(maximumGradeIndex);
+			boolean isExtraCredit = (cursor.getInt(isExtraCreditIndex) == 1);
+			String[] dateStringArray = cursor.getString(gradeDateIndex).split("-");
+			LocalDate gradeDate = LocalDate.of(Integer.valueOf(dateStringArray[0]), Integer.valueOf(dateStringArray[1]), Integer.valueOf(dateStringArray[2]));
+
+			SubjectGrade subjectGrade = new SubjectGrade(gradeId, gradeDescription, obtainedGrade, maximumGrade, isExtraCredit);
+			subjectGrade.setSubjectId(subjectId);
+			subjectGrade.setDate(gradeDate);
 
 			gradesList.add(subjectGrade);
 		}
@@ -595,12 +693,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		addToTotalGrade(subjectGrade);
 		SQLiteDatabase db = this.getWritableDatabase();
 
-		ContentValues contentValues = new ContentValues();
-		contentValues.put(GradesEntry.COLUMN_GRADE_SUBJECT_ID, subjectGrade.getSubjectId());
-		contentValues.put(GradesEntry.COLUMN_GRADE_DESCRIPTION, subjectGrade.getGradeDescription());
-		contentValues.put(GradesEntry.COLUMN_GRADE_OBTAINED, subjectGrade.getObtainedGrade());
-		contentValues.put(GradesEntry.COLUMN_GRADE_MAXIMUM, subjectGrade.getMaximumGrade());
-		contentValues.put(GradesEntry.COLUMN_GRADE_IS_EXTRA_CREDIT, subjectGrade.isExtraGrade());
+		ContentValues contentValues = getGradeContentValue(subjectGrade);
 
 		db.insert(GradesEntry.TABLE_NAME, null, contentValues);
 		db.close();
@@ -654,6 +747,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		newSubjectGrade.setSubjectId(oldGrade.getSubjectId());
 		addToTotalGrade(newSubjectGrade);
+	}
+
+	private ContentValues getGradeContentValue(SubjectGrade subjectGrade) {
+		ContentValues gradeContentValue = new ContentValues();
+		gradeContentValue.put(GradesEntry.COLUMN_GRADE_SUBJECT_ID, subjectGrade.getSubjectId());
+		gradeContentValue.put(GradesEntry.COLUMN_GRADE_DESCRIPTION, subjectGrade.getGradeDescription());
+		gradeContentValue.put(GradesEntry.COLUMN_GRADE_OBTAINED, subjectGrade.getObtainedGrade());
+		gradeContentValue.put(GradesEntry.COLUMN_GRADE_MAXIMUM, subjectGrade.getMaximumGrade());
+		gradeContentValue.put(GradesEntry.COLUMN_GRADE_IS_EXTRA_CREDIT, subjectGrade.isExtraGrade());
+		gradeContentValue.put(GradesEntry.COLUMN_GRADE_DATE, subjectGrade.getDate().toString());
+		return gradeContentValue;
 	}
 
 	// General use
@@ -719,30 +823,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(GradesEntry.SQL_CREATE_TRANSITIONAL_ENTRIES);
 
 		for(Subject subject: subjects) {
-			ContentValues subjectContentValue = new ContentValues();
-			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_NAME, subject.getName());
+			ContentValues subjectContentValue = getSubjectContentValue(subject);
 
-			// I'm really considering that all subjects id in the QAcad webpage are unique,
-			// if it isn't, this is certainly going to fail.
-
-			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_ID, subject.getId());
-
-			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_ABBREVIATION, subject.getName().substring(0, 3));
-			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_PROFESSOR, subject.getProfessor());
-			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_OBTAINED_GRADE, subject.getObtainedGrade());
-			subjectContentValue.put(SubjectsEntry.COLUMN_SUBJECT_MAXIMUM_GRADE, subject.getMaximumGrade());
-
-			long subjectId = db.insert(SubjectsEntry.TRANSITIONAL_TABLE_NAME, null, subjectContentValue);
+			db.insert(SubjectsEntry.TRANSITIONAL_TABLE_NAME, null, subjectContentValue);
 
 			for(Grade grade: subject.getGradeList()) {
 				SubjectGrade subjectGrade = new SubjectGrade(grade);
 
-				ContentValues gradeContentValue = new ContentValues();
-				gradeContentValue.put(GradesEntry.COLUMN_GRADE_SUBJECT_ID, subjectGrade.getSubjectId());
-				gradeContentValue.put(GradesEntry.COLUMN_GRADE_DESCRIPTION, subjectGrade.getGradeDescription());
-				gradeContentValue.put(GradesEntry.COLUMN_GRADE_OBTAINED, subjectGrade.getObtainedGrade());
-				gradeContentValue.put(GradesEntry.COLUMN_GRADE_MAXIMUM, subjectGrade.getMaximumGrade());
-				gradeContentValue.put(GradesEntry.COLUMN_GRADE_IS_EXTRA_CREDIT, subjectGrade.isExtraGrade());
+				ContentValues gradeContentValue = getGradeContentValue(subjectGrade);
 
 				db.insert(GradesEntry.TRANSITIONAL_TABLE_NAME, null, gradeContentValue);
 			}
@@ -753,6 +841,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		// SQLite automatically handles the renaming of foreign keys parent tables, since the transitional grades table references
 		// the transitional subjects table, when this last one is renamed the reference is also updated.
+		// I don't know what happens to the schedule table
 
 		String renameNewSubjectTable = String.format("ALTER TABLE %s RENAME TO %s", SubjectsEntry.TRANSITIONAL_TABLE_NAME, SubjectsEntry.TABLE_NAME);
 		String renameNewGradeTable = String.format("ALTER TABLE %s RENAME TO %s", GradesEntry.TRANSITIONAL_TABLE_NAME, GradesEntry.TABLE_NAME);

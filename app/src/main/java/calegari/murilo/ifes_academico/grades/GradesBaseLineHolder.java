@@ -19,8 +19,8 @@ public class GradesBaseLineHolder extends RecyclerView.ViewHolder{
     public GradesBaseLineHolder(View itemView) {
         super(itemView);
 
-        gradeText = itemView.findViewById(R.id.grade);
-        subjectName = itemView.findViewById(R.id.subjectName);
+        gradeText = itemView.findViewById(R.id.cardSubtitle);
+        subjectName = itemView.findViewById(R.id.cardTitle);
         gradeChart = itemView.findViewById(R.id.slimChart);
     }
 }

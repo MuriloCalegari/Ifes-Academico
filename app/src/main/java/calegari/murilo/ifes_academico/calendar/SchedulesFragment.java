@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
@@ -137,7 +136,7 @@ public class SchedulesFragment extends BaseFragment {
 	}
 
 	private void setupScheduleView() {
-		AndroidThreeTen.init(getContext());
+		//AndroidThreeTen.init(getContext());
 
 		weekView = getView().findViewById(R.id.week_view_foo);
 

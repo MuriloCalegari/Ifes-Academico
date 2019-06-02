@@ -1,8 +1,6 @@
 package calegari.murilo.ifes_academico.subjectgrades;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import calegari.murilo.ifes_academico.R;
 import calegari.murilo.ifes_academico.databases.DatabaseHelper;
-import calegari.murilo.ifes_academico.grades.GradesFragment;
 
 public class SubjectGradesFragment extends Fragment {
 
@@ -82,7 +79,7 @@ public class SubjectGradesFragment extends Fragment {
 
 		DatabaseHelper db = new DatabaseHelper(getContext());
 
-		for(SubjectGrade subjectGrade : db.getAllGrades(subjectId)) {
+		for(SubjectGrade subjectGrade : db.getSubjectGrades(subjectId)) {
 			mAdapter.updateList(subjectGrade);
 		}
 	}

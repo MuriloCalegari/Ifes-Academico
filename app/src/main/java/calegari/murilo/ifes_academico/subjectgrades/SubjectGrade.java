@@ -1,5 +1,7 @@
 package calegari.murilo.ifes_academico.subjectgrades;
 
+import org.threeten.bp.LocalDate;
+
 import calegari.murilo.qacadscrapper.utils.Grade;
 
 public class SubjectGrade extends Grade {
@@ -80,4 +82,20 @@ public class SubjectGrade extends Grade {
 	public void setSubjectId(int subjectId) {
 		this.subjectId = subjectId;
 	}
+
+	/*
+
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+	public LocalDate getAndroidDate() {
+		java.time.LocalDate defaultLocalDate = getDate();
+
+		LocalDate.of(defaultLocalDate.getYear(), defaultLocalDate.getMonthValue(), defaultLocalDate.getDayOfMonth());
+		return (LocalDate) getDate();
+	}
+
+	*/
+
 }

@@ -42,7 +42,7 @@
                 app:textColor="@color/colorAccent" />
 
             <TextView
-                android:id="@+id/grade"
+                android:id="@+id/cardSubtitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -50,12 +50,12 @@
                 android:layout_marginEnd="16dp"
                 android:text="XX.XX out of YY.YY"
                 android:textSize="22sp"
-                app:layout_constraintEnd_toStartOf="@id/subjectAbbreviation"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/subjectName" />
+                app:layout_constraintTop_toBottomOf="@+id/cardTitle"
+                tools:ignore="HardcodedText" />
 
             <TextView
-                android:id="@+id/subjectName"
+                android:id="@+id/cardTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -66,7 +66,8 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/slimChart"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
