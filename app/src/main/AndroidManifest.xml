@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="calegari.murilo.ifes_academico">
+    package="calegari.murilo.sistema_academico">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="MyApplication"
+        android:name="calegari.murilo.sistema_academico.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,34 +15,34 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".LoginActivity"
+            android:name="calegari.murilo.sistema_academico.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".calendar.EditClassTimeActivity"
+            android:name="calegari.murilo.sistema_academico.calendar.EditClassTimeActivity"
             android:label="@string/title_activity_edit_class_time"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name="calegari.murilo.sistema_academico.MainActivity"
             android:hardwareAccelerated="true"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AboutActivity"
+            android:name="calegari.murilo.sistema_academico.AboutActivity"
             android:label="@string/aboutActivityName"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="calegari.murilo.ifes_academico.MainActivity" />
+                android:value="calegari.murilo.sistema_academico.MainActivity" />
         </activity>
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name="calegari.murilo.sistema_academico.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SplashActivity"
+            android:name="calegari.murilo.sistema_academico.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,28 +51,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".subjects.NewSubjectActivity"
+            android:name="calegari.murilo.sistema_academico.subjects.NewSubjectActivity"
             android:label="@string/title_activity_new_subject"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".subjects.EditSubjectActivity"
+            android:name="calegari.murilo.sistema_academico.subjects.EditSubjectActivity"
             android:label="@string/title_activity_edit_subject"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".subjectgrades.EditSubjectGradeActivity"
+            android:name="calegari.murilo.sistema_academico.subjectgrades.EditSubjectGradeActivity"
             android:label="@string/title_activity_edit_subject_grade"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".subjectgrades.NewSubjectGradeActivity"
+            android:name="calegari.murilo.sistema_academico.subjectgrades.NewSubjectGradeActivity"
             android:label="@string/title_activity_new_subject_grade"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".BaseFragmentActivity"
+            android:name="calegari.murilo.sistema_academico.BaseFragmentActivity"
             android:theme="@style/PullCollapsibleTheme" />
         <activity
-            android:name=".calendar.NewClassTimeActivity"
+            android:name="calegari.murilo.sistema_academico.calendar.NewClassTimeActivity"
             android:label="@string/title_activity_new_subject_schedule"
             android:theme="@style/AppTheme.NoActionBar" />
         <meta-data
