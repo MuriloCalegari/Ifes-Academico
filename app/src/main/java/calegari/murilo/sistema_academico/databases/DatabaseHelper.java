@@ -19,6 +19,7 @@ import calegari.murilo.sistema_academico.calendar.ClassTime;
 import calegari.murilo.sistema_academico.subjectgrades.SubjectGrade;
 import calegari.murilo.qacadscrapper.utils.Grade;
 import calegari.murilo.qacadscrapper.utils.Subject;
+import calegari.murilo.sistema_academico.utils.SubjectNotFoundException;
 
 @SuppressWarnings("WeakerAccess")
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -162,6 +163,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		Log.d(TAG, "Recreating databases");
 		SQLiteDatabase db = this.getWritableDatabase();
 
+		db.execSQL(ScheduleEntry.SQL_DELETE_ENTRIES);
+		db.execSQL(GradesEntry.SQL_DELETE_ENTRIES);
 		db.execSQL(SubjectsEntry.SQL_DELETE_ENTRIES);
 
 		db.execSQL(SubjectsEntry.SQL_CREATE_ENTRIES);
@@ -525,15 +528,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		int columnSubjectObtainedGradeIndex = subjectsCursor.getColumnIndex(SubjectsEntry.COLUMN_SUBJECT_OBTAINED_GRADE);
 		int columnSubjectMaximumGradeIndex = subjectsCursor.getColumnIndex(SubjectsEntry.COLUMN_SUBJECT_MAXIMUM_GRADE);
 
-		subjectsCursor.moveToFirst();
-
 		Subject subject = new Subject();
-		subject.setId(subjectId);
-		subject.setName(subjectsCursor.getString(columnSubjectNameIndex));
-		subject.setAbbreviation(subjectsCursor.getString(columnSubjectAbbreviationIndex));
-		subject.setProfessor(subjectsCursor.getString(columnSubjectProfessorIndex));
-		subject.setObtainedGrade(subjectsCursor.getFloat(columnSubjectObtainedGradeIndex));
-		subject.setMaximumGrade(subjectsCursor.getFloat(columnSubjectMaximumGradeIndex));
+
+		if(subjectsCursor.moveToFirst()) {
+			subject.setId(subjectId);
+			subject.setName(subjectsCursor.getString(columnSubjectNameIndex));
+			subject.setAbbreviation(subjectsCursor.getString(columnSubjectAbbreviationIndex));
+			subject.setProfessor(subjectsCursor.getString(columnSubjectProfessorIndex));
+			subject.setObtainedGrade(subjectsCursor.getFloat(columnSubjectObtainedGradeIndex));
+			subject.setMaximumGrade(subjectsCursor.getFloat(columnSubjectMaximumGradeIndex));
+		} else {
+			throw new SubjectNotFoundException(String.format("No subject with id %s was found", subjectId));
+		}
 
 		subjectsCursor.close();
 		db.close();
@@ -759,8 +765,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		ContentValues gradeContentValue = new ContentValues();
 		gradeContentValue.put(GradesEntry.COLUMN_GRADE_SUBJECT_ID, subjectGrade.getSubjectId());
 		gradeContentValue.put(GradesEntry.COLUMN_GRADE_DESCRIPTION, subjectGrade.getGradeDescription());
-		gradeContentValue.put(GradesEntry.COLUMN_GRADE_OBTAINED, subjectGrade.getObtainedGrade());
-		gradeContentValue.put(GradesEntry.COLUMN_GRADE_MAXIMUM, subjectGrade.getMaximumGrade());
+		gradeContentValue.put(GradesEntry.COLUMN_GRADE_OBTAINED, subjectGrade.getObtainedGrade() * subjectGrade.getWeight());
+		gradeContentValue.put(GradesEntry.COLUMN_GRADE_MAXIMUM, subjectGrade.getMaximumGrade() * subjectGrade.getWeight());
 		gradeContentValue.put(GradesEntry.COLUMN_GRADE_IS_EXTRA_CREDIT, subjectGrade.isExtraGrade());
 		gradeContentValue.put(GradesEntry.COLUMN_GRADE_DATE, subjectGrade.getDate().toString());
 		return gradeContentValue;
@@ -818,6 +824,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		boolean inTransaction = db.inTransaction();
 
+		// We do not want to constraints to interfere during this switch
+
+		db.execSQL("PRAGMA foreign_keys = OFF;");
+
 		if(!inTransaction) {
 			Log.v(TAG, "updateSubjectsDatabase: beginning transaction");
 			db.beginTransaction();
@@ -872,6 +882,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 
 		Log.v(TAG, "updateSubjectsDatabase: writing data to disk");
+
+		// Turn constraints back on
+
+		db.execSQL("PRAGMA foreign_keys = ON;");
+
 		db.close();
 	}
 }
