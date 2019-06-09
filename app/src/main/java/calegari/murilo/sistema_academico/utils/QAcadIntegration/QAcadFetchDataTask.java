@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
@@ -82,6 +83,7 @@ public class QAcadFetchDataTask extends AsyncTask<Integer, Integer, Integer>{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			Crashlytics.logException(e);
 			result = Constants.QAcad.RESULT_UNKNOWN_ERROR;
 			if(context instanceof Activity) {
 				try {

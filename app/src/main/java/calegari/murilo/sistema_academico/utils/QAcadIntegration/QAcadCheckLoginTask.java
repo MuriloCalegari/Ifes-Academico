@@ -3,6 +3,8 @@ package calegari.murilo.sistema_academico.utils.QAcadIntegration;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.IOException;
 import java.util.Map;
 
@@ -40,6 +42,7 @@ public class QAcadCheckLoginTask extends AsyncTask<Integer, Integer, Integer> {
         } catch (IOException e) {
             result =  Constants.QAcad.RESULT_CONNECTION_FAILURE;
         } catch (Exception e) {
+            Crashlytics.logException(e);
             result = Constants.QAcad.RESULT_UNKNOWN_ERROR;
         }
 
