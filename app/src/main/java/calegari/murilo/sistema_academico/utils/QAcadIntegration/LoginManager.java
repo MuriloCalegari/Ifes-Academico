@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import calegari.murilo.sistema_academico.LoginActivity;
@@ -40,6 +41,8 @@ public class LoginManager {
         sharedPreferences = context.getSharedPreferences(Constants.Keys.APP_GLOBALS_PREFERENCES, Context.MODE_PRIVATE).edit();
         sharedPreferences.remove(Constants.Keys.APP_USERNAME_PREFERENCE);
         sharedPreferences.apply();
+
+        PreferenceManager.getDefaultSharedPreferences(context).edit().remove(Constants.Keys.IS_DATA_COLLECTION_AUTHORIZED).apply();
 
         DatabaseHelper databaseHelper = new DatabaseHelper(context);
         databaseHelper.recreateDatabase(); // Clear databases

@@ -24,6 +24,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -39,6 +40,7 @@ import calegari.murilo.sistema_academico.utils.Constants;
 import calegari.murilo.sistema_academico.utils.QAcadIntegration.LoginManager;
 import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadFetchDataTask;
 
+import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +51,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
@@ -120,6 +123,27 @@ public class MainActivity extends AppCompatActivity
 			syncDataFromQAcad();
 			intent.removeExtra(Constants.Keys.SHOULD_SYNC_GRADES);
 		}
+
+		if(!PreferenceManager.getDefaultSharedPreferences(this).contains(Constants.Keys.IS_DATA_COLLECTION_AUTHORIZED)) {
+			displayGetDataCollectionAuthorization();
+		}
+	}
+
+	private void displayGetDataCollectionAuthorization() {
+		AlertDialog dialog = new AlertDialog.Builder(this)
+				.setTitle(getString(R.string.about_data_collection))
+				.setMessage(R.string.data_collection_explanation)
+				.setPositiveButton(R.string.accept, (dialogInterface, i) -> acceptOrDeclineDataCollection(true))
+				.setNegativeButton(R.string.decline, (dialogInterface, i) -> acceptOrDeclineDataCollection(false))
+				.show();
+
+		try {
+			((TextView) dialog.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+		} catch (NullPointerException ignored) {}
+	}
+
+	private void acceptOrDeclineDataCollection(boolean isAccepted) {
+		PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Keys.IS_DATA_COLLECTION_AUTHORIZED, isAccepted).apply();
 	}
 
 	@Override

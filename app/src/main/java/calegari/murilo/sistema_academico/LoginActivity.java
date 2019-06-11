@@ -1,6 +1,7 @@
 package calegari.murilo.sistema_academico;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,24 +11,30 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import br.com.simplepass.loadingbutton.customViews.CircularProgressImageButton;
 import calegari.murilo.sistema_academico.utils.Constants;
 import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadCheckLoginTask;
 import calegari.murilo.qacadscrapper.utils.User;
+import calegari.murilo.sistema_academico.utils.Tools;
 
 public class LoginActivity extends AppCompatActivity {
 
     private CircularProgressImageButton loginButton;
     private TextView loginButtonText;
+    private Switch termsAndConditionsSwitch;
     private final Context context = this;
 
     @Override
@@ -52,107 +59,118 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener((view) -> checkCredentials(usernameText.getText().toString(), passwordText.getText().toString()));
 
+        // Makes link to terms and conditions clickable
+
+        TextView termsAndConditionsText = findViewById(R.id.termsAndConditionsText);
+        termsAndConditionsText.setMovementMethod(LinkMovementMethod.getInstance());
+
+        termsAndConditionsSwitch = findViewById(R.id.termsAndConditionsSwitch);
     }
 
     public void checkCredentials(String username, String password) {
-        loginButtonText.setVisibility(View.GONE);
-        loginButton.startAnimation(() -> null);
+        if(!termsAndConditionsSwitch.isChecked()) {
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), getString(R.string.must_accept_terms_and_conditiosn_first), Snackbar.LENGTH_SHORT);
+            snackbar.show();
+        } else {
+            loginButtonText.setVisibility(View.GONE);
+            loginButton.startAnimation(() -> null);
 
-        User user = new User(username, password);
+            User user = new User(username, password);
 
-        @SuppressLint("StaticFieldLeak")
-        QAcadCheckLoginTask qAcadCheckLoginTask = new QAcadCheckLoginTask(user) {
-            @SuppressLint("ApplySharedPref")
-            @Override
-            protected void onPostExecute(Integer result) {
-                super.onPostExecute(result);
-                loginButton.setClickable(false);
+            @SuppressLint("StaticFieldLeak")
+            QAcadCheckLoginTask qAcadCheckLoginTask = new QAcadCheckLoginTask(user) {
+                @SuppressLint("ApplySharedPref")
+                @Override
+                protected void onPostExecute(Integer result) {
+                    super.onPostExecute(result);
+                    loginButton.setClickable(false);
 
-                if(result == Constants.QAcad.RESULT_LOGIN_INVALID) {
+                    if(result == Constants.QAcad.RESULT_LOGIN_INVALID) {
 
-                    Bitmap errorIcon = drawableToBitmap(getDrawable(R.drawable.ic_error_white_24dp));
-                    loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_error));
-                    loginButton.doneLoadingAnimation(getResources().getColor(R.color.danger_color), errorIcon); // Displays error icon
-                    new Handler().postDelayed(() -> {
-                        loginButton.revertAnimation(() -> {
-                            loginButtonText.setText(getString(R.string.invalid_login)); // Tells user that its login is invalid
-                            loginButtonText.setVisibility(View.VISIBLE);
-                            setLoginButtonToIdle();
-                            return null;
-                        });
-                    }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
+                        Bitmap errorIcon = drawableToBitmap(getDrawable(R.drawable.ic_error_white_24dp));
+                        loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_error));
+                        loginButton.doneLoadingAnimation(getResources().getColor(R.color.danger_color), errorIcon); // Displays error icon
+                        new Handler().postDelayed(() -> {
+                            loginButton.revertAnimation(() -> {
+                                loginButtonText.setText(getString(R.string.invalid_login)); // Tells user that its login is invalid
+                                loginButtonText.setVisibility(View.VISIBLE);
+                                setLoginButtonToIdle();
+                                return null;
+                            });
+                        }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
 
-                } else if (result == Constants.QAcad.RESULT_CONNECTION_FAILURE) {
+                    } else if(result == Constants.QAcad.RESULT_CONNECTION_FAILURE) {
 
-                    Bitmap errorIcon = drawableToBitmap(getDrawable(R.drawable.ic_error_white_24dp));
-                    loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_error));
-                    loginButton.doneLoadingAnimation(getResources().getColor(R.color.danger_color), errorIcon); // Displays error icon
-                    new Handler().postDelayed(() -> {
-                        loginButton.revertAnimation(() -> {
-                            loginButtonText.setText(getString(R.string.connection_failure)); // Tells user that a connection failure has happened
-                            loginButtonText.setVisibility(View.VISIBLE);
+                        Bitmap errorIcon = drawableToBitmap(getDrawable(R.drawable.ic_error_white_24dp));
+                        loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_error));
+                        loginButton.doneLoadingAnimation(getResources().getColor(R.color.danger_color), errorIcon); // Displays error icon
+                        new Handler().postDelayed(() -> {
+                            loginButton.revertAnimation(() -> {
+                                loginButtonText.setText(getString(R.string.connection_failure)); // Tells user that a connection failure has happened
+                                loginButtonText.setVisibility(View.VISIBLE);
 
-                            setLoginButtonToIdle();
-                            return null;
-                        });
-                    }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
+                                setLoginButtonToIdle();
+                                return null;
+                            });
+                        }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
 
-                } else if (result == Constants.QAcad.RESULT_SUCCESS) {
+                    } else if(result == Constants.QAcad.RESULT_SUCCESS) {
 
-                    Bitmap checkIcon = drawableToBitmap(getDrawable(R.drawable.ic_check_white_24dp));
-                    loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_idle));
-                    loginButton.doneLoadingAnimation(getResources().getColor(R.color.ok_color), checkIcon); // Displays success icon
-                    new Handler().postDelayed(() -> {
-                        loginButton.revertAnimation(() -> {
-                            loginButtonText.setText(getString(R.string.success)); // Tells user that their login is valid
-                            loginButtonText.setVisibility(View.VISIBLE);
+                        Bitmap checkIcon = drawableToBitmap(getDrawable(R.drawable.ic_check_white_24dp));
+                        loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_idle));
+                        loginButton.doneLoadingAnimation(getResources().getColor(R.color.ok_color), checkIcon); // Displays success icon
+                        new Handler().postDelayed(() -> {
+                            loginButton.revertAnimation(() -> {
+                                loginButtonText.setText(getString(R.string.success)); // Tells user that their login is valid
+                                loginButtonText.setVisibility(View.VISIBLE);
 
-                            SharedPreferences sharedPreferences = getSharedPreferences(Constants.Keys.QACAD_USER_INFO_PREFERENCES, MODE_PRIVATE);
-                            sharedPreferences.edit()
-                                    .putString(Constants.Keys.QACAD_USERNAME_PREFERENCE, username)
-                                    .putString(Constants.Keys.QACAD_PASSWORD_PREFERENCE, password)
-                                    .commit();
-
-                            String userFullName = this.qAcadScrapper.getUser().getFullName();
-
-                            if(userFullName != null) {
-                                sharedPreferences = getSharedPreferences(Constants.Keys.APP_GLOBALS_PREFERENCES, MODE_PRIVATE);
+                                SharedPreferences sharedPreferences = getSharedPreferences(Constants.Keys.QACAD_USER_INFO_PREFERENCES, MODE_PRIVATE);
                                 sharedPreferences.edit()
-                                        .putString(Constants.Keys.APP_USERNAME_PREFERENCE, userFullName.split(" ")[0])
-                                        .apply();
-                            }
+                                        .putString(Constants.Keys.QACAD_USERNAME_PREFERENCE, username)
+                                        .putString(Constants.Keys.QACAD_PASSWORD_PREFERENCE, password)
+                                        .commit();
 
-                            // If login is successful, send cookieMap to be used in MainActivity
-                            MainActivity.qAcadCookieMap = cookieMap;
+                                String userFullName = this.qAcadScrapper.getUser().getFullName();
 
-                            Intent intent = new Intent(context, MainActivity.class);
-                            intent.putExtra(Constants.Keys.SHOULD_SYNC_GRADES, true);
-                            startActivity(intent);
-                            finish();
-                            return null;
-                        });
-                    }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
+                                if(userFullName != null) {
+                                    sharedPreferences = getSharedPreferences(Constants.Keys.APP_GLOBALS_PREFERENCES, MODE_PRIVATE);
+                                    sharedPreferences.edit()
+                                            .putString(Constants.Keys.APP_USERNAME_PREFERENCE, userFullName.split(" ")[0])
+                                            .apply();
+                                }
 
-                } else if (result == Constants.QAcad.RESULT_UNKNOWN_ERROR) {
+                                // If login is successful, send cookieMap to be used in MainActivity
+                                MainActivity.qAcadCookieMap = cookieMap;
 
-                    Bitmap errorIcon = drawableToBitmap(getDrawable(R.drawable.ic_error_white_24dp));
-                    loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_error));
-                    loginButton.doneLoadingAnimation(getResources().getColor(R.color.danger_color), errorIcon); // Displays error icon
-                    new Handler().postDelayed(() -> {
-                        loginButton.revertAnimation(() -> {
-                            loginButtonText.setText(getString(R.string.unknown_error)); // Tells user that an unknown error has occurred
-                            loginButtonText.setVisibility(View.VISIBLE);
+                                Intent intent = new Intent(context, MainActivity.class);
+                                intent.putExtra(Constants.Keys.SHOULD_SYNC_GRADES, true);
+                                startActivity(intent);
+                                finish();
+                                return null;
+                            });
+                        }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
 
-                            setLoginButtonToIdle();
-                            return null;
-                        });
-                    }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
+                    } else if(result == Constants.QAcad.RESULT_UNKNOWN_ERROR) {
 
+                        Bitmap errorIcon = drawableToBitmap(getDrawable(R.drawable.ic_error_white_24dp));
+                        loginButton.setBackground(getDrawable(R.drawable.login_button_round_corners_error));
+                        loginButton.doneLoadingAnimation(getResources().getColor(R.color.danger_color), errorIcon); // Displays error icon
+                        new Handler().postDelayed(() -> {
+                            loginButton.revertAnimation(() -> {
+                                loginButtonText.setText(getString(R.string.unknown_error)); // Tells user that an unknown error has occurred
+                                loginButtonText.setVisibility(View.VISIBLE);
+
+                                setLoginButtonToIdle();
+                                return null;
+                            });
+                        }, getResources().getInteger(R.integer.login_button_delay_x_to_error));
+
+                    }
                 }
-            }
-        };
+            };
 
-        qAcadCheckLoginTask.execute();
+            qAcadCheckLoginTask.execute();
+        }
     }
 
     private void setLoginButtonToIdle() {

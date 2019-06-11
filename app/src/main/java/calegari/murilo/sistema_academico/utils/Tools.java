@@ -1,11 +1,15 @@
 package calegari.murilo.sistema_academico.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 
 
 import androidx.preference.PreferenceManager;
+
+import com.google.android.material.snackbar.Snackbar;
+
 import calegari.murilo.sistema_academico.R;
 
 public abstract class Tools {

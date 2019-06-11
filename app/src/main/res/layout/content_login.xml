@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,13 +24,12 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="32dp"
-            android:paddingBottom="32dp"
-            android:scrollbars="none"
             android:overScrollMode="never"
-            >
+            android:paddingStart="16dp"
+            android:paddingTop="32dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="32dp"
+            android:scrollbars="none">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/innerConstraintLayout"
@@ -65,7 +65,7 @@
                         android:id="@+id/usernameEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:singleLine="true"/>
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,24 +88,41 @@
                         android:id="@+id/passwordEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
                         android:inputType="text|textPassword"
-                        android:singleLine="true"
-                        android:imeOptions="actionDone"/>
+                        android:singleLine="true" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/termsAndConditionsText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/accept_terms_and_conditions"
+                    app:layout_constraintEnd_toStartOf="@id/termsAndConditionsSwitch"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout" />
+
+                <Switch
+                    android:id="@+id/termsAndConditionsSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@id/termsAndConditionsText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/termsAndConditionsText" />
 
                 <br.com.simplepass.loadingbutton.customViews.CircularProgressImageButton
                     android:id="@+id/loginButton"
                     android:layout_width="@dimen/login_button_width"
                     android:layout_height="@dimen/login_button_height"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginEnd="0dp"
+                    android:layout_marginTop="16dp"
                     android:text="@string/login"
+                    app:layout_constraintCircleRadius="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/passwordInputLayout"
-                    app:layout_constraintCircleRadius="16dp"
+                    app:layout_constraintTop_toBottomOf="@+id/termsAndConditionsText"
                     app:spinning_bar_color="@color/light_grey"
                     app:spinning_bar_padding="6dp" />
 
@@ -113,17 +130,17 @@
                     android:id="@+id/loginButtonText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginBottom="0dp"
                     android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
                     android:layout_marginEnd="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:text="@string/login"
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintBottom_toBottomOf="@id/loginButton"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/loginButton"
-                    app:layout_constraintBottom_toBottomOf="@id/loginButton"
-                    android:text="@string/login"
-                    android:textColor="@android:color/white"
-                    android:textAllCaps="true"/>
+                    app:layout_constraintTop_toTopOf="@id/loginButton" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

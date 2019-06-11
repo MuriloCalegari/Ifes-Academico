@@ -148,5 +148,25 @@
     <string name="date">Date</string>
     <string name="calendar">Calendar</string>
     <string name="upcoming_events">Tests are coming, be prepared!</string>
+    <string name="accept_terms_and_conditions">I accept all the <a href="https://sites.google.com/view/app-sistema-academico/">terms and conditions</a></string>
+    <string name="must_accept_terms_and_conditiosn_first">You must accept the terms and conditions first.</string>
+    <string name="about_data_collection">About data collection</string>
+
+    <string name="data_collection_explanation">
+        "Hi, \n"
+        "In order to improve your experience within the app I need to collect some of your usage data. Without them, I'm not able to provide most of the fixes I might need to make on this app.\n"
+        "Some of the data I might collect include:\n"
+        "* Information about your device;\n"
+        "* Geographical region (limited to the user's city);\n"
+        "* General statistics about the user's usage of the app (such as how is the user spending his time on the app);"
+        "* Log data, which is fully described in <a href="https://sites.google.com/view/app-sistema-academico/">terms and conditions</a>.\n"
+        "All this data is processed in third-party applications such as Google Firebase. I DO NOT gain access of you login and password information, it is fully restricted to your phone and it is only used for accessing Q-Acadêmico website in the background."
+        "If you have any doubts, do not hesitate to contact me at murilo.calegari.souza@gmail.com"
+    </string>
+    <string name="accept">Accept</string>
+    <string name="decline">Decline</string>
+    <string name="privacy">Privacy</string>
+    <string name="data_collection">Data collection</string>
+    <string name="data_collection_authorize">I authorize some data collection to improve the app\'s experience in general.</string>
 
 </resources>

@@ -139,5 +139,27 @@
     <string name="date">Data</string>
     <string name="calendar">Calendário</string>
     <string name="upcoming_events">As avaliações estão chegando!</string>
+    <string name="accept_terms_and_conditions">Eu aceito todos os <a href="https://sites.google.com/view/app-sistema-academico/">termos e condições</a></string>
+    <string name="must_accept_terms_and_conditiosn_first">Você deve primeiro aceitar os termos e condições.</string>
+
+    <string name="about_data_collection">Sobre a coleta de dados</string>
+    <string name="accept">Aceito</string>
+    <string name="decline">Recuso</string>
+
+    <string name="data_collection_explanation">
+       "Olá,\n \n"
+        "Para que eu seja capaz de melhorar a sua experiência dentro deste aplicativo, eu preciso coletar aluguns dados. Sem eles, não sou capaz de fornecer a marioria das correções que eu talvez precise fazer.\n"
+        "Alguns dos dados que eu talvez colete incluem:\n"
+        "* Informações sobre seu dispositivo, como modelo, tamanho de tela, espaço livre, etc.;\n"
+        "* Região geográfica, limitada à cidade do usuário;\n"
+        "* Estatísticas gerais sobre o seu uso do app, como tempo de tela em determinadas áreas;\n"
+        "* Dados de logs, os quais estão completamente descritos nos <a href="https://sites.google.com/view/app-sistema-academico/">termos e condições</a>.\n"
+        "Todos esses dados são processados em serviços de terceiros como o Google Firebase. Em nenhum momento eu tenho acesso ao seu login e senha, esses SOMENTE são usados para acessar o website do Q-Acadêmico no plano de fundo. Eu NÃO TENHO acesso às suas notas e pretendo proteger todas as suas informações pessoais na medida do possível.\n"
+        "Se você tem quaisquer dúvidas, não hesite em me contactar pelo email <a href="mailto:murilo.calegari.souza@gmail.com">murilo.calegari.souza@gmail.com"</a>
+    </string>
+
+    <string name="privacy">Privacidade</string>
+    <string name="data_collection">Coleta de dados</string>
+    <string name="data_collection_authorize">Eu autorizo a coleta de alguns dados para melhorar a experiência do aplicativo em geral</string>
 
 </resources>

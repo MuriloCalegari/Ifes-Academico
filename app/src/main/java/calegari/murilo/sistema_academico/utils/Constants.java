@@ -10,6 +10,7 @@ public class Constants {
 		public static final String SUBJECT_ID = "subjectId";
 		public static final String APP_GLOBALS_PREFERENCES = "globalpreferences";
 		public static final String APP_USERNAME_PREFERENCE = "username";
+		public static final String IS_DATA_COLLECTION_AUTHORIZED = "datacollectionauthorized";
 	}
 
 	public class QAcad {
