@@ -161,5 +161,6 @@
     <string name="privacy">Privacidade</string>
     <string name="data_collection">Coleta de dados</string>
     <string name="data_collection_authorize">Eu autorizo a coleta de alguns dados para melhorar a experiência do aplicativo em geral</string>
+    <string name="privacy_policy">Política de privacidade</string>
 
 </resources>

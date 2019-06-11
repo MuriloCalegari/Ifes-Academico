@@ -168,5 +168,6 @@
     <string name="privacy">Privacy</string>
     <string name="data_collection">Data collection</string>
     <string name="data_collection_authorize">I authorize some data collection to improve the app\'s experience in general.</string>
+    <string name="privacy_policy">Privacy policy</string>
 
 </resources>

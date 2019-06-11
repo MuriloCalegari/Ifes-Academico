@@ -34,6 +34,7 @@ public class AboutActivity extends AppCompatActivity {
                 .addPlayStore(getApplicationContext().getPackageName())
                 .addEmail("murilo.calegari.souza@gmail.com")
                 .addGitHub("MuriloCalegari/Ifes-Academico")
+				.addWebsite("https://sites.google.com/view/app-sistema-academico/", getString(R.string.privacy_policy))
                 .addItem(openSourceElement)
                 .create();
 
