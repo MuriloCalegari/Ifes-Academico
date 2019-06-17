@@ -14,7 +14,7 @@ import calegari.murilo.sistema_academico.utils.Constants;
 import calegari.murilo.qacadscrapper.QAcadScrapper;
 import calegari.murilo.qacadscrapper.utils.User;
 
-public class QAcadCheckLoginTask extends AsyncTask<Integer, Integer, Integer> {
+public class QAcadLoginTask extends AsyncTask<Integer, Integer, Integer> {
 
     private final User user;
     private final String TAG = getClass().getSimpleName();
@@ -23,7 +23,7 @@ public class QAcadCheckLoginTask extends AsyncTask<Integer, Integer, Integer> {
     private int result;
     protected QAcadScrapper qAcadScrapper;
 
-    public QAcadCheckLoginTask(User user) {
+    public QAcadLoginTask(User user) {
        this.user = user;
     }
 

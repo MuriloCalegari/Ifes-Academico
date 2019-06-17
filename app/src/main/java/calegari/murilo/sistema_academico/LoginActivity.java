@@ -1,7 +1,6 @@
 package calegari.murilo.sistema_academico;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,7 +16,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -26,9 +24,8 @@ import android.widget.TextView;
 
 import br.com.simplepass.loadingbutton.customViews.CircularProgressImageButton;
 import calegari.murilo.sistema_academico.utils.Constants;
-import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadCheckLoginTask;
+import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadLoginTask;
 import calegari.murilo.qacadscrapper.utils.User;
-import calegari.murilo.sistema_academico.utils.Tools;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -78,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             User user = new User(username, password);
 
             @SuppressLint("StaticFieldLeak")
-            QAcadCheckLoginTask qAcadCheckLoginTask = new QAcadCheckLoginTask(user) {
+			QAcadLoginTask qAcadLoginTask = new QAcadLoginTask(user) {
                 @SuppressLint("ApplySharedPref")
                 @Override
                 protected void onPostExecute(Integer result) {
@@ -169,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             };
 
-            qAcadCheckLoginTask.execute();
+            qAcadLoginTask.execute();
         }
     }
 

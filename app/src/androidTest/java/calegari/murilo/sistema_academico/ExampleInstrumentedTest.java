@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import calegari.murilo.sistema_academico.utils.QAcadIntegration.LoginManager;
-import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadCheckLoginTask;
+import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadLoginTask;
 import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadFetchMaterialsURLsTask;
 import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadFetchGradesTask;
 
@@ -67,18 +67,18 @@ public class ExampleInstrumentedTest {
     public void testSimultaneousFetchData() {
         Context appContext = getContext();
 
-        QAcadCheckLoginTask qAcadCheckLoginTask = new QAcadCheckLoginTask(LoginManager.getUser(appContext));
-        qAcadCheckLoginTask.execute();
+        QAcadLoginTask qAcadLoginTask = new QAcadLoginTask(LoginManager.getUser(appContext));
+        qAcadLoginTask.execute();
 
         try {
-            qAcadCheckLoginTask.get();
+            qAcadLoginTask.get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        Map<String, String> cookieMap = qAcadCheckLoginTask.getCookieMap();
+        Map<String, String> cookieMap = qAcadLoginTask.getCookieMap();
 
         for(int i = 0; i <= 100; i++) {
             QAcadFetchGradesTask qAcadFetchGradesTask = new QAcadFetchGradesTask(appContext, cookieMap);
