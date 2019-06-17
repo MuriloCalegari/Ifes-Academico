@@ -30,6 +30,10 @@ public abstract class LoginManager {
                 Log.d(TAG, "logout: Cancelling qAcadFetchGradesTask");
                 activity.qAcadFetchGradesTask.cancel(false);
             }
+            if(activity.qAcadFetchMaterialsURLsTask != null) {
+                Log.d(TAG, "logout: Cancelling qAcadFetchMaterialsURLsTask");
+                activity.qAcadFetchMaterialsURLsTask.cancel(false);
+            }
         }
 
         SharedPreferences.Editor sharedPreferences;
