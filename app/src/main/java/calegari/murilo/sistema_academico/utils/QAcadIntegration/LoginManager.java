@@ -51,9 +51,11 @@ public abstract class LoginManager {
 
         MainActivity.qAcadCookieMap = null; // Clear cookies
 
-        Intent loginIntent = new Intent(context, LoginActivity.class);
-        context.startActivity(loginIntent);
-        ((Activity) context).finish();
+        if(context instanceof Activity) {
+            Intent loginIntent = new Intent(context, LoginActivity.class);
+            context.startActivity(loginIntent);
+            ((Activity) context).finish();
+        }
     }
 
     public static User getUser(Context context) {
