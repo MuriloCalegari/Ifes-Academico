@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.view.View;
 
 
 import androidx.preference.PreferenceManager;
@@ -52,5 +53,20 @@ public abstract class Tools {
 		}
 
 		return finalString;
+	}
+
+	public static void displaySnackBarBackOnActivity(Context context, int stringId) {
+		displaySnackBarBackOnActivity(context, context.getString(stringId));
+	}
+
+	public static void displaySnackBarBackOnActivity(Context context, String message) {
+		if(context instanceof Activity) {
+			try {
+				View rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
+				Snackbar snackbar = Snackbar.make(rootView, message, Snackbar.LENGTH_LONG);
+				snackbar.show();
+			} catch (Exception ignored) {
+			}
+		}
 	}
 }

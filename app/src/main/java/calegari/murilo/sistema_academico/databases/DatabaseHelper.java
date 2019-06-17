@@ -8,13 +8,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.threeten.bp.LocalDate;
 
+import calegari.murilo.qacadscrapper.utils.ClassMaterial;
 import calegari.murilo.sistema_academico.calendar.ClassTime;
 import calegari.murilo.sistema_academico.subjectgrades.SubjectGrade;
 import calegari.murilo.qacadscrapper.utils.Grade;
@@ -28,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public static class GlobalEntry implements BaseColumns {
 		public static final String DATABASE_NAME = "schooltoolsdatabase.db";
-		public static final int DATABASE_VERSION = 1;
+		public static final int DATABASE_VERSION = 2;
 	}
 
 	public static class SubjectsEntry implements BaseColumns {
@@ -135,6 +140,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 	}
 
+	public static class MaterialsEntry implements BaseColumns {
+		public static final String TABLE_NAME = "materials";
+		public static final String TRANSITIONAL_TABLE_NAME = TABLE_NAME + "_transitional";
+
+		public static final String COLUMN_ID = "materialid";
+		public static final String COLUMN_DESCRIPTION = "description";
+		public static final String COLUMN_RELEASE_DATE = "releasedate";
+		public static final String COLUMN_URL = "url";
+		public static final String COLUMN_SUBJECT_ID = "subjectid";
+
+		private static final String SQL_CREATE_ENTRIES = getCreateEntriesForTableName(TABLE_NAME, SubjectsEntry.TABLE_NAME);
+		private static final String SQL_CREATE_TRANSITIONAL_ENTRIES = getCreateEntriesForTableName(TRANSITIONAL_TABLE_NAME, SubjectsEntry.TRANSITIONAL_TABLE_NAME);
+
+
+		private static final String SQL_DELETE_ENTRIES = "DROP TABLES IF EXSITS " + TABLE_NAME;
+
+		private static String getCreateEntriesForTableName(String tableName, String foreignSubjectTableName) {
+			return String.format(
+					"CREATE TABLE IF NOT EXISTS %s(%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT, %s DATETIME, %s TEXT, %s INTEGER, FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE)",
+					tableName,
+					COLUMN_ID,
+					COLUMN_DESCRIPTION,
+					COLUMN_RELEASE_DATE,
+					COLUMN_URL,
+					COLUMN_SUBJECT_ID,
+					COLUMN_SUBJECT_ID,
+					foreignSubjectTableName,
+					SubjectsEntry.COLUMN_SUBJECT_ID
+			);
+		}
+	}
+
 	final String TAG = getClass().getSimpleName();
 
 	public DatabaseHelper(@Nullable Context context) {
@@ -147,10 +184,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(SubjectsEntry.SQL_CREATE_ENTRIES);
 		db.execSQL(ScheduleEntry.SQL_CREATE_ENTRIES);
 		db.execSQL(GradesEntry.SQL_CREATE_ENTRIES);
+		db.execSQL(MaterialsEntry.SQL_CREATE_ENTRIES);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		if(oldVersion <= 1) {
+			db.execSQL(MaterialsEntry.SQL_CREATE_ENTRIES);
+		}
 	}
 
 	@Override
@@ -628,8 +669,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			float obtainedGrade = cursor.getFloat(obtainedGradeIndex);
 			float maximumGrade = cursor.getFloat(maximumGradeIndex);
 			boolean isExtraCredit = (cursor.getInt(isExtraCreditIndex) == 1);
-			String[] dateStringArray = cursor.getString(gradeDateIndex).split("-");
-			LocalDate gradeDate = LocalDate.of(Integer.valueOf(dateStringArray[0]), Integer.valueOf(dateStringArray[1]), Integer.valueOf(dateStringArray[2]));
+			String dateString = cursor.getString(gradeDateIndex);
+			LocalDate gradeDate = getLocalDateFromString(dateString);
 
 			SubjectGrade subjectGrade = new SubjectGrade(gradeId, gradeDescription, obtainedGrade, maximumGrade, isExtraCredit);
 			subjectGrade.setSubjectId(subjectId);
@@ -642,6 +683,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.close();
 
 		return gradesList;
+	}
+
+	private LocalDate getLocalDateFromString(String dateString) {
+		String[] dateStringArray = dateString.split("-");
+		return LocalDate.of(Integer.valueOf(dateStringArray[0]), Integer.valueOf(dateStringArray[1]), Integer.valueOf(dateStringArray[2]));
 	}
 
 	public List<SubjectGrade> getAllGrades(int subjectId) {
@@ -685,8 +731,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			float obtainedGrade = cursor.getFloat(obtainedGradeIndex);
 			float maximumGrade = cursor.getFloat(maximumGradeIndex);
 			boolean isExtraCredit = (cursor.getInt(isExtraCreditIndex) == 1);
-			String[] dateStringArray = cursor.getString(gradeDateIndex).split("-");
-			LocalDate gradeDate = LocalDate.of(Integer.valueOf(dateStringArray[0]), Integer.valueOf(dateStringArray[1]), Integer.valueOf(dateStringArray[2]));
+			LocalDate gradeDate = getLocalDateFromString(cursor.getString(gradeDateIndex));
 
 			SubjectGrade subjectGrade = new SubjectGrade(gradeId, gradeDescription, obtainedGrade, maximumGrade, isExtraCredit);
 			subjectGrade.setSubjectId(subjectId);
@@ -888,5 +933,140 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("PRAGMA foreign_keys = ON;");
 
 		db.close();
+	}
+
+	/**
+	 * Updates the materials database, checking for which materials are new
+ 	 * @param updatedMaterials Class materials to add
+	 * @return List of new ClassMaterial objects
+	 */
+	public List<ClassMaterial> updateMaterialsDatabase(List<ClassMaterial> updatedMaterials) {
+		SQLiteDatabase db = getWritableDatabase();
+
+		boolean inTransaction = db.inTransaction();
+
+		if(!inTransaction) {
+			Log.v(TAG, "updateMaterialsDatabase: beginning transaction");
+			db.beginTransaction();
+		}
+
+		List<ClassMaterial> existingMaterials = getAllMaterials();
+		List<ClassMaterial> newMaterials = findNewMaterials(updatedMaterials, existingMaterials);
+		List<ClassMaterial> deletedMaterials = findDeletedMaterials(updatedMaterials, existingMaterials);
+
+		for(ClassMaterial deletedMaterial: deletedMaterials) {
+			db.delete(
+					MaterialsEntry.TABLE_NAME,
+					MaterialsEntry.COLUMN_ID + "=?",
+					new String[]{String.valueOf(deletedMaterial.getId())}
+			);
+		}
+
+		for(ClassMaterial newMaterial: newMaterials) {
+			db.insert(
+					MaterialsEntry.TABLE_NAME,
+					null,
+					getMaterialContentValues(newMaterial, false)
+			);
+		}
+
+		if(!inTransaction) {
+			Log.v(TAG, "updateMaterialsDatabase: finished transaction");
+			db.setTransactionSuccessful();
+			db.endTransaction();
+		}
+
+		return newMaterials;
+	}
+
+	private List<ClassMaterial> findNewMaterials(List<ClassMaterial> updatedMaterials, List<ClassMaterial> existingMaterials) {
+		List<ClassMaterial> newMaterials = new ArrayList<>();
+		for(ClassMaterial material: updatedMaterials) {
+			if(!isMaterialInList(material, existingMaterials)) {
+				newMaterials.add(material);
+			}
+		}
+		return newMaterials;
+	}
+
+	private List<ClassMaterial> findDeletedMaterials(List<ClassMaterial> updatedMaterials, List<ClassMaterial> existingMaterials) {
+		List<ClassMaterial> deletedMaterials = new ArrayList<>();
+
+		for(ClassMaterial existingMaterial: existingMaterials) {
+			if(!isMaterialInList(existingMaterial, updatedMaterials)) {
+				deletedMaterials.add(existingMaterial);
+			}
+		}
+
+		return deletedMaterials;
+	}
+
+	private ContentValues getMaterialContentValues(ClassMaterial newMaterial, boolean includeId) {
+		ContentValues contentValues = new ContentValues();
+		if(includeId) {
+			contentValues.put(MaterialsEntry.COLUMN_ID, newMaterial.getId());
+		}
+		contentValues.put(MaterialsEntry.COLUMN_DESCRIPTION, newMaterial.getTitle());
+		contentValues.put(MaterialsEntry.COLUMN_RELEASE_DATE, newMaterial.getReleaseDate().toString());
+		contentValues.put(MaterialsEntry.COLUMN_URL, newMaterial.getDownloadURL().toString());
+		contentValues.put(MaterialsEntry.COLUMN_SUBJECT_ID, newMaterial.getSubjectId());
+		return contentValues;
+	}
+
+	private boolean isMaterialInList(ClassMaterial materialToCompare, List<ClassMaterial> materials) {
+		for(ClassMaterial currentMaterial: materials) {
+			if(currentMaterial.equals(materialToCompare)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public List<ClassMaterial> getAllMaterials() {
+		SQLiteDatabase db = getReadableDatabase();
+
+		List<ClassMaterial> classMaterials = new ArrayList<>();
+
+		Cursor cursor = db.query(
+				MaterialsEntry.TABLE_NAME,
+				null,null, null, null, null, null
+		);
+
+		int idIndex = cursor.getColumnIndex(MaterialsEntry.COLUMN_ID);
+		int descriptionIndex = cursor.getColumnIndex(MaterialsEntry.COLUMN_DESCRIPTION);
+		int releaseDateIndex = cursor.getColumnIndex(MaterialsEntry.COLUMN_RELEASE_DATE);
+		int urlIndex = cursor.getColumnIndex(MaterialsEntry.COLUMN_URL);
+		int subjectIdIndex = cursor.getColumnIndex(MaterialsEntry.COLUMN_SUBJECT_ID);
+
+		while(cursor.moveToNext()) {
+			int id = cursor.getInt(idIndex);
+			String description = cursor.getString(descriptionIndex);
+			LocalDate releaseDate = getLocalDateFromString(cursor.getString(releaseDateIndex));
+
+			URL url;
+			try {
+				url = new URL(cursor.getString(urlIndex));
+			} catch (MalformedURLException e) {
+				Crashlytics.logException(e);
+				throw new IllegalArgumentException("An illegal URL was used");
+			}
+
+			int subjectId = cursor.getInt(subjectIdIndex);
+
+			ClassMaterial classMaterial = new ClassMaterial(
+					id,
+					description,
+					url,
+					releaseDate,
+					subjectId
+			);
+
+			classMaterials.add(classMaterial);
+		}
+
+		cursor.close();
+
+		return classMaterials;
 	}
 }

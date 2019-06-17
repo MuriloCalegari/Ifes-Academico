@@ -7,12 +7,13 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import calegari.murilo.qacadscrapper.utils.User;
 import calegari.murilo.sistema_academico.LoginActivity;
 import calegari.murilo.sistema_academico.MainActivity;
 import calegari.murilo.sistema_academico.databases.DatabaseHelper;
 import calegari.murilo.sistema_academico.utils.Constants;
 
-public class LoginManager {
+public abstract class LoginManager {
 
     private static String TAG = "LoginManager";
 
@@ -25,9 +26,9 @@ public class LoginManager {
     public static void logout(Context context) {
         if(context instanceof MainActivity) {
             MainActivity activity = (MainActivity) context;
-            if(activity.qAcadFetchDataTask != null) {
-                Log.d(TAG, "logout: Cancelling qAcadFetchDataTask");
-                activity.qAcadFetchDataTask.cancel(false);
+            if(activity.qAcadFetchGradesTask != null) {
+                Log.d(TAG, "logout: Cancelling qAcadFetchGradesTask");
+                activity.qAcadFetchGradesTask.cancel(false);
             }
         }
 
@@ -53,5 +54,13 @@ public class LoginManager {
         Intent loginIntent = new Intent(context, LoginActivity.class);
         context.startActivity(loginIntent);
         ((Activity) context).finish();
+    }
+
+    public static User getUser(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.Keys.QACAD_USER_INFO_PREFERENCES, Context.MODE_PRIVATE);
+
+        String username = sharedPreferences.getString(Constants.Keys.QACAD_USERNAME_PREFERENCE, "");
+        String password = sharedPreferences.getString(Constants.Keys.QACAD_PASSWORD_PREFERENCE, "");
+        return new User(username, password);
     }
 }

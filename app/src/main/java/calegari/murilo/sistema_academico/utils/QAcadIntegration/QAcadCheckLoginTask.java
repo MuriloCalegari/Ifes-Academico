@@ -52,4 +52,12 @@ public class QAcadCheckLoginTask extends AsyncTask<Integer, Integer, Integer> {
     public int getResult() {
         return result;
     }
+
+    public Map<String, String> getCookieMap() {
+        return cookieMap;
+    }
+
+    public void setCookieMap(Map<String, String> cookieMap) {
+        this.cookieMap = cookieMap;
+    }
 }

@@ -38,7 +38,8 @@ import calegari.murilo.sistema_academico.subjectgrades.SubjectGradesFragment;
 import calegari.murilo.sistema_academico.subjects.SubjectsFragment;
 import calegari.murilo.sistema_academico.utils.Constants;
 import calegari.murilo.sistema_academico.utils.QAcadIntegration.LoginManager;
-import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadFetchDataTask;
+import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadFetchMaterialsURLsTask;
+import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadFetchGradesTask;
 
 import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
@@ -51,7 +52,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity
 	public static SwipeRefreshLayout pullToRefresh;
 
 	public static Map<String, String> qAcadCookieMap = null;
-	public QAcadFetchDataTask qAcadFetchDataTask;
+	public QAcadFetchGradesTask qAcadFetchGradesTask;
+	public QAcadFetchMaterialsURLsTask qAcadFetchMaterialsURLsTask;
 
 	private static ActionBarDrawerToggle drawerToggle;
 
@@ -90,14 +91,13 @@ public class MainActivity extends AppCompatActivity
 
 		setContentView(R.layout.activity_main);
 
-		toolbar = findViewById(R.id.toolbar);
+		NAVBAR_CLOSE_DELAY = getResources().getInteger(R.integer.navigation_bar_close_delay);
+
+		findViews();
+
 		setSupportActionBar(toolbar);
 		actionBar = getSupportActionBar();
 
-		drawer = findViewById(R.id.drawer_layout);
-		NAVBAR_CLOSE_DELAY = getResources().getInteger(R.integer.navigation_bar_close_delay);
-
-		navigationView = findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
 
 		fragmentManager = getSupportFragmentManager();
@@ -106,13 +106,7 @@ public class MainActivity extends AppCompatActivity
 				this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 		drawerToggle.syncState();
 
-		View header = navigationView.getHeaderView(0);
-		changeUsernameButton = header.findViewById(R.id.changeUserNameButton);
-		usernameTextView = header.findViewById(R.id.username);
-
 		updateUsername();
-
-		pullToRefresh = findViewById(R.id.swiperefresh);
 		setupListeners();
 
 		startFragment(HomeFragment.class, false);
@@ -120,13 +114,23 @@ public class MainActivity extends AppCompatActivity
 		Intent intent = getIntent();
 
 		if(intent.getBooleanExtra(Constants.Keys.SHOULD_SYNC_GRADES, false)) {
-			syncDataFromQAcad();
+			syncGradesFromQAcad();
 			intent.removeExtra(Constants.Keys.SHOULD_SYNC_GRADES);
 		}
 
 		if(!PreferenceManager.getDefaultSharedPreferences(this).contains(Constants.Keys.IS_DATA_COLLECTION_AUTHORIZED)) {
 			displayGetDataCollectionAuthorization();
 		}
+	}
+
+	private void findViews() {
+		toolbar = findViewById(R.id.toolbar);
+		drawer = findViewById(R.id.drawer_layout);
+		navigationView = findViewById(R.id.nav_view);
+		View header = navigationView.getHeaderView(0);
+		changeUsernameButton = header.findViewById(R.id.changeUserNameButton);
+		usernameTextView = header.findViewById(R.id.username);
+		pullToRefresh = findViewById(R.id.swiperefresh);
 	}
 
 	private void displayGetDataCollectionAuthorization() {
@@ -168,7 +172,7 @@ public class MainActivity extends AppCompatActivity
 		changeUsernameButton.setOnClickListener(view -> setUsernameDialog());
 		usernameTextView.setOnClickListener(view -> setUsernameDialog());
 
-		pullToRefresh.setOnRefreshListener(this::syncDataFromQAcad);
+		pullToRefresh.setOnRefreshListener(this::syncMaterialsFromQAcad);
 	}
 
 	private void setUsernameDialog() {
@@ -287,10 +291,10 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	@SuppressLint("StaticFieldLeak")
-	private void syncDataFromQAcad() {
+	private void syncGradesFromQAcad() {
 		pullToRefresh.setRefreshing(true);
 
-		qAcadFetchDataTask = new QAcadFetchDataTask(this, qAcadCookieMap) {
+		qAcadFetchGradesTask = new QAcadFetchGradesTask(this, qAcadCookieMap) {
 			@Override
 			protected void onPostExecute(Integer result) {
 				super.onPostExecute(result);
@@ -312,7 +316,36 @@ public class MainActivity extends AppCompatActivity
 			}
 		};
 
-		qAcadFetchDataTask.execute();
+		qAcadFetchGradesTask.execute();
+	}
+
+	@SuppressLint("StaticFieldLeak")
+	private void syncMaterialsFromQAcad() {
+		pullToRefresh.setRefreshing(true);
+
+		qAcadFetchMaterialsURLsTask = new QAcadFetchMaterialsURLsTask(this, qAcadCookieMap) {
+			@Override
+			protected void onPostExecute(Integer result) {
+				super.onPostExecute(result);
+				refreshCurrentFragment(true);
+				qAcadCookieMap = getCookieMap(); // update cookies to the last one generated
+			}
+
+			@Override
+			protected void onCancelled(Integer result) {
+				/*
+				This is currently only being called by LoginManager.Logout(),
+				so it's important for data security reasons that we clean all
+				databases after the task is cancelled.
+				*/
+
+				DatabaseHelper databaseHelper = new DatabaseHelper(context);
+				databaseHelper.recreateDatabase();
+				databaseHelper.close();
+			}
+		};
+
+		qAcadFetchMaterialsURLsTask.execute();
 	}
 
 	public void refreshCurrentFragment() {
