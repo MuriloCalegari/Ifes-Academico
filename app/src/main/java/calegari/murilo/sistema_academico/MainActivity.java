@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity
 		changeUsernameButton.setOnClickListener(view -> setUsernameDialog());
 		usernameTextView.setOnClickListener(view -> setUsernameDialog());
 
-		pullToRefresh.setOnRefreshListener(this::syncMaterialsFromQAcad);
+		pullToRefresh.setOnRefreshListener(this::syncGradesFromQAcad);
 	}
 
 	private void setUsernameDialog() {
