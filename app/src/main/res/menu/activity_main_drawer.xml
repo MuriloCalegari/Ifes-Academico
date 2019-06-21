@@ -21,6 +21,11 @@
             android:icon="@drawable/ic_spellcheck_black_24dp"
             android:title="@string/grades" />
 
+        <item
+            android:id="@+id/nav_materials"
+            android:icon="@drawable/ic_cloud_download_black_24dp"
+            android:title="@string/grades" />
+
         <!--
         <item
             android:id="@+id/nav_events"

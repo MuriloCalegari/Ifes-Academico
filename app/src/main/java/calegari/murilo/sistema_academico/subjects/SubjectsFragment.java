@@ -83,7 +83,6 @@ public class SubjectsFragment extends BaseFragment {
     }
 
     private void setupRecycler() {
-
         // Configures the layout manager so it becomes a list
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 

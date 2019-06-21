@@ -30,6 +30,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import calegari.murilo.sistema_academico.calendar.SchedulesFragment;
 import calegari.murilo.sistema_academico.databases.DatabaseHelper;
+import calegari.murilo.sistema_academico.materials.MaterialsFragment;
 import calegari.murilo.sistema_academico.grades.GradesFragment;
 import calegari.murilo.sistema_academico.grades.GradesLineAdapter;
 import calegari.murilo.sistema_academico.home.HomeFragment;
@@ -278,8 +279,12 @@ public class MainActivity extends AppCompatActivity
 				case R.id.nav_schedules:
 					startFragment(SchedulesFragment.class, useAnimations);
 					break;
+				case R.id.nav_materials:
+					startFragment(MaterialsFragment.class, useAnimations);
+					break;
 				case R.id.nav_logout:
 					LoginManager.logout(this);
+					break;
 				default:
 					break;
 			}

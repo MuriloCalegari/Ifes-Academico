@@ -67,7 +67,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
     implementation 'com.google.android.material:material:1.1.0-alpha07'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0-beta02'
     testImplementation 'junit:junit:4.12'
@@ -86,18 +86,21 @@ dependencies {
     //implementation 'com.github.sangcomz:StickyTimeLine:v0.0.20'
     implementation 'com.github.vipulasri:timelineview:1.1.0'
     implementation 'org.threeten:threetenbp:1.4.0'
+    implementation 'com.github.florent37:expansionpanel:1.2.2'
+    implementation 'com.github.fenjuly:ArrowDownloadButton:45d1286'
 
-    implementation 'com.github.MuriloCalegari:QAcadScrapper:9fe91d2a'
+    implementation 'com.github.MuriloCalegari:QAcadScrapper:de9a48e'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
     implementation 'com.google.firebase:firebase-core:16.0.9'
 
-    //implementation 'com.facebook.stetho:stetho:1.5.1'
+    implementation 'com.facebook.stetho:stetho:1.5.1'
 
     //implementation files('src/libs/QAcadScrapper.jar')
     //implementation 'io.apisense:rhino-android:1.0'
     // Make QAcadScrapper.jar compatible with this project.
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'androidx.cardview:cardview:1.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

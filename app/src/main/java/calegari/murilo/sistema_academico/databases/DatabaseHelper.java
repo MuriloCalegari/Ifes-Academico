@@ -7,11 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
+import android.util.SparseArray;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.Nullable;
 
@@ -1068,5 +1071,84 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		cursor.close();
 
 		return classMaterials;
+	}
+
+	public List<ClassMaterial> getSubjectMaterials(int subjectId) {
+		SQLiteDatabase db = getReadableDatabase();
+
+		List<ClassMaterial> classMaterials = new ArrayList<>();
+
+		Cursor cursor = db.query(
+				MaterialsEntry.TABLE_NAME,
+				null,MaterialsEntry.COLUMN_SUBJECT_ID + "=?", new String[]{String.valueOf(subjectId)}, null, null, null
+		);
+
+		int idIndex = cursor.getColumnIndex(MaterialsEntry.COLUMN_ID);
+		int descriptionIndex = cursor.getColumnIndex(MaterialsEntry.COLUMN_DESCRIPTION);
+		int releaseDateIndex = cursor.getColumnIndex(MaterialsEntry.COLUMN_RELEASE_DATE);
+		int urlIndex = cursor.getColumnIndex(MaterialsEntry.COLUMN_URL);
+
+		while(cursor.moveToNext()) {
+			int id = cursor.getInt(idIndex);
+			String description = cursor.getString(descriptionIndex);
+			LocalDate releaseDate = getLocalDateFromString(cursor.getString(releaseDateIndex));
+
+			URL url;
+			try {
+				url = new URL(cursor.getString(urlIndex));
+			} catch (MalformedURLException e) {
+				Crashlytics.logException(e);
+				throw new IllegalArgumentException("An illegal URL was used");
+			}
+
+			ClassMaterial classMaterial = new ClassMaterial(
+					id,
+					description,
+					url,
+					releaseDate,
+					subjectId
+			);
+
+			classMaterials.add(classMaterial);
+		}
+
+		cursor.close();
+
+		return classMaterials;
+	}
+
+	public List<Subject> getSubjectsWithMaterials() {
+		/*
+		Map<Integer, Subject> subjectArray = new HashMap<>();
+
+		List<ClassMaterial> classMaterials = getAllMaterials();
+
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		for(ClassMaterial classMaterial: classMaterials) {
+			if(subjectArray.get(classMaterial.getSubjectId()) == null) {
+				subjectArray.put(classMaterial.getSubjectId(), getSubject(classMaterial.getSubjectId()));
+			}
+
+			subjectArray.get(classMaterial.getSubjectId()).getMaterialsList().add(classMaterial);
+		}
+
+		db.close();
+
+		return new ArrayList<>(subjectArray.values());
+		*/
+
+		List<Subject> subjects = getAllSubjects();
+		List<Subject> subjectsWithMaterials = new ArrayList<>();
+
+		for(Subject subject: subjects) {
+			List<ClassMaterial> classMaterials = getSubjectMaterials(subject.getId());
+			if(classMaterials.size() != 0) {
+				subject.setMaterialsList(getSubjectMaterials(subject.getId()));
+				subjectsWithMaterials.add(subject);
+			}
+		}
+
+		return subjectsWithMaterials;
 	}
 }
