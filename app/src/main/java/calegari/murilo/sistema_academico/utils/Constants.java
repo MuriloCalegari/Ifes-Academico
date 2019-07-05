@@ -11,6 +11,8 @@ public class Constants {
 		public static final String APP_GLOBALS_PREFERENCES = "globalpreferences";
 		public static final String APP_USERNAME_PREFERENCE = "username";
 		public static final String IS_DATA_COLLECTION_AUTHORIZED = "datacollectionauthorized";
+		public static final String IS_FIRST_RUN_EVER = "isfirstrun";
+		public static final String SHOULD_SYNC_MATERIALS = "shouldsyncmaterials";
 	}
 
 	public class QAcad {

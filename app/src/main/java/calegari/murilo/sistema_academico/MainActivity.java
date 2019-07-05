@@ -114,8 +114,11 @@ public class MainActivity extends AppCompatActivity
 
 		Intent intent = getIntent();
 
-		if(intent.getBooleanExtra(Constants.Keys.SHOULD_SYNC_GRADES, false)) {
-			syncGradesFromQAcad();
+		if(intent.getBooleanExtra(Constants.Keys.IS_FIRST_RUN_EVER, false)) {
+			syncDataFromQAcad();
+			intent.removeExtra(Constants.Keys.IS_FIRST_RUN_EVER);
+		} else if(intent.getBooleanExtra(Constants.Keys.SHOULD_SYNC_GRADES, false)) {
+			syncDataFromQAcadAccordingToContext();
 			intent.removeExtra(Constants.Keys.SHOULD_SYNC_GRADES);
 		}
 
@@ -173,7 +176,7 @@ public class MainActivity extends AppCompatActivity
 		changeUsernameButton.setOnClickListener(view -> setUsernameDialog());
 		usernameTextView.setOnClickListener(view -> setUsernameDialog());
 
-		pullToRefresh.setOnRefreshListener(this::syncGradesFromQAcad);
+		pullToRefresh.setOnRefreshListener(this::syncDataFromQAcadAccordingToContext);
 	}
 
 	private void setUsernameDialog() {
@@ -296,6 +299,67 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	@SuppressLint("StaticFieldLeak")
+	private void syncDataFromQAcad() {
+		pullToRefresh.setRefreshing(true);
+
+		qAcadFetchGradesTask = new QAcadFetchGradesTask(this, qAcadCookieMap) {
+			@Override
+			protected void onPostExecute(Integer result) {
+				super.onPostExecute(result);
+				qAcadCookieMap = getCookieMap(); // update cookies to the last one generated
+
+				qAcadFetchMaterialsURLsTask = new QAcadFetchMaterialsURLsTask(context, qAcadCookieMap) {
+					@Override
+					protected void onPostExecute(Integer result) {
+						super.onPostExecute(result);
+						qAcadCookieMap = getCookieMap(); // update cookies to the last one generated
+						refreshCurrentFragment(true);
+					}
+
+					@Override
+					protected void onCancelled(Integer result) {
+				/*
+				This is currently only being called by LoginManager.Logout(),
+				so it's important for data security reasons that we clean all
+				databases after the task is cancelled.
+				*/
+
+						DatabaseHelper databaseHelper = new DatabaseHelper(context);
+						databaseHelper.recreateDatabase();
+						databaseHelper.close();
+					}
+				};
+
+				qAcadFetchMaterialsURLsTask.execute();
+			}
+
+			@Override
+			protected void onCancelled(Integer result) {
+				/*
+				This is currently only being called by LoginManager.Logout(),
+				so it's important for data security reasons that we clean all
+				databases after the task is cancelled.
+				*/
+
+				DatabaseHelper databaseHelper = new DatabaseHelper(context);
+				databaseHelper.recreateDatabase();
+				databaseHelper.close();
+			}
+		};
+
+		qAcadFetchGradesTask.execute();
+	}
+
+	@SuppressLint("StaticFieldLeak")
+	private void syncDataFromQAcadAccordingToContext() {
+		if(currentFragment instanceof MaterialsFragment) {
+			syncMaterialsFromQAcad();
+		} else {
+			syncGradesFromQAcad();
+		}
+	}
+
+	@SuppressLint("StaticFieldLeak")
 	private void syncGradesFromQAcad() {
 		pullToRefresh.setRefreshing(true);
 
@@ -303,8 +367,8 @@ public class MainActivity extends AppCompatActivity
 			@Override
 			protected void onPostExecute(Integer result) {
 				super.onPostExecute(result);
-				refreshCurrentFragment(true);
 				qAcadCookieMap = getCookieMap(); // update cookies to the last one generated
+				refreshCurrentFragment(true);
 			}
 
 			@Override
@@ -332,8 +396,8 @@ public class MainActivity extends AppCompatActivity
 			@Override
 			protected void onPostExecute(Integer result) {
 				super.onPostExecute(result);
-				refreshCurrentFragment(true);
 				qAcadCookieMap = getCookieMap(); // update cookies to the last one generated
+				refreshCurrentFragment(true);
 			}
 
 			@Override
@@ -417,11 +481,11 @@ public class MainActivity extends AppCompatActivity
 		}
 	}
 
-	public static void startFragment(Class fragmentClass, boolean useAnimations) {
+	public void startFragment(Class fragmentClass, boolean useAnimations) {
 		startFragment(fragmentClass, useAnimations, null);
 	}
 
-	public static void startFragment(Class fragmentClass, boolean useAnimations, Bundle bundle) {
+	public void startFragment(Class fragmentClass, boolean useAnimations, Bundle bundle) {
 
 		Fragment fragment = null;
 		try {
@@ -445,6 +509,19 @@ public class MainActivity extends AppCompatActivity
 
 			fragmentTransaction.replace(R.id.flContent, fragment).commitAllowingStateLoss();
 			currentFragment = fragment;
+
+			Intent intent = getIntent();
+
+			// Every time a fragment is switched and it is not refreshing, check if there are any pending synchronizations
+			if(!pullToRefresh.isRefreshing()) {
+				if(fragmentClass == MaterialsFragment.class && intent.getBooleanExtra(Constants.Keys.SHOULD_SYNC_MATERIALS, false)) {
+					syncMaterialsFromQAcad();
+					intent.removeExtra(Constants.Keys.SHOULD_SYNC_MATERIALS);
+				} else if(intent.getBooleanExtra(Constants.Keys.SHOULD_SYNC_GRADES, false)) {
+					syncGradesFromQAcad();
+					intent.removeExtra(Constants.Keys.SHOULD_SYNC_GRADES);
+				}
+			}
 		}
 	}
 

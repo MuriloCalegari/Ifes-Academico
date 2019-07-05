@@ -38,6 +38,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.mozilla.javascript.tools.jsc.Main;
+
 import calegari.murilo.sistema_academico.MainActivity;
 import calegari.murilo.sistema_academico.R;
 import calegari.murilo.sistema_academico.databases.DatabaseHelper;
@@ -75,7 +77,9 @@ public class HomeFragment extends Fragment {
 
 		CardView gradesChartCardView = view.findViewById(R.id.cardView);
 
-		gradesChartCardView.setOnClickListener(v -> MainActivity.startFragment(GradesFragment.class, true));
+		if(getContext() instanceof MainActivity) {
+			gradesChartCardView.setOnClickListener(v -> ((MainActivity) getContext()).startFragment(GradesFragment.class, true));
+		}
 
 	}
 
@@ -160,7 +164,9 @@ public class HomeFragment extends Fragment {
 			chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
 				@Override
 				public void onValueSelected(Entry e, Highlight h) {
-					MainActivity.startFragment(GradesFragment.class, true);
+					if(getContext() instanceof MainActivity) {
+						((MainActivity) getContext()).startFragment(GradesFragment.class, true);
+					}
 				}
 
 				@Override

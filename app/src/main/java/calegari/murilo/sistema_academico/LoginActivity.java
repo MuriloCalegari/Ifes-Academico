@@ -140,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                                 MainActivity.qAcadCookieMap = cookieMap;
 
                                 Intent intent = new Intent(context, MainActivity.class);
-                                intent.putExtra(Constants.Keys.SHOULD_SYNC_GRADES, true);
+                                intent.putExtra(Constants.Keys.IS_FIRST_RUN_EVER, true);
                                 startActivity(intent);
                                 finish();
                                 return null;

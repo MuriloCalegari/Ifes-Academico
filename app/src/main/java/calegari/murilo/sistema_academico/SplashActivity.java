@@ -20,6 +20,7 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             intent = new Intent(this, MainActivity.class);
             intent.putExtra(Constants.Keys.SHOULD_SYNC_GRADES, true);
+            intent.putExtra(Constants.Keys.SHOULD_SYNC_MATERIALS, true);
         }
 
         startActivity(intent);
