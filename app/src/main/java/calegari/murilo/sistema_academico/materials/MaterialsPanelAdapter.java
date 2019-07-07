@@ -1,6 +1,7 @@
 package calegari.murilo.sistema_academico.materials;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fenjuly.library.ArrowDownloadButton;
 import com.github.florent37.expansionpanel.ExpansionLayout;
 import com.github.florent37.expansionpanel.viewgroup.ExpansionLayoutCollection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import calegari.murilo.qacadscrapper.utils.ClassMaterial;
@@ -50,12 +53,19 @@ public class MaterialsPanelAdapter extends RecyclerView.Adapter<MaterialsPanelAd
 		// For smoother interaction, set the recycler view adapter even if the materials aren't set
 		// to be seen soon (for example on a clickListener)
 
-		holder.recyclerView.setAdapter(new MaterialsAdapter(subjects.get(position).getMaterialsList()));
+		MaterialsAdapter adapter = new MaterialsAdapter(subjects.get(position).getMaterialsList());
+		adapter.setHasStableIds(true);
+		holder.recyclerView.setAdapter(adapter);
 	}
 
 	@Override
 	public int getItemCount() {
 		return subjects.size();
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return subjects.get(position).getId();
 	}
 
 	class MaterialsPanelViewHolder extends RecyclerView.ViewHolder {
@@ -67,8 +77,9 @@ public class MaterialsPanelAdapter extends RecyclerView.Adapter<MaterialsPanelAd
 			super(itemView);
 			subjectName = itemView.findViewById(R.id.subjectName);
 			expansionLayout = itemView.findViewById(R.id.expansionLayout);
+
 			recyclerView = itemView.findViewById(R.id.materialsRecyclerView);
-			recyclerView.setNestedScrollingEnabled(true);
+			recyclerView.setNestedScrollingEnabled(false);
 			recyclerView.setLayoutManager(new LinearLayoutManager(context));
 		}
 	}

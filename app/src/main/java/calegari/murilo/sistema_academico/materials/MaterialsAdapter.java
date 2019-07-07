@@ -8,12 +8,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fenjuly.library.ArrowDownloadButton;
+import com.crashlytics.android.Crashlytics;
 
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
 
+import br.com.simplepass.loadingbutton.customViews.CircularProgressImageButton;
 import calegari.murilo.qacadscrapper.utils.ClassMaterial;
 import calegari.murilo.sistema_academico.R;
 
@@ -31,7 +32,7 @@ public class MaterialsAdapter extends RecyclerView.Adapter<MaterialsAdapter.Mate
 	public MaterialsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		View view = LayoutInflater
 				.from(parent.getContext())
-				.inflate(R.layout.material_card,parent,false);
+				.inflate(R.layout.material_card, parent,false);
 		return new MaterialsViewHolder(view);
 	}
 
@@ -39,8 +40,15 @@ public class MaterialsAdapter extends RecyclerView.Adapter<MaterialsAdapter.Mate
 	public void onBindViewHolder(@NonNull MaterialsViewHolder holder, int position) {
 		holder.materialTitle.setText(materials.get(position).getTitle());
 		holder.releaseDate.setText(materials.get(position).getReleaseDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+		final int[] progress = {0};
 		holder.downloadButton.setOnClickListener((v) -> {
-			// TODO set behavior
+			Crashlytics.getInstance().crash();
+			if(progress[0] == 0) {
+				holder.downloadButton.setImageDrawable(null);
+				holder.downloadButton.startAnimation(() -> null);
+			}
+			progress[0] += 25;
+			//holder.downloadButton.setProgress(progress[0]);
 		});
 	}
 
@@ -51,7 +59,7 @@ public class MaterialsAdapter extends RecyclerView.Adapter<MaterialsAdapter.Mate
 
 	class MaterialsViewHolder extends RecyclerView.ViewHolder {
 
-		ArrowDownloadButton downloadButton;
+		CircularProgressImageButton downloadButton;
 		TextView materialTitle;
 		TextView releaseDate;
 
@@ -63,4 +71,8 @@ public class MaterialsAdapter extends RecyclerView.Adapter<MaterialsAdapter.Mate
 		}
 	}
 
+	@Override
+	public long getItemId(int position) {
+		return materials.get(position).getId();
+	}
 }

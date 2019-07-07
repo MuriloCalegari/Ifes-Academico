@@ -44,9 +44,10 @@ public class MaterialsFragment extends BaseFragment {
 		List<Subject> subjects = db.getSubjectsWithMaterials();
 		db.close();
 		MaterialsPanelAdapter materialsPanelAdapter = new MaterialsPanelAdapter(subjects, getContext());
+		materialsPanelAdapter.setHasStableIds(true);
 
 		recyclerView.setAdapter(materialsPanelAdapter);
 		recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-		//recyclerView.setNestedScrollingEnabled(true);
+		recyclerView.setNestedScrollingEnabled(true);
 	}
 }

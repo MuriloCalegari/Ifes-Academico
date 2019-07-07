@@ -282,9 +282,11 @@ public class MainActivity extends AppCompatActivity
 				case R.id.nav_schedules:
 					startFragment(SchedulesFragment.class, useAnimations);
 					break;
+					/* // TODO reimplement materials
 				case R.id.nav_materials:
 					startFragment(MaterialsFragment.class, useAnimations);
 					break;
+					*/
 				case R.id.nav_logout:
 					LoginManager.logout(this);
 					break;
