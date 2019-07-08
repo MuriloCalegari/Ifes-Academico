@@ -74,7 +74,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
     implementation 'com.github.franmontiel:AttributionPresenter:1.0.1'
     implementation project(path: ':lib:AndroidWeekView')
-    implementation 'br.com.simplepass:loading-button-android:2.1.1'
+    implementation 'br.com.simplepass:loading-button-android:2.1.5'
     //implementation 'com.github.sangcomz:StickyTimeLine:v0.0.20'
     implementation 'com.github.vipulasri:timelineview:1.1.0'
     implementation 'org.threeten:threetenbp:1.4.0'
