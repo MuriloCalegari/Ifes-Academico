@@ -171,4 +171,7 @@
     <string name="privacy_policy">Privacy policy</string>
     <string name="class_materials">Class Materials</string>
 
+    <string name="username_collection">Username collection</string>
+    <string name="username_collection_authorize">I authorize sharing my username to help the developers identify myself as a specific user.</string>
+
 </resources>

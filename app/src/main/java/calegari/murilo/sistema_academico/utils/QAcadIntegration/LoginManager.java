@@ -69,4 +69,10 @@ public abstract class LoginManager {
         String password = sharedPreferences.getString(Constants.Keys.QACAD_PASSWORD_PREFERENCE, "");
         return new User(username, password);
     }
+
+    public static String getUserId(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.Keys.QACAD_USER_INFO_PREFERENCES, Context.MODE_PRIVATE);
+
+        return sharedPreferences.getString(Constants.Keys.QACAD_USERNAME_PREFERENCE, "");
+    }
 }

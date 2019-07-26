@@ -13,6 +13,7 @@ public class Constants {
 		public static final String IS_DATA_COLLECTION_AUTHORIZED = "datacollectionauthorized";
 		public static final String IS_FIRST_RUN_EVER = "isfirstrun";
 		public static final String SHOULD_SYNC_MATERIALS = "shouldsyncmaterials";
+		public static final String IS_USERNAME_COLLECTION_AUTHORIZED = "usernamecollectionauthorized";
 	}
 
 	public class QAcad {

@@ -42,6 +42,12 @@
             android:key="datacollectionauthorized"
             android:title="@string/data_collection"
             android:summary="@string/data_collection_authorize"/>
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="usernamecollectionauthorized"
+            android:title="@string/username_collection"
+            android:summary="@string/username_collection_authorize"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

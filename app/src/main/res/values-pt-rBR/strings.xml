@@ -163,5 +163,7 @@
     <string name="data_collection_authorize">Eu autorizo a coleta de alguns dados para melhorar a experiência do aplicativo em geral</string>
     <string name="privacy_policy">Política de privacidade</string>
     <string name="class_materials">Materiais de aula</string>
+    <string name="username_collection">Coleta de número de matrícula</string>
+    <string name="username_collection_authorize">Eu autorizo o compartilhamento do meu número de matrícula para ajudar os desenvolvedores a identificatarem-me como um usuário específico.</string>
 
 </resources>
