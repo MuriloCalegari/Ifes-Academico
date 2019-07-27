@@ -1,4 +1,4 @@
-package calegari.murilo.sistema_academico.utils.QAcadIntegration;
+package calegari.murilo.sistema_academico.qacad;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -13,39 +13,34 @@ import java.util.Map;
 
 import javax.security.auth.login.LoginException;
 
-import calegari.murilo.qacadscrapper.QAcadScrapper;
-import calegari.murilo.qacadscrapper.utils.ClassMaterial;
-import calegari.murilo.qacadscrapper.utils.User;
 import calegari.murilo.sistema_academico.R;
 import calegari.murilo.sistema_academico.databases.DatabaseHelper;
 import calegari.murilo.sistema_academico.utils.Constants;
+import calegari.murilo.qacadscrapper.QAcadScrapper;
+import calegari.murilo.qacadscrapper.utils.Subject;
+import calegari.murilo.qacadscrapper.utils.User;
 import calegari.murilo.sistema_academico.utils.Tools;
 
-import static calegari.murilo.sistema_academico.utils.Constants.QAcad.ACADEMIC_URL;
-import static calegari.murilo.sistema_academico.utils.Constants.QAcad.RESULT_CANCELLED;
-import static calegari.murilo.sistema_academico.utils.Constants.QAcad.RESULT_SUCCESS;
+public class QAcadFetchGradesTask extends AsyncTask<Integer, Integer, Integer>{
 
-public class QAcadFetchMaterialsURLsTask extends AsyncTask<Integer, Integer, Integer> {
-
-	private final String TAG = getClass().getSimpleName();
+	private final String TAG = "QAcadFetchGradesTask";
 	private WeakReference<Context> contextWeakReference;
 
 	private Map<String, String> cookieMap;
 
-	private int result;
-
-	public QAcadFetchMaterialsURLsTask(Context context, Map<String, String> cookieMap) {
+	public QAcadFetchGradesTask(Context context, Map<String, String> cookieMap) {
 		this(context);
 		this.cookieMap = cookieMap;
 	}
 
-	public QAcadFetchMaterialsURLsTask(Context context) {
+	public QAcadFetchGradesTask(Context context) {
 		this.contextWeakReference = new WeakReference<>(context);
 	}
 
 	@Override
 	protected Integer doInBackground(Integer... integers) {
-		Log.d(TAG, "Called QAcadFetchMaterialsURLsTask doInBackground");
+		Log.d(TAG, "Called QAcadFetchGradesTask doInBackground");
+		int result;
 
 		Context context = contextWeakReference.get();
 
@@ -54,24 +49,24 @@ public class QAcadFetchMaterialsURLsTask extends AsyncTask<Integer, Integer, Int
 			User user = LoginManager.getUser(context);
 			user.setMultiThreadEnabled(true);
 
-			QAcadScrapper qAcadScrapper = new QAcadScrapper(ACADEMIC_URL, user);
-			qAcadScrapper.setCookieMap(cookieMap);
+			QAcadScrapper qAcadScrapper = new QAcadScrapper(Constants.QAcad.ACADEMIC_URL, user);
 
 			DatabaseHelper databaseHelper = new DatabaseHelper(context);
 
 			try {
-				Log.d(TAG, "Getting all materials from QAcad");
-				List<ClassMaterial> materials = qAcadScrapper.getAllMaterials();
-				Log.d(TAG, "All materials were obtained");
+				qAcadScrapper.setCookieMap(cookieMap);
+
+				Log.d(TAG, "Getting all subjects and grades from QAcad");
+				List<Subject> subjectList = qAcadScrapper.getAllSubjectsAndGrades();
+				Log.d(TAG, "All subjects and grades from QAcad were obtained!");
 
 				if(!isCancelled()) {
-					databaseHelper.updateMaterialsDatabase(materials);
+					databaseHelper.updateSubjectsDatabase(subjectList);
 					cookieMap = qAcadScrapper.getCookieMap();
-					result = RESULT_SUCCESS;
+					result = Constants.QAcad.RESULT_SUCCESS;
 				} else {
-					result = RESULT_CANCELLED;
+					result = Constants.QAcad.RESULT_CANCELLED;
 				}
-
 			} catch (LoginException e) {
 				LoginManager.logout(context); // Logout if calling loginToQACad() failed
 				result = Constants.QAcad.RESULT_LOGIN_INVALID;
@@ -81,11 +76,13 @@ public class QAcadFetchMaterialsURLsTask extends AsyncTask<Integer, Integer, Int
 			} catch (Exception e) {
 				e.printStackTrace();
 				Crashlytics.logException(e);
+				result = Constants.QAcad.RESULT_UNKNOWN_ERROR;
 				Tools.displaySnackBarBackOnActivity(context, R.string.unknown_error);
 			}
 
 			databaseHelper.close();
-
+		} else {
+			result = Constants.QAcad.RESULT_CANCELLED;
 		}
 
 		return result;
@@ -93,5 +90,9 @@ public class QAcadFetchMaterialsURLsTask extends AsyncTask<Integer, Integer, Int
 
 	public Map<String, String> getCookieMap() {
 		return cookieMap;
+	}
+
+	public void setCookieMap(Map<String, String> cookieMap) {
+		this.cookieMap = cookieMap;
 	}
 }

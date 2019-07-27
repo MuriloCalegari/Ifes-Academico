@@ -12,10 +12,10 @@ import org.junit.runner.RunWith;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import calegari.murilo.sistema_academico.utils.QAcadIntegration.LoginManager;
-import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadLoginTask;
-import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadFetchMaterialsURLsTask;
-import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadFetchGradesTask;
+import calegari.murilo.sistema_academico.qacad.LoginManager;
+import calegari.murilo.sistema_academico.qacad.QAcadLoginTask;
+import calegari.murilo.sistema_academico.qacad.QAcadFetchMaterialsURLsTask;
+import calegari.murilo.sistema_academico.qacad.QAcadFetchGradesTask;
 
 import static org.junit.Assert.*;
 

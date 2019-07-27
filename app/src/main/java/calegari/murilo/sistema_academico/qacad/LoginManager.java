@@ -1,4 +1,4 @@
-package calegari.murilo.sistema_academico.utils.QAcadIntegration;
+package calegari.murilo.sistema_academico.qacad;
 
 import android.app.Activity;
 import android.content.Context;

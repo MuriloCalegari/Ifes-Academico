@@ -7,7 +7,7 @@ import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import calegari.murilo.sistema_academico.utils.Constants;
-import calegari.murilo.sistema_academico.utils.QAcadIntegration.LoginManager;
+import calegari.murilo.sistema_academico.qacad.LoginManager;
 import io.fabric.sdk.android.Fabric;
 
 public class MyApplication extends Application {

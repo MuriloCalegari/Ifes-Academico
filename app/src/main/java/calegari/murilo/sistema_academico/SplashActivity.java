@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import calegari.murilo.sistema_academico.utils.Constants;
-import calegari.murilo.sistema_academico.utils.QAcadIntegration.LoginManager;
+import calegari.murilo.sistema_academico.qacad.LoginManager;
 
 public class SplashActivity extends AppCompatActivity {
 

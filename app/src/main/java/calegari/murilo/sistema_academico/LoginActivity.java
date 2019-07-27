@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import br.com.simplepass.loadingbutton.customViews.CircularProgressImageButton;
 import calegari.murilo.sistema_academico.utils.Constants;
-import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadLoginTask;
+import calegari.murilo.sistema_academico.qacad.QAcadLoginTask;
 import calegari.murilo.qacadscrapper.utils.User;
 
 public class LoginActivity extends AppCompatActivity {

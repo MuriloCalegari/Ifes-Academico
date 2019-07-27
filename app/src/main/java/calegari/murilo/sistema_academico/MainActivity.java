@@ -38,9 +38,9 @@ import calegari.murilo.sistema_academico.settings.SettingsActivity;
 import calegari.murilo.sistema_academico.subjectgrades.SubjectGradesFragment;
 import calegari.murilo.sistema_academico.subjects.SubjectsFragment;
 import calegari.murilo.sistema_academico.utils.Constants;
-import calegari.murilo.sistema_academico.utils.QAcadIntegration.LoginManager;
-import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadFetchMaterialsURLsTask;
-import calegari.murilo.sistema_academico.utils.QAcadIntegration.QAcadFetchGradesTask;
+import calegari.murilo.sistema_academico.qacad.LoginManager;
+import calegari.murilo.sistema_academico.qacad.QAcadFetchMaterialsURLsTask;
+import calegari.murilo.sistema_academico.qacad.QAcadFetchGradesTask;
 
 import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;

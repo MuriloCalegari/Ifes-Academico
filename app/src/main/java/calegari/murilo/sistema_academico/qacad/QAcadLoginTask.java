@@ -1,4 +1,4 @@
-package calegari.murilo.sistema_academico.utils.QAcadIntegration;
+package calegari.murilo.sistema_academico.qacad;
 
 import android.os.AsyncTask;
 import android.util.Log;
