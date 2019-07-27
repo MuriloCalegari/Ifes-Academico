@@ -115,7 +115,8 @@ public class MainActivity extends AppCompatActivity
 		Intent intent = getIntent();
 
 		if(intent.getBooleanExtra(Constants.Keys.IS_FIRST_RUN_EVER, false)) {
-			syncDataFromQAcad();
+			//syncDataFromQAcad(); // TODO sync all data when materials are ready
+			syncGradesFromQAcad();
 			intent.removeExtra(Constants.Keys.IS_FIRST_RUN_EVER);
 		} else if(intent.getBooleanExtra(Constants.Keys.SHOULD_SYNC_GRADES, false)) {
 			syncDataFromQAcadAccordingToContext();
