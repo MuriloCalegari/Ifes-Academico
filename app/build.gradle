@@ -81,7 +81,7 @@ dependencies {
     implementation 'com.github.florent37:expansionpanel:1.2.2'
     implementation 'com.github.fenjuly:ArrowDownloadButton:45d1286'
 
-    implementation 'com.github.MuriloCalegari:QAcadScrapper:a1b1133fbf'
+    implementation 'com.github.MuriloCalegari:QAcadScrapper:b91dadea'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
     //implementation 'com.facebook.stetho:stetho:1.5.1'
