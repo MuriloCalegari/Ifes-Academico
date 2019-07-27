@@ -982,7 +982,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private List<ClassMaterial> findNewMaterials(List<ClassMaterial> updatedMaterials, List<ClassMaterial> existingMaterials) {
 		List<ClassMaterial> newMaterials = new ArrayList<>();
 		for(ClassMaterial material: updatedMaterials) {
-			if(!isMaterialInList(material, existingMaterials)) {
+			if(!existingMaterials.contains(material)) {
 				newMaterials.add(material);
 			}
 		}
@@ -993,7 +993,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		List<ClassMaterial> deletedMaterials = new ArrayList<>();
 
 		for(ClassMaterial existingMaterial: existingMaterials) {
-			if(!isMaterialInList(existingMaterial, updatedMaterials)) {
+			if(!updatedMaterials.contains(existingMaterial)) {
 				deletedMaterials.add(existingMaterial);
 			}
 		}
@@ -1011,16 +1011,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		contentValues.put(MaterialsEntry.COLUMN_URL, newMaterial.getDownloadURL().toString());
 		contentValues.put(MaterialsEntry.COLUMN_SUBJECT_ID, newMaterial.getSubjectId());
 		return contentValues;
-	}
-
-	private boolean isMaterialInList(ClassMaterial materialToCompare, List<ClassMaterial> materials) {
-		for(ClassMaterial currentMaterial: materials) {
-			if(currentMaterial.equals(materialToCompare)) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public List<ClassMaterial> getAllMaterials() {
@@ -1115,26 +1105,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public List<Subject> getSubjectsWithMaterials() {
-		/*
-		Map<Integer, Subject> subjectArray = new HashMap<>();
-
-		List<ClassMaterial> classMaterials = getAllMaterials();
-
-		SQLiteDatabase db = this.getReadableDatabase();
-
-		for(ClassMaterial classMaterial: classMaterials) {
-			if(subjectArray.get(classMaterial.getSubjectId()) == null) {
-				subjectArray.put(classMaterial.getSubjectId(), getSubject(classMaterial.getSubjectId()));
-			}
-
-			subjectArray.get(classMaterial.getSubjectId()).getMaterialsList().add(classMaterial);
-		}
-
-		db.close();
-
-		return new ArrayList<>(subjectArray.values());
-		*/
-
 		List<Subject> subjects = getAllSubjects();
 		List<Subject> subjectsWithMaterials = new ArrayList<>();
 
