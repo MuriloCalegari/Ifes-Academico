@@ -12,7 +12,7 @@ Abra o Android Studio e clique em `File -> New -> Project from Version Control -
 
 ### Configurações de assinatura
 
-Quando você publica um app na Play Store, é necessária que você assine os arquivos que você envia para a loja por uma questão de segurança. Essas configurações de assinatura são definidas no no arquivo `app/build.gradle` e, para manter em segredo as minhas chaves de criptografia, os dados são salvos em um arquivo keystore.properties. Para que você possa fazer o build sem as opções de criptografia, é necessário que você delete as linhas que fazem menção à assinatura (signingConfig) do arquivo `app/build.gradle`:
+Quando você publica um app na Play Store, é necessário que você assine os arquivos que você envia para a loja por uma questão de segurança. Essas configurações de assinatura são definidas no arquivo `app/build.gradle` e, para manter em segredo as minhas chaves de criptografia, os dados são salvos em um arquivo keystore.properties. Para que você possa fazer o build sem as opções de criptografia, é necessário que você delete as linhas que fazem menção à assinatura (signingConfig) do arquivo `app/build.gradle`:
 
 ```java
 // Load keystore
