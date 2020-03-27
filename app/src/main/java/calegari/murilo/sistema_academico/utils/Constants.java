@@ -17,7 +17,7 @@ public class Constants {
 	}
 
 	public class QAcad {
-		public static final String ACADEMIC_URL = "https://academico3.cefetes.br";
+		public static final String ACADEMIC_URL = "https://academico.ifes.edu.br";
 		public static final int RESULT_LOGIN_INVALID = 0;
 		public static final int RESULT_CONNECTION_FAILURE = 1;
 		public static final int RESULT_UNKNOWN_ERROR = 2;
